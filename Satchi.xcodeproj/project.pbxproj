@@ -7,14 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB0D4754260E930F006BCBB8 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0D4753260E930F006BCBB8 /* MainTabView.swift */; };
 		EB872508260CC0C4008AD8E7 /* SatchiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872507260CC0C4008AD8E7 /* SatchiApp.swift */; };
-		EB87250A260CC0C4008AD8E7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872509260CC0C4008AD8E7 /* ContentView.swift */; };
+		EB87250A260CC0C4008AD8E7 /* TrackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872509260CC0C4008AD8E7 /* TrackListView.swift */; };
 		EB87250C260CC0C5008AD8E7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB87250B260CC0C5008AD8E7 /* Assets.xcassets */; };
 		EB87250F260CC0C5008AD8E7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB87250E260CC0C5008AD8E7 /* Preview Assets.xcassets */; };
 		EB872511260CC0C5008AD8E7 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872510260CC0C5008AD8E7 /* Persistence.swift */; };
 		EB872514260CC0C5008AD8E7 /* Satchi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB872512260CC0C5008AD8E7 /* Satchi.xcdatamodeld */; };
 		EB87251F260CC0C5008AD8E7 /* SatchiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87251E260CC0C5008AD8E7 /* SatchiTests.swift */; };
 		EB87252A260CC0C5008AD8E7 /* SatchiUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872529260CC0C5008AD8E7 /* SatchiUITests.swift */; };
+		EB87253F260CC158008AD8E7 /* TrackListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */; };
+		EB872540260CC158008AD8E7 /* TrackListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */; };
+		EB872548260CC190008AD8E7 /* TrackStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872547260CC190008AD8E7 /* TrackStorage.swift */; };
+		EB872549260CC190008AD8E7 /* TrackStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872547260CC190008AD8E7 /* TrackStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,9 +40,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EB0D4753260E930F006BCBB8 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		EB872504260CC0C4008AD8E7 /* Satchi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Satchi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB872507260CC0C4008AD8E7 /* SatchiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatchiApp.swift; sourceTree = "<group>"; };
-		EB872509260CC0C4008AD8E7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		EB872509260CC0C4008AD8E7 /* TrackListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListView.swift; sourceTree = "<group>"; };
 		EB87250B260CC0C5008AD8E7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EB87250E260CC0C5008AD8E7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		EB872510260CC0C5008AD8E7 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -49,6 +55,8 @@
 		EB872525260CC0C5008AD8E7 /* SatchiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SatchiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB872529260CC0C5008AD8E7 /* SatchiUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatchiUITests.swift; sourceTree = "<group>"; };
 		EB87252B260CC0C5008AD8E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListViewModel.swift; sourceTree = "<group>"; };
+		EB872547260CC190008AD8E7 /* TrackStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,13 +107,14 @@
 		EB872506260CC0C4008AD8E7 /* Satchi */ = {
 			isa = PBXGroup;
 			children = (
+				EB87253D260CC132008AD8E7 /* TrackList */,
 				EB872507260CC0C4008AD8E7 /* SatchiApp.swift */,
-				EB872509260CC0C4008AD8E7 /* ContentView.swift */,
 				EB87250B260CC0C5008AD8E7 /* Assets.xcassets */,
 				EB872510260CC0C5008AD8E7 /* Persistence.swift */,
 				EB872515260CC0C5008AD8E7 /* Info.plist */,
 				EB872512260CC0C5008AD8E7 /* Satchi.xcdatamodeld */,
 				EB87250D260CC0C5008AD8E7 /* Preview Content */,
+				EB0D4753260E930F006BCBB8 /* MainTabView.swift */,
 			);
 			path = Satchi;
 			sourceTree = "<group>";
@@ -134,6 +143,16 @@
 				EB87252B260CC0C5008AD8E7 /* Info.plist */,
 			);
 			path = SatchiUITests;
+			sourceTree = "<group>";
+		};
+		EB87253D260CC132008AD8E7 /* TrackList */ = {
+			isa = PBXGroup;
+			children = (
+				EB872509260CC0C4008AD8E7 /* TrackListView.swift */,
+				EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */,
+				EB872547260CC190008AD8E7 /* TrackStorage.swift */,
+			);
+			path = TrackList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,9 +285,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB872511260CC0C5008AD8E7 /* Persistence.swift in Sources */,
-				EB87250A260CC0C4008AD8E7 /* ContentView.swift in Sources */,
+				EB872548260CC190008AD8E7 /* TrackStorage.swift in Sources */,
+				EB87250A260CC0C4008AD8E7 /* TrackListView.swift in Sources */,
 				EB872508260CC0C4008AD8E7 /* SatchiApp.swift in Sources */,
+				EB0D4754260E930F006BCBB8 /* MainTabView.swift in Sources */,
 				EB872514260CC0C5008AD8E7 /* Satchi.xcdatamodeld in Sources */,
+				EB87253F260CC158008AD8E7 /* TrackListViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +298,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB872540260CC158008AD8E7 /* TrackListViewModel.swift in Sources */,
+				EB872549260CC190008AD8E7 /* TrackStorage.swift in Sources */,
 				EB87251F260CC0C5008AD8E7 /* SatchiTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

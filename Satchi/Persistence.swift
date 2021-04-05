@@ -13,10 +13,38 @@ struct PersistenceController {
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+        
+        for nr in 0..<2 {
+            let newTrack = Track(context: viewContext)
+            newTrack.id = UUID()
+            newTrack.name = "Trc \(nr)"
+            newTrack.created = Date()
         }
+        for nr in 2..<6 {
+            let newTrack = Track(context: viewContext)
+            newTrack.id = UUID()
+            newTrack.name = "Trc \(nr)"
+            var createdTimeInterval = DateComponents(day: nr)
+            newTrack.created = Calendar.current.date(byAdding: createdTimeInterval, to: Date())
+            var finishedTimeInterval = DateComponents(day: nr+1)
+            newTrack.finished = Calendar.current.date(byAdding: finishedTimeInterval, to: Date())
+        }
+        
+        var timeInterval = DateComponents(day: 2)
+
+        let newTrack = Track(context: viewContext)
+        newTrack.id = UUID()
+        newTrack.name = "Stensö"
+        newTrack.created = Date()
+        newTrack.finished = Calendar.current.date(byAdding: timeInterval, to: Date())
+
+        let newTrack2 = Track(context: viewContext)
+        newTrack2.id = UUID()
+        newTrack2.name = "Udden"
+        newTrack2.created = Date()
+        newTrack2.finished = Calendar.current.date(byAdding: timeInterval, to: Date())
+
+        
         do {
             try viewContext.save()
         } catch {
@@ -52,4 +80,20 @@ struct PersistenceController {
             }
         })
     }
+    
+    func deleteAllTracks(inContext context:NSManagedObjectContext) {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Track")
+        fetchRequest.returnsObjectsAsFaults = false
+        do {
+            let results = try context.fetch(fetchRequest)
+            for object in results {
+                guard let objectData = object as? NSManagedObject else {continue}
+                context.delete(objectData)
+            }
+        } catch let error {
+            print("Detele all data in Track error :", error)
+        }
+
+    }
+
 }
