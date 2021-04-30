@@ -11,6 +11,7 @@ import CoreData
 struct TrackListView: View {
     
     @ObservedObject private var viewModel:TrackListViewModel
+    @State var showingNavigation: Bool = false
     
     init(viewModel: TrackListViewModel = TrackListViewModel()) {
         self.viewModel = viewModel
@@ -27,14 +28,9 @@ struct TrackListView: View {
                 Divider().frame(height: 2)
                 
                 ForEach(viewModel.availableTracks) { track in
-                    
-                    TrackCellView(track: track)
-                        .cornerRadius(10)
-                        .onTapGesture {
-                            print("TAP TAP")
-                        }
-                    //                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    
+                    NavigationLink(destination: EditTrackView(model:EditTrackModel(track:track))) {
+                        TrackCellView(track: track)
+                    }.buttonStyle(PlainButtonStyle())
                 }
                 
                 
@@ -45,23 +41,17 @@ struct TrackListView: View {
                 Divider().frame(height: 2)
                 
                 ForEach(viewModel.finishedTracks) { track in
-                    TrackCellView(track: track)
-                        .cornerRadius(10)
-                        .onTapGesture {
-                            print("TAP TAP")
-                        }
-                    //                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    
+                    NavigationLink(destination: EditTrackView(model:EditTrackModel(track:track))) {
+                        TrackCellView(track: track)
+                    }.buttonStyle(PlainButtonStyle())
                 }
-                
-                //            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             }
             
         }
-        .navigationTitle("Dog tracks")
+        .navigationTitle("Tracks")
         .toolbar {
             HStack {
-                Button(action: addTrack) {
+                NavigationLink(destination: TrackMapView()) {
                     Label("Add Track", systemImage: "plus")
                 }
             }
@@ -70,13 +60,6 @@ struct TrackListView: View {
     }
     
     
-    
-    
-    private func addTrack() {
-        withAnimation {
-            TrackStorage.shared.add(name: "NEW!")
-        }
-    }
     
     private func deleteTracks(offsets: IndexSet) {
         withAnimation {
@@ -115,9 +98,15 @@ struct TrackCellView: View {
             VStack(alignment:.leading)
             {
                 Text("\(track.name ?? "")").bold()
+                Label("\(track.length) m", systemImage: "arrow.left.and.right").font(.caption)
+                
                 HStack {
                     Image(systemName: "flag.fill").foregroundColor(.green)
                     Text("\(track.created!, formatter: itemFormatter)")
+                }
+                .font(.caption)
+                
+                HStack {
                     Image(systemName: "flag.fill").foregroundColor(.red)
                     if track.finished != nil {
                         Text("\(track.finished!, formatter: itemFormatter)")

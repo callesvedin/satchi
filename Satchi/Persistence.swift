@@ -18,12 +18,14 @@ struct PersistenceController {
             let newTrack = Track(context: viewContext)
             newTrack.id = UUID()
             newTrack.name = "Trc \(nr)"
+            newTrack.length = Int32(nr * 500)
             newTrack.created = Date()
         }
         for nr in 2..<6 {
             let newTrack = Track(context: viewContext)
             newTrack.id = UUID()
             newTrack.name = "Trc \(nr)"
+            newTrack.length = Int32(nr * 500)
             var createdTimeInterval = DateComponents(day: nr)
             newTrack.created = Calendar.current.date(byAdding: createdTimeInterval, to: Date())
             var finishedTimeInterval = DateComponents(day: nr+1)
@@ -35,12 +37,14 @@ struct PersistenceController {
         let newTrack = Track(context: viewContext)
         newTrack.id = UUID()
         newTrack.name = "Stensö"
+        newTrack.length = 5000
         newTrack.created = Date()
         newTrack.finished = Calendar.current.date(byAdding: timeInterval, to: Date())
 
         let newTrack2 = Track(context: viewContext)
         newTrack2.id = UUID()
         newTrack2.name = "Udden"
+        newTrack2.length = 5400
         newTrack2.created = Date()
         newTrack2.finished = Calendar.current.date(byAdding: timeInterval, to: Date())
 

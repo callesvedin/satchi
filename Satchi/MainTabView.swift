@@ -9,11 +9,21 @@ import SwiftUI
 
 
 struct MainTabView: View {
+    var body: some View {        
+        NavigationView {
+            TrackListView()
+        }
+    }    
+}
+
+
+struct MainTabView2: View {
     var body: some View {
         TabView {
             NavigationView {
                 TrackListView()                   
-            } .tabItem {
+            }
+            .tabItem {
                 Image(systemName: "map")
                 Text("Tracks")
             }

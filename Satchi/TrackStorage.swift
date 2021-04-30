@@ -39,11 +39,12 @@ class TrackStorage:NSObject, ObservableObject {
         }
     }
     
-    func add(name:String) {
+    func add(name: String, created: Date?, finished:Date?) -> Track {
         let newTrack = Track(context: persistanceController.container.viewContext)
         newTrack.name = name
+        newTrack.created = created
+        newTrack.finished = finished
         newTrack.id = UUID()
-        newTrack.created = Date()
         
         do {
             try persistanceController.container.viewContext.save()
@@ -53,10 +54,11 @@ class TrackStorage:NSObject, ObservableObject {
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
+        return newTrack
     }
     
-    func update(withId id:UUID, name:String) {
-        
+    func update(withId id: UUID, name: String, created:Date?, finished:Date?) {
+//        persistanceController.container.viewContext.performFetch(id)
     }
     
     func delete(tracks:IndexSet) {

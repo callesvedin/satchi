@@ -7,7 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB05E19526277868002941B6 /* StartAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05E19426277868002941B6 /* StartAnnotation.swift */; };
 		EB0D4754260E930F006BCBB8 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0D4753260E930F006BCBB8 /* MainTabView.swift */; };
+		EB2F91212624B6500026773D /* TrackMapOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F91202624B6500026773D /* TrackMapOverlayView.swift */; };
+		EB2F91262624B8DF0026773D /* OverlayButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */; };
+		EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE225261CBA3D00D56711 /* TrackMapView.swift */; };
+		EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */; };
+		EB7DFD2B261E0D6A0056D6B4 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DFD2A261E0D6A0056D6B4 /* MapView.swift */; };
 		EB872508260CC0C4008AD8E7 /* SatchiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872507260CC0C4008AD8E7 /* SatchiApp.swift */; };
 		EB87250A260CC0C4008AD8E7 /* TrackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872509260CC0C4008AD8E7 /* TrackListView.swift */; };
 		EB87250C260CC0C5008AD8E7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB87250B260CC0C5008AD8E7 /* Assets.xcassets */; };
@@ -19,7 +25,9 @@
 		EB87253F260CC158008AD8E7 /* TrackListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */; };
 		EB872540260CC158008AD8E7 /* TrackListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */; };
 		EB872548260CC190008AD8E7 /* TrackStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872547260CC190008AD8E7 /* TrackStorage.swift */; };
-		EB872549260CC190008AD8E7 /* TrackStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872547260CC190008AD8E7 /* TrackStorage.swift */; };
+		EBD13A55261AF3760080C4FE /* EditTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A54261AF3760080C4FE /* EditTrackView.swift */; };
+		EBD13A60261AF3C10080C4FE /* EditTrackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A5F261AF3C10080C4FE /* EditTrackModel.swift */; };
+		EBD13A65261AF59A0080C4FE /* TrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +48,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EB05E19426277868002941B6 /* StartAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAnnotation.swift; sourceTree = "<group>"; };
 		EB0D4753260E930F006BCBB8 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		EB2F91202624B6500026773D /* TrackMapOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapOverlayView.swift; sourceTree = "<group>"; };
+		EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayButtonStyle.swift; sourceTree = "<group>"; };
+		EB5CE225261CBA3D00D56711 /* TrackMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapView.swift; sourceTree = "<group>"; };
+		EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapModel.swift; sourceTree = "<group>"; };
+		EB7DFD2A261E0D6A0056D6B4 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		EB872504260CC0C4008AD8E7 /* Satchi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Satchi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB872507260CC0C4008AD8E7 /* SatchiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatchiApp.swift; sourceTree = "<group>"; };
 		EB872509260CC0C4008AD8E7 /* TrackListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListView.swift; sourceTree = "<group>"; };
@@ -57,6 +71,9 @@
 		EB87252B260CC0C5008AD8E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListViewModel.swift; sourceTree = "<group>"; };
 		EB872547260CC190008AD8E7 /* TrackStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackStorage.swift; sourceTree = "<group>"; };
+		EBD13A54261AF3760080C4FE /* EditTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackView.swift; sourceTree = "<group>"; };
+		EBD13A5F261AF3C10080C4FE /* EditTrackModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackModel.swift; sourceTree = "<group>"; };
+		EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +101,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EB5CE224261CBA2300D56711 /* TrackMap */ = {
+			isa = PBXGroup;
+			children = (
+				EB5CE225261CBA3D00D56711 /* TrackMapView.swift */,
+				EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */,
+				EB7DFD2A261E0D6A0056D6B4 /* MapView.swift */,
+				EB2F91202624B6500026773D /* TrackMapOverlayView.swift */,
+				EB05E19426277868002941B6 /* StartAnnotation.swift */,
+			);
+			path = TrackMap;
+			sourceTree = "<group>";
+		};
 		EB8724FB260CC0C4008AD8E7 = {
 			isa = PBXGroup;
 			children = (
@@ -107,14 +136,18 @@
 		EB872506260CC0C4008AD8E7 /* Satchi */ = {
 			isa = PBXGroup;
 			children = (
+				EB5CE224261CBA2300D56711 /* TrackMap */,
+				EBD13A53261AF3520080C4FE /* EditTrack */,
 				EB87253D260CC132008AD8E7 /* TrackList */,
 				EB872507260CC0C4008AD8E7 /* SatchiApp.swift */,
+				EB872547260CC190008AD8E7 /* TrackStorage.swift */,
 				EB87250B260CC0C5008AD8E7 /* Assets.xcassets */,
 				EB872510260CC0C5008AD8E7 /* Persistence.swift */,
 				EB872515260CC0C5008AD8E7 /* Info.plist */,
 				EB872512260CC0C5008AD8E7 /* Satchi.xcdatamodeld */,
-				EB87250D260CC0C5008AD8E7 /* Preview Content */,
+				EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */,
 				EB0D4753260E930F006BCBB8 /* MainTabView.swift */,
+				EB87250D260CC0C5008AD8E7 /* Preview Content */,
 			);
 			path = Satchi;
 			sourceTree = "<group>";
@@ -150,9 +183,18 @@
 			children = (
 				EB872509260CC0C4008AD8E7 /* TrackListView.swift */,
 				EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */,
-				EB872547260CC190008AD8E7 /* TrackStorage.swift */,
 			);
 			path = TrackList;
+			sourceTree = "<group>";
+		};
+		EBD13A53261AF3520080C4FE /* EditTrack */ = {
+			isa = PBXGroup;
+			children = (
+				EBD13A54261AF3760080C4FE /* EditTrackView.swift */,
+				EBD13A5F261AF3C10080C4FE /* EditTrackModel.swift */,
+				EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */,
+			);
+			path = EditTrack;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,12 +327,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB872511260CC0C5008AD8E7 /* Persistence.swift in Sources */,
+				EB2F91262624B8DF0026773D /* OverlayButtonStyle.swift in Sources */,
 				EB872548260CC190008AD8E7 /* TrackStorage.swift in Sources */,
+				EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */,
 				EB87250A260CC0C4008AD8E7 /* TrackListView.swift in Sources */,
+				EB7DFD2B261E0D6A0056D6B4 /* MapView.swift in Sources */,
 				EB872508260CC0C4008AD8E7 /* SatchiApp.swift in Sources */,
+				EBD13A55261AF3760080C4FE /* EditTrackView.swift in Sources */,
+				EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */,
+				EB05E19526277868002941B6 /* StartAnnotation.swift in Sources */,
 				EB0D4754260E930F006BCBB8 /* MainTabView.swift in Sources */,
+				EBD13A65261AF59A0080C4FE /* TrackViewModel.swift in Sources */,
+				EB2F91212624B6500026773D /* TrackMapOverlayView.swift in Sources */,
 				EB872514260CC0C5008AD8E7 /* Satchi.xcdatamodeld in Sources */,
 				EB87253F260CC158008AD8E7 /* TrackListViewModel.swift in Sources */,
+				EBD13A60261AF3C10080C4FE /* EditTrackModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,7 +350,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB872540260CC158008AD8E7 /* TrackListViewModel.swift in Sources */,
-				EB872549260CC190008AD8E7 /* TrackStorage.swift in Sources */,
 				EB87251F260CC0C5008AD8E7 /* SatchiTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -449,6 +499,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Satchi/Preview Content\"";
 				DEVELOPMENT_TEAM = 9469B78B2K;
@@ -461,6 +512,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = se.cjs.Satchi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -471,6 +523,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Satchi/Preview Content\"";
 				DEVELOPMENT_TEAM = 9469B78B2K;
@@ -483,6 +536,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = se.cjs.Satchi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
