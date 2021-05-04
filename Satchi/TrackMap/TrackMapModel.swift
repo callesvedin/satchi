@@ -23,13 +23,16 @@ enum RunningState {
 class TrackMapModel:NSObject, ObservableObject {
     private var locationManager = CLLocationManager()
     
-   @Published public var currentLocation:CLLocation? {
+    @Published public var currentLocation:CLLocation? {
         didSet {
             if currentLocation != nil {
                 setRegion(center:currentLocation)
             }
         }
     }
+    
+    @Published var stateDone: Bool = false
+    
     public var startPointAdded = false
     
     public var annotations:[MKAnnotation] = []
@@ -45,11 +48,11 @@ class TrackMapModel:NSObject, ObservableObject {
                 addAnnotation(annotation)
                 stopTracking()
             }else if state == .done {
-                
+                stateDone = true
             }
         }
     }
-
+    
     
     public var trackPath:[CLLocation] = [] {
         didSet {
@@ -92,6 +95,7 @@ class TrackMapModel:NSObject, ObservableObject {
     }
     
     private func reset() {
+        stateDone = false
         startPointAdded = false
         annotations = []
         trackPath = []
@@ -109,7 +113,7 @@ class TrackMapModel:NSObject, ObservableObject {
         locationManager.startUpdatingLocation()
         locationManager.startUpdatingHeading()
     }
-
+    
     private func stopTracking() {
         locationManager.stopUpdatingHeading()
         locationManager.stopUpdatingLocation()
@@ -135,7 +139,7 @@ extension TrackMapModel:CLLocationManagerDelegate
             self.gotUserLocation = false
         }
     }
-        
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Location manager failed. \(error.localizedDescription)")
     }

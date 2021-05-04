@@ -28,7 +28,7 @@ struct TrackListView: View {
                 Divider().frame(height: 2)
                 
                 ForEach(viewModel.availableTracks) { track in
-                    NavigationLink(destination: EditTrackView(model:EditTrackModel(track:track))) {
+                    NavigationLink(destination: EditTrackView(track:track, hideBackButton: false)) {
                         TrackCellView(track: track)
                     }.buttonStyle(PlainButtonStyle())
                 }
@@ -41,7 +41,7 @@ struct TrackListView: View {
                 Divider().frame(height: 2)
                 
                 ForEach(viewModel.finishedTracks) { track in
-                    NavigationLink(destination: EditTrackView(model:EditTrackModel(track:track))) {
+                    NavigationLink(destination: EditTrackView(track:track, hideBackButton: false)) {
                         TrackCellView(track: track)
                     }.buttonStyle(PlainButtonStyle())
                 }

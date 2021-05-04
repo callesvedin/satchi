@@ -8,10 +8,28 @@
 import Foundation
 
 class EditTrackModel: ObservableObject {
-    @Published var track:Track
+    var uuid : UUID?
     
-    init(track:Track) {
-        self.track = track
+    var created : Date
+    var finished : Date?
+    var length : Int
+    @Published var name : String
+    
+    init(uuid:UUID?, created:Date = Date(), finished:Date?, length:Int, name:String){
+        self.uuid = uuid
+        self.created = created
+        self.finished = finished
+        self.length = length
+        self.name = name
+    }
+//    
+    convenience init(track:Track) {
+        self.init(uuid:track.id,
+                  created: track.created ?? Date(),
+                  finished: track.finished,
+                  length: Int(track.length),
+                  name: track.name ?? "No Name"
+        )
     }
     
 //    func save(track:TrackViewModel) {

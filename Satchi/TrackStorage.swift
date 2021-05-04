@@ -39,7 +39,8 @@ class TrackStorage:NSObject, ObservableObject {
         }
     }
     
-    func add(name: String, created: Date?, finished:Date?) -> Track {
+    func create(name: String, created: Date?, finished:Date?) -> Track {
+        print("Creating new track")
         let newTrack = Track(context: persistanceController.container.viewContext)
         newTrack.name = name
         newTrack.created = created
