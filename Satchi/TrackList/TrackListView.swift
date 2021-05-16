@@ -9,18 +9,27 @@ import SwiftUI
 import CoreData
 
 struct TrackListView: View {
-    
+    @EnvironmentObject var navigationHelper: NavigationHelper
     @ObservedObject private var viewModel:TrackListViewModel
-    @State var showingNavigation: Bool = false
+//    @State var showingNavigation: Bool = false
+    @State var isView1Active: Bool = false
     
     init(viewModel: TrackListViewModel = TrackListViewModel()) {
         self.viewModel = viewModel
     }
     
+    
     var body: some View {
         
         ScrollView {
             LazyVStack(spacing: 0) {
+                NavigationLink(destination: TrackMapView(),
+                               tag: "TrackListView",
+                               selection: $navigationHelper.selection) {
+                                    EmptyView()
+                               }
+                .isDetailLink(false)
+                
                 TrackSectionView(sectionName: "Current")
                     .onTapGesture {
                         print("Header TAP")
@@ -51,21 +60,17 @@ struct TrackListView: View {
         .navigationTitle("Tracks")
         .toolbar {
             HStack {
-                NavigationLink(destination: TrackMapView()) {
-                    Label("Add Track", systemImage: "plus")
+                Button("Add") {
+                    navigationHelper.selection = "TrackListView"
                 }
+
             }
         }
+        
         
     }
     
     
-    
-    private func deleteTracks(offsets: IndexSet) {
-        withAnimation {
-            TrackStorage.shared.delete(tracks:offsets)
-        }
-    }
 }
 
 private let itemFormatter: DateFormatter = {
@@ -97,8 +102,22 @@ struct TrackCellView: View {
         HStack {
             VStack(alignment:.leading)
             {
-                Text("\(track.name ?? "")").bold()
-                Label("\(track.length) m", systemImage: "arrow.left.and.right").font(.caption)
+                HStack {
+                    Text("\(track.name ?? "")")
+                        .bold()
+                    Spacer()
+                    Button(action: {
+                        print("Delete button tapped!")
+                        withAnimation(){
+                            TrackStorage.shared.delete(track: track)
+                        }
+                    }) {
+                        Image(systemName: "trash")
+                    }
+                }
+                .padding(.vertical,4)
+                Label("\(track.length) m", systemImage: "arrow.left.and.right")
+                    .font(.caption)
                 
                 HStack {
                     Image(systemName: "flag.fill").foregroundColor(.green)

@@ -7,13 +7,22 @@
 
 import SwiftUI
 
-@main
-struct SatchiApp: App {    
 
+class NavigationHelper: ObservableObject {
+    @Published var selection: String? = nil {
+        didSet {
+            print("NavigationHelper selection changed to \(selection ?? "-")")
+        }
+    }
+}
+
+
+@main
+struct SatchiApp: App {
+    
     var body: some Scene {
         WindowGroup {
-            MainTabView()
-            
+            MainTabView().environmentObject(NavigationHelper())
         }
     }
 }

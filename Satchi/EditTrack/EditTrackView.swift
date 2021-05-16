@@ -8,20 +8,20 @@
 import SwiftUI
 
 struct EditTrackView: View {
-    
+    @EnvironmentObject var navigationHelper: NavigationHelper
     //@ObservedObject var model:EditTrackModel
     @ObservedObject var track:Track
     
     let hideBackButton : Bool
     let dateFormatter:DateFormatter
-        
+    
     init(track:Track, hideBackButton: Bool = true) {
         self.track = track
         self.hideBackButton = hideBackButton
         dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd hh:mm"
     }
-        
+    
     var body: some View {
         HStack {
             VStack(alignment: .leading){
@@ -34,8 +34,11 @@ struct EditTrackView: View {
                 }
                 HStack {
                     Spacer()
-                    Button("Done"){
-                        
+                    Button(action: {
+                        self.navigationHelper.selection = nil
+                    }) {
+                        Text("Done")
+                            .font(.headline)
                     }
                     Spacer()
                 }

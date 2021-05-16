@@ -61,6 +61,21 @@ class TrackStorage:NSObject, ObservableObject {
     func update(withId id: UUID, name: String, created:Date?, finished:Date?) {
 //        persistanceController.container.viewContext.performFetch(id)
     }
+
+    func delete(track:Track) {
+        persistanceController.container.viewContext.delete(track)
+        
+        do {
+            try persistanceController.container.viewContext.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+
+    }
+
     
     func delete(tracks:IndexSet) {
         tracks.map{self.tracks.value[$0]}.forEach {
