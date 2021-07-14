@@ -9,11 +9,17 @@ import SwiftUI
 
 
 struct TrackMapOverlayView: View {    
-    @Binding var state:RunningState
+    @ObservedObject var mapModel:TrackMapModel
+    @ObservedObject var timer : TrackTimer
+    
+    init(mapModel:TrackMapModel) {
+        self.mapModel = mapModel
+        self.timer = mapModel.timer
+    }
     
     var body: some View {
         var buttonText:String
-        switch state {
+        switch mapModel.state {
         case .notStarted:
             buttonText = "Start"
         case .started:
@@ -24,27 +30,37 @@ struct TrackMapOverlayView: View {
         return
             VStack{
                 HStack{
-                    Text("Distance: 200m")
+                    Text(String(format: "Distance: %.2f m", (mapModel.distance)))
                     Spacer()
-                    Text("Time: 0sec")
+                    Text(String(format:"Time: %.1f sec", mapModel.timer.secondsElapsed))
                 }
                 .padding(.top, 30)
                 .padding()
+                .background(Color.white)
+                .opacity(0.5)
                 Spacer()
                 
                 Button(buttonText) {
-                    switch state {
+//                    switch mapModel.timer.mode {
+//
+//                    case .running:
+//                        mapModel.timer.stop()
+//                    case .stopped:
+//                        mapModel.timer.start()
+//                    }
+                    
+                    switch mapModel.state {
                     case .started:
-                        state = .stopped
+                        mapModel.state = .stopped
                     case .notStarted:
-                        state = .started
+                        mapModel.state = .started
                     case .stopped:
-                        state = .done
+                        mapModel.state = .done
                     default:
                         break;
                     }
                 }
-                .buttonStyle(OverlayButtonStyle(backgroundColor: state == .started ? .red : .green))
+                .buttonStyle(OverlayButtonStyle(backgroundColor: mapModel.state == .started ? .red : .green))
                 .padding(.bottom, 60)
             
             
@@ -54,6 +70,6 @@ struct TrackMapOverlayView: View {
 
 struct TrackMapOverlayView_Previews: PreviewProvider {
     static var previews: some View {
-        TrackMapOverlayView(state: Binding.constant(RunningState.notStarted))
+        TrackMapOverlayView(mapModel:TrackMapModel())
     }
 }

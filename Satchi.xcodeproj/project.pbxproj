@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,23 +11,27 @@
 		EB0D4754260E930F006BCBB8 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0D4753260E930F006BCBB8 /* MainTabView.swift */; };
 		EB2F91212624B6500026773D /* TrackMapOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F91202624B6500026773D /* TrackMapOverlayView.swift */; };
 		EB2F91262624B8DF0026773D /* OverlayButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */; };
+		EB5688E0269C304000AF9AB1 /* TrackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5688DF269C304000AF9AB1 /* TrackCellView.swift */; };
 		EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE225261CBA3D00D56711 /* TrackMapView.swift */; };
 		EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */; };
+		EB7D868F265438AE0088F13E /* TrackTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D868E265438AE0088F13E /* TrackTimer.swift */; };
 		EB7DFD2B261E0D6A0056D6B4 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DFD2A261E0D6A0056D6B4 /* MapView.swift */; };
 		EB872508260CC0C4008AD8E7 /* SatchiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872507260CC0C4008AD8E7 /* SatchiApp.swift */; };
 		EB87250A260CC0C4008AD8E7 /* TrackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872509260CC0C4008AD8E7 /* TrackListView.swift */; };
 		EB87250C260CC0C5008AD8E7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB87250B260CC0C5008AD8E7 /* Assets.xcassets */; };
 		EB87250F260CC0C5008AD8E7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB87250E260CC0C5008AD8E7 /* Preview Assets.xcassets */; };
 		EB872511260CC0C5008AD8E7 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872510260CC0C5008AD8E7 /* Persistence.swift */; };
-		EB872514260CC0C5008AD8E7 /* Satchi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB872512260CC0C5008AD8E7 /* Satchi.xcdatamodeld */; };
 		EB87251F260CC0C5008AD8E7 /* SatchiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87251E260CC0C5008AD8E7 /* SatchiTests.swift */; };
 		EB87252A260CC0C5008AD8E7 /* SatchiUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872529260CC0C5008AD8E7 /* SatchiUITests.swift */; };
 		EB87253F260CC158008AD8E7 /* TrackListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */; };
 		EB872540260CC158008AD8E7 /* TrackListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */; };
 		EB872548260CC190008AD8E7 /* TrackStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872547260CC190008AD8E7 /* TrackStorage.swift */; };
+		EBA1122F267FA13B00021F29 /* TrackTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA1122E267FA13B00021F29 /* TrackTransformer.swift */; };
 		EBC69ACE2641B88F0094EAA3 /* TextInputDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */; };
+		EBCB480E2667540E00E5631C /* Sliders in Frameworks */ = {isa = PBXBuildFile; productRef = EBCB480D2667540E00E5631C /* Sliders */; };
+		EBCB4817266762F800E5631C /* Satchi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EBCB4815266762F800E5631C /* Satchi.xcdatamodeld */; };
 		EBD13A55261AF3760080C4FE /* EditTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A54261AF3760080C4FE /* EditTrackView.swift */; };
-		EBD13A60261AF3C10080C4FE /* EditTrackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A5F261AF3C10080C4FE /* EditTrackModel.swift */; };
+		EBD13A60261AF3C10080C4FE /* TrackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A5F261AF3C10080C4FE /* TrackModel.swift */; };
 		EBD13A65261AF59A0080C4FE /* TrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -53,8 +57,10 @@
 		EB0D4753260E930F006BCBB8 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		EB2F91202624B6500026773D /* TrackMapOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapOverlayView.swift; sourceTree = "<group>"; };
 		EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayButtonStyle.swift; sourceTree = "<group>"; };
+		EB5688DF269C304000AF9AB1 /* TrackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCellView.swift; sourceTree = "<group>"; };
 		EB5CE225261CBA3D00D56711 /* TrackMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapView.swift; sourceTree = "<group>"; };
 		EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapModel.swift; sourceTree = "<group>"; };
+		EB7D868E265438AE0088F13E /* TrackTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTimer.swift; sourceTree = "<group>"; };
 		EB7DFD2A261E0D6A0056D6B4 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		EB872504260CC0C4008AD8E7 /* Satchi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Satchi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB872507260CC0C4008AD8E7 /* SatchiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatchiApp.swift; sourceTree = "<group>"; };
@@ -62,7 +68,6 @@
 		EB87250B260CC0C5008AD8E7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EB87250E260CC0C5008AD8E7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		EB872510260CC0C5008AD8E7 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		EB872513260CC0C5008AD8E7 /* Satchi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Satchi.xcdatamodel; sourceTree = "<group>"; };
 		EB872515260CC0C5008AD8E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB87251A260CC0C5008AD8E7 /* SatchiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SatchiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB87251E260CC0C5008AD8E7 /* SatchiTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatchiTests.swift; sourceTree = "<group>"; };
@@ -72,9 +77,11 @@
 		EB87252B260CC0C5008AD8E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListViewModel.swift; sourceTree = "<group>"; };
 		EB872547260CC190008AD8E7 /* TrackStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackStorage.swift; sourceTree = "<group>"; };
+		EBA1122E267FA13B00021F29 /* TrackTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTransformer.swift; sourceTree = "<group>"; };
 		EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputDialog.swift; sourceTree = "<group>"; };
+		EBCB4816266762F800E5631C /* Satchi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Satchi.xcdatamodel; sourceTree = "<group>"; };
 		EBD13A54261AF3760080C4FE /* EditTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackView.swift; sourceTree = "<group>"; };
-		EBD13A5F261AF3C10080C4FE /* EditTrackModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackModel.swift; sourceTree = "<group>"; };
+		EBD13A5F261AF3C10080C4FE /* TrackModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackModel.swift; sourceTree = "<group>"; };
 		EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -83,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBCB480E2667540E00E5631C /* Sliders in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,17 +147,16 @@
 		EB872506260CC0C4008AD8E7 /* Satchi */ = {
 			isa = PBXGroup;
 			children = (
+				EBCB481C2667636A00E5631C /* Persistance */,
 				EB5CE224261CBA2300D56711 /* TrackMap */,
 				EBD13A53261AF3520080C4FE /* EditTrack */,
 				EB87253D260CC132008AD8E7 /* TrackList */,
 				EB872507260CC0C4008AD8E7 /* SatchiApp.swift */,
-				EB872547260CC190008AD8E7 /* TrackStorage.swift */,
-				EB87250B260CC0C5008AD8E7 /* Assets.xcassets */,
-				EB872510260CC0C5008AD8E7 /* Persistence.swift */,
-				EB872515260CC0C5008AD8E7 /* Info.plist */,
-				EB872512260CC0C5008AD8E7 /* Satchi.xcdatamodeld */,
 				EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */,
 				EB0D4753260E930F006BCBB8 /* MainTabView.swift */,
+				EB7D868E265438AE0088F13E /* TrackTimer.swift */,
+				EB87250B260CC0C5008AD8E7 /* Assets.xcassets */,
+				EB872515260CC0C5008AD8E7 /* Info.plist */,
 				EB87250D260CC0C5008AD8E7 /* Preview Content */,
 			);
 			path = Satchi;
@@ -186,15 +193,27 @@
 			children = (
 				EB872509260CC0C4008AD8E7 /* TrackListView.swift */,
 				EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */,
+				EB5688DF269C304000AF9AB1 /* TrackCellView.swift */,
 			);
 			path = TrackList;
+			sourceTree = "<group>";
+		};
+		EBCB481C2667636A00E5631C /* Persistance */ = {
+			isa = PBXGroup;
+			children = (
+				EB872510260CC0C5008AD8E7 /* Persistence.swift */,
+				EB872547260CC190008AD8E7 /* TrackStorage.swift */,
+				EBCB4815266762F800E5631C /* Satchi.xcdatamodeld */,
+				EBA1122E267FA13B00021F29 /* TrackTransformer.swift */,
+			);
+			path = Persistance;
 			sourceTree = "<group>";
 		};
 		EBD13A53261AF3520080C4FE /* EditTrack */ = {
 			isa = PBXGroup;
 			children = (
 				EBD13A54261AF3760080C4FE /* EditTrackView.swift */,
-				EBD13A5F261AF3C10080C4FE /* EditTrackModel.swift */,
+				EBD13A5F261AF3C10080C4FE /* TrackModel.swift */,
 				EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */,
 			);
 			path = EditTrack;
@@ -216,6 +235,9 @@
 			dependencies = (
 			);
 			name = Satchi;
+			packageProductDependencies = (
+				EBCB480D2667540E00E5631C /* Sliders */,
+			);
 			productName = Satchi;
 			productReference = EB872504260CC0C4008AD8E7 /* Satchi.app */;
 			productType = "com.apple.product-type.application";
@@ -287,6 +309,9 @@
 				Base,
 			);
 			mainGroup = EB8724FB260CC0C4008AD8E7;
+			packageReferences = (
+				EBCB480C2667540E00E5631C /* XCRemoteSwiftPackageReference "swiftui-sliders" */,
+			);
 			productRefGroup = EB872505260CC0C4008AD8E7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -339,13 +364,16 @@
 				EBD13A55261AF3760080C4FE /* EditTrackView.swift in Sources */,
 				EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */,
 				EB05E19526277868002941B6 /* StartAnnotation.swift in Sources */,
+				EB5688E0269C304000AF9AB1 /* TrackCellView.swift in Sources */,
 				EB0D4754260E930F006BCBB8 /* MainTabView.swift in Sources */,
+				EBCB4817266762F800E5631C /* Satchi.xcdatamodeld in Sources */,
 				EBD13A65261AF59A0080C4FE /* TrackViewModel.swift in Sources */,
+				EBA1122F267FA13B00021F29 /* TrackTransformer.swift in Sources */,
 				EBC69ACE2641B88F0094EAA3 /* TextInputDialog.swift in Sources */,
+				EB7D868F265438AE0088F13E /* TrackTimer.swift in Sources */,
 				EB2F91212624B6500026773D /* TrackMapOverlayView.swift in Sources */,
-				EB872514260CC0C5008AD8E7 /* Satchi.xcdatamodeld in Sources */,
 				EB87253F260CC158008AD8E7 /* TrackListViewModel.swift in Sources */,
-				EBD13A60261AF3C10080C4FE /* EditTrackModel.swift in Sources */,
+				EBD13A60261AF3C10080C4FE /* TrackModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -671,13 +699,32 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		EBCB480C2667540E00E5631C /* XCRemoteSwiftPackageReference "swiftui-sliders" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:spacenation/swiftui-sliders.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EBCB480D2667540E00E5631C /* Sliders */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EBCB480C2667540E00E5631C /* XCRemoteSwiftPackageReference "swiftui-sliders" */;
+			productName = Sliders;
+		};
+/* End XCSwiftPackageProductDependency section */
+
 /* Begin XCVersionGroup section */
-		EB872512260CC0C5008AD8E7 /* Satchi.xcdatamodeld */ = {
+		EBCB4815266762F800E5631C /* Satchi.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				EB872513260CC0C5008AD8E7 /* Satchi.xcdatamodel */,
+				EBCB4816266762F800E5631C /* Satchi.xcdatamodel */,
 			);
-			currentVersion = EB872513260CC0C5008AD8E7 /* Satchi.xcdatamodel */;
+			currentVersion = EBCB4816266762F800E5631C /* Satchi.xcdatamodel */;
 			path = Satchi.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

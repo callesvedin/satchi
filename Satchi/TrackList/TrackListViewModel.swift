@@ -9,13 +9,8 @@ import Foundation
 import Combine
 
 class TrackListViewModel:ObservableObject {
-    var tracks: [Track] = [] {
-        willSet {
-            NSLog("Updating tracks to \(newValue)")
-            finishedTracks = newValue.filter({track in track.finished != nil})
-            availableTracks = newValue.filter({track in track.finished == nil})
-        }
-    }
+    var tracks: [Track] = []
+    
     @Published var finishedTracks:[Track] = []
     @Published var availableTracks:[Track] = []
     
@@ -24,7 +19,16 @@ class TrackListViewModel:ObservableObject {
     init(trackPublisher: AnyPublisher<[Track], Never> = TrackStorage.shared.tracks.eraseToAnyPublisher()){
         cancellable = trackPublisher.sink {tracks in
             NSLog("Updating tracks")
-            self.tracks = tracks            
+            self.tracks = tracks
         }
+    }
+    
+    public func reload() {
+        self.finishedTracks = tracks.filter({track in track.finished != nil})
+        self.availableTracks = tracks.filter({track in track.finished == nil})
+    }
+    
+    public func delete(track:Track) {
+        TrackStorage.shared.delete(track: track)
     }
 }

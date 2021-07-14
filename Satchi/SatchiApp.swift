@@ -19,6 +19,13 @@ class NavigationHelper: ObservableObject {
 
 @main
 struct SatchiApp: App {
+
+    init() {
+        #if DEBUG
+        let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        print(paths[0])
+        #endif
+    }
     
     var body: some Scene {
         WindowGroup {

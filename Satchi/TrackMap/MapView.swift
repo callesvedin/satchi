@@ -8,7 +8,6 @@ struct MapView: UIViewRepresentable {
     
     @ObservedObject var mapModel: TrackMapModel
     
-    //private var cancellable: AnyCancellable?
     private var line: MKPolyline?
     private var mapView : MKMapView
     @State private var startingPointAdded = false
@@ -30,6 +29,7 @@ struct MapView: UIViewRepresentable {
         mapView.userTrackingMode = .followWithHeading
 
         mapView.register(MKPinAnnotationView.self, forAnnotationViewWithReuseIdentifier: StartAnnotation.reuseIdentifier)
+        mapView.register(MKPinAnnotationView.self, forAnnotationViewWithReuseIdentifier: StopAnnotation.reuseIdentifier)
         return mapView
     }
     
@@ -61,41 +61,27 @@ struct MapView: UIViewRepresentable {
         }
         
         removeOverlays(mapView: uiView)
-        var coordinates = mapModel.trackPath.map({$0.coordinate})
         
-        let polyline = MKPolyline(coordinates: &coordinates, count: coordinates.count)
-        uiView.addOverlay(polyline)
+        if mapModel.laidPath.count > 0 {
+            var laidCoordinates = mapModel.laidPath.map({$0.coordinate})
+            let polyline = TrackPolyline(coordinates: &laidCoordinates, count: laidCoordinates.count)
+            polyline.color = .systemBlue
+            uiView.addOverlay(polyline)
+        }
+        
+        if mapModel.trackPath.count > 0 {
+            var trackCoordinates = mapModel.trackPath.map({$0.coordinate})
+            let polyline = TrackPolyline(coordinates: &trackCoordinates, count: trackCoordinates.count)
+            polyline.color = .systemRed
+            uiView.addOverlay(polyline)
+        }
+        
         #if DEBUG
         print("Annotations:\(uiView.annotations.count)")
         print("Overlays:\(uiView.overlays.count)")
         #endif
     }
     
-
-    
-    
-    func updateUIView2(_ uiView: MKMapView, context: Context) {
-        if mapModel.region != nil {
-            uiView.setRegion(
-                mapModel.region!, animated: true
-            )
-        }
-        
-        
-        if mapModel.state == .started && !startingPointAdded && !mapModel.annotations.isEmpty {
-            uiView.addAnnotation(mapModel.annotations.first!)
-        }
-        
-        
-        if mapModel.state == .started, let newLocation = mapModel.trackPath.last, mapModel.trackPath.count > 1 {
-            let oldLocation = mapModel.trackPath[mapModel.trackPath.count - 2]
-            let oldCoordinates = oldLocation.coordinate
-            let newCoordinates =  newLocation.coordinate
-            var area = [oldCoordinates, newCoordinates]
-            let polyline = MKPolyline(coordinates: &area, count: area.count)
-            uiView.addOverlay(polyline)
-         }
-    }
     
     class MapViewCoordinator: NSObject, MKMapViewDelegate {
         let mapModel:TrackMapModel
@@ -106,14 +92,15 @@ struct MapView: UIViewRepresentable {
         
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
             let renderer = MKPolylineRenderer(overlay: overlay)
-            renderer.strokeColor = .systemBlue
-            renderer.lineWidth = 5            
+            if let over = overlay as? TrackPolyline {
+                renderer.strokeColor = over.color
+                renderer.lineWidth = 5
+            }
             return renderer
         }
         
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-            
-            
+                        
             if let ann = annotation as? StartAnnotation {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: StartAnnotation.reuseIdentifier, for: ann) as! MKPinAnnotationView
                 view.pinTintColor = StartAnnotation.color
@@ -126,18 +113,13 @@ struct MapView: UIViewRepresentable {
                 return view
             }
             
-            
-            switch annotation {
-            case is StartAnnotation:
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: StartAnnotation.reuseIdentifier, for: annotation) as! MKPinAnnotationView
-                
-                return view
-            default:
-                return nil
-            }
-
+            return nil
         }
                 
     }
     
+}
+
+class TrackPolyline:MKPolyline {
+    var color:UIColor?
 }

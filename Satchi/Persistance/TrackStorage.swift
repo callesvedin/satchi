@@ -39,13 +39,15 @@ class TrackStorage:NSObject, ObservableObject {
         }
     }
     
-    func create(name: String, created: Date?, finished:Date?) -> Track {
+    func create() -> Track {
         print("Creating new track")
         let newTrack = Track(context: persistanceController.container.viewContext)
-        newTrack.name = name
-        newTrack.created = created
-        newTrack.finished = finished
+        //        newTrack.name = name
+        newTrack.created = Date()
+        //        newTrack.timeToCreate = timeToCreate
+        //        newTrack.length = Int32(length)
         newTrack.id = UUID()
+        //        newTrack.laidPath = laidPath
         
         do {
             try persistanceController.container.viewContext.save()
@@ -58,10 +60,56 @@ class TrackStorage:NSObject, ObservableObject {
         return newTrack
     }
     
-    func update(withId id: UUID, name: String, created:Date?, finished:Date?) {
-//        persistanceController.container.viewContext.performFetch(id)
+    func update(with trackModel:TrackModel) {        
+        // Perform the fetch with the predicate
+        do {
+            let track = try getTrack(trackModel.uuid)
+            track.difficulty = Int16(trackModel.difficulty)
+            track.finished = trackModel.finished
+            track.laidPath = trackModel.laidPath
+            track.trackPath = trackModel.trackPath
+            if trackModel.length != nil {
+                track.length = Int32(trackModel.length!)
+            }
+            track.name = trackModel.name
+            if trackModel.timeToCreate != nil {
+                track.timeToCreate = trackModel.timeToCreate!
+            }
+            
+            track.finished = trackModel.finished
+            try persistanceController.container.viewContext.save()
+            
+        } catch {
+            let fetchError = error as NSError
+            debugPrint(fetchError)
+        }
+        
+        
     }
+    
 
+    private func getTrack(_ uuid:UUID?) throws -> Track {
+        if uuid == nil {
+            return TrackStorage.shared.create()
+        }else{
+            let trackRequest: NSFetchRequest<Track> = Track.fetchRequest()
+            let query = NSPredicate(format: "%K == %@", "id", uuid! as CVarArg)
+            trackRequest.predicate = query
+            
+            // Perform the fetch with the predicate
+            do {
+                let foundEntities: [Track] = try persistanceController.container.viewContext.fetch(trackRequest)
+                
+                return foundEntities.first!
+            } catch {
+                let fetchError = error as NSError
+                debugPrint(fetchError)
+                throw error
+            }
+        }
+    }
+    
+    
     func delete(track:Track) {
         persistanceController.container.viewContext.delete(track)
         
@@ -73,9 +121,9 @@ class TrackStorage:NSObject, ObservableObject {
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
-
+        
     }
-
+    
     
     func delete(tracks:IndexSet) {
         tracks.map{self.tracks.value[$0]}.forEach {
@@ -90,7 +138,7 @@ class TrackStorage:NSObject, ObservableObject {
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
-
+        
     }
 }
 

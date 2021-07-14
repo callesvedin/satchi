@@ -29,9 +29,12 @@ struct TextInputDialog: View {
 
     var body: some View {
         VStack {
-            Text(prompt).padding()
+            Text(prompt).frame(width: 100)
+            
             TextField("", text: $fieldValue)
-                .frame(width: 200, alignment: .center)
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .frame(width: 200, alignment: .center)
+
             HStack {
                 Button("Save") {
                     self.value = fieldValue
@@ -40,14 +43,14 @@ struct TextInputDialog: View {
             }.padding()
         }
         .padding()
-    }
+        }
 }
 
 #if DEBUG
 struct TextInputDialog_Previews: PreviewProvider {
     static var previews: some View {
         var name = "Stensö"
-        TextInputDialog(prompt: "Enter track name",
+        TextInputDialog(prompt: "Track name:",
                         value: Binding<String>.init(get: { name }, set: {name = $0})).frame(width: 100, height: 100, alignment: .center)
     }
 }
