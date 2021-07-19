@@ -8,15 +8,13 @@ struct MapView: UIViewRepresentable {
     
     @ObservedObject var mapModel: TrackMapModel
     
-    private var line: MKPolyline?
     private var mapView : MKMapView
-    @State private var startingPointAdded = false
     
     init(mapModel:TrackMapModel) {
         self.mapModel = mapModel
         self.mapView = MKMapView()
     }
-        
+    
     func makeCoordinator() -> MapViewCoordinator {
         return MapViewCoordinator(mapModel: mapModel)
     }
@@ -27,9 +25,12 @@ struct MapView: UIViewRepresentable {
         mapView.showsUserLocation = true
         mapView.mapType = .satellite
         mapView.userTrackingMode = .followWithHeading
-
-        mapView.register(MKPinAnnotationView.self, forAnnotationViewWithReuseIdentifier: StartAnnotation.reuseIdentifier)
-        mapView.register(MKPinAnnotationView.self, forAnnotationViewWithReuseIdentifier: StopAnnotation.reuseIdentifier)
+        
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "LayStart")
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "LayStop")
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "TrackStart")
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "TrackStop")
+        
         return mapView
     }
     
@@ -37,15 +38,15 @@ struct MapView: UIViewRepresentable {
         let overlays = mapView.overlays
         mapView.removeOverlays(overlays)
     }
-
+    
     func removeAnnotations(mapView:MKMapView) {
         let annotations = mapView.annotations.filter {
-                $0 !== mapView.userLocation
-            }
+            $0 !== mapView.userLocation
+        }
         mapView.removeAnnotations(annotations)
     }
     
-
+    
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
         if mapModel.region != nil {
@@ -53,7 +54,7 @@ struct MapView: UIViewRepresentable {
                 mapModel.region!, animated: true
             )
         }
-
+        
         if mapModel.annotations.isEmpty {
             removeAnnotations(mapView: uiView)
         }else {
@@ -74,6 +75,11 @@ struct MapView: UIViewRepresentable {
             let polyline = TrackPolyline(coordinates: &trackCoordinates, count: trackCoordinates.count)
             polyline.color = .systemRed
             uiView.addOverlay(polyline)
+        }
+        
+        if mapModel.state == .finishedTrack, let first = mapView.overlays.first {
+            let rect = mapView.overlays.reduce(first.boundingMapRect, {$0.union($1.boundingMapRect)})
+            mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 50.0, left: 50.0, bottom: 50.0, right: 50.0), animated: true)
         }
         
         #if DEBUG
@@ -100,22 +106,17 @@ struct MapView: UIViewRepresentable {
         }
         
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-                        
-            if let ann = annotation as? StartAnnotation {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: StartAnnotation.reuseIdentifier, for: ann) as! MKPinAnnotationView
-                view.pinTintColor = StartAnnotation.color
-                return view
-            }
-            
-            if let ann = annotation as? StopAnnotation {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: StopAnnotation.reuseIdentifier, for: ann) as! MKPinAnnotationView
-                view.pinTintColor = StopAnnotation.color
-                return view
+            if let annotation = annotation as? PathAnnotation {
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: annotation.reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
+                    view.glyphImage = UIImage(systemName: annotation.imageIdentifier)
+                    view.markerTintColor = annotation.color
+                    return view
+                
             }
             
             return nil
         }
-                
+        
     }
     
 }

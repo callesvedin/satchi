@@ -11,21 +11,21 @@ import SwiftUI
 import MapKit
 
 
-struct TrackAnnotation: Identifiable {
-    let id = UUID()
-    let coordinate: CLLocationCoordinate2D
-}
+//struct TrackAnnotation: Identifiable {
+//    let id = UUID()
+//    let coordinate: CLLocationCoordinate2D
+//}
 
 enum RunningState {
-    case notStarted, started, stopped, done
+    case layPathNotStarted, layPathStarted, layPathStopped, layPathDone,
+         trackingNotStarted, trackingStarted, trackingStopped, trackingDone, finishedTrack, allDone
 }
 
 class TrackMapModel:NSObject, ObservableObject {
     private var locationManager = CLLocationManager()
-    public var tracking = false
     public var annotations:[MKAnnotation] = []
     public var region:MKCoordinateRegion?
-    @Published var stateDone: Bool = false
+    
     @Published var timer:TrackTimer = TrackTimer()
     @Published var distance:CLLocationDistance = 0
     @Published public var gotUserLocation = false
@@ -39,19 +39,21 @@ class TrackMapModel:NSObject, ObservableObject {
     }
 
     
-    @Published public var state = RunningState.notStarted {
+    @Published public var state = RunningState.layPathNotStarted {
         didSet {
             print("Running state changed:\(state)")
-            if state == .started && currentLocation != nil {
+            if state == .layPathStarted && currentLocation != nil {
                 reset()
                 addStartAnnotation(at: currentLocation!)
                 timer.start()
-            }else if state == .stopped && currentLocation != nil {
-                addStopAnnotation(at: currentLocation!)
+            }else if (state == .layPathStopped || state == .trackingStopped) && currentLocation != nil {
+                if state == .trackingStopped {
+                    addTrackStopAnnotation(at: currentLocation!)
+                }else{
+                    addStopAnnotation(at: currentLocation!)
+                }
                 timer.stop()
                 stopTracking()
-            }else if state == .done {
-                stateDone = true
             }
         }
     }
@@ -68,47 +70,79 @@ class TrackMapModel:NSObject, ObservableObject {
 
     public var trackPath:[CLLocation] = [] {
         didSet {
-            if trackPath.count >= 2 {
-                distance = getLength(from: trackPath)
+            if trackPath.count == 1 {
+                addTrackStartAnnotation(at: trackPath.first!)
             }
         }
     }
     
     
-    init(laidPath:[CLLocation]? = nil) {
+    init(laidPath:[CLLocation]? = nil, trackedPath:[CLLocation]? = nil) {
         super.init()
-        if let path = laidPath, !path.isEmpty{
-            self.laidPath = path
-            self.addStartAnnotation(at: path.first!)
-            self.addStopAnnotation(at: path.last!)
-            self.tracking = true
+
+        if let lPath = laidPath, !lPath.isEmpty ,let tPath = trackedPath, !tPath.isEmpty {
+            self.laidPath = lPath
+            self.trackPath = tPath
+            self.addStartAnnotation(at: lPath.first!)
+            self.addStopAnnotation(at: lPath.last!)
+            self.addTrackStartAnnotation(at: tPath.first!)
+            self.addTrackStopAnnotation(at: tPath.last!)
+            self.state = .finishedTrack
+        }else if let lPath = laidPath, !lPath.isEmpty {
+            self.laidPath = lPath
+            self.addStartAnnotation(at: lPath.first!)
+            self.addStopAnnotation(at: lPath.last!)
+            self.state = .trackingNotStarted
+        }else {
+            self.state = .layPathNotStarted
         }
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-        locationManager.delegate = self
-        setStartLocation()
+                
+        if self.state == .trackingNotStarted || self.state == .layPathNotStarted {
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+            locationManager.delegate = self
+            setStartLocation()
+        }
     }
-    
-    private func addStartAnnotation(at location:CLLocation) {
-        let annotation = StartAnnotation()
+
+    private func addTrackStartAnnotation(at location:CLLocation) {
+        let annotation = PathAnnotation(kind: .TrackPathStart)
         annotation.coordinate = location.coordinate
         annotation.title = "Start"
+
+        addAnnotation(annotation)
+    }
+    
+    private func addTrackStopAnnotation(at location:CLLocation) {
+        let annotation = PathAnnotation(kind: .TrackPathStop)
+        annotation.coordinate = location.coordinate
+        annotation.title = "Stop"
+
+        addAnnotation(annotation)
+    }
+    
+
+    
+    private func addStartAnnotation(at location:CLLocation) {
+        let annotation = PathAnnotation(kind: .LayPathStart)
+        annotation.coordinate = location.coordinate
+        annotation.title = "Track Start"
         addAnnotation(annotation)
     }
     
     private func addStopAnnotation(at location:CLLocation) {
-        let annotation = StopAnnotation()
+        let annotation = PathAnnotation(kind: .LayPathStop)
         annotation.coordinate = location.coordinate
-        annotation.title = "Stop"
+        annotation.title = "Track Stop"
         addAnnotation(annotation)
     }
     
-    private func setRegion(center:CLLocation?) {
+    private func setRegion(center:CLLocation?, spanDelta:Double = 0.001) {
         guard let center = center else {return}
         if region != nil {
             region!.center = CLLocationCoordinate2D(latitude: center.coordinate.latitude, longitude: center.coordinate.longitude)
         }else{
             self.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: center.coordinate.latitude, longitude: center.coordinate.longitude),
-                                             span: MKCoordinateSpan(latitudeDelta: 0.002, longitudeDelta: 0.002)
+                                             span: MKCoordinateSpan(latitudeDelta: spanDelta, longitudeDelta: spanDelta)
             )
         }
     }
@@ -126,8 +160,7 @@ class TrackMapModel:NSObject, ObservableObject {
         annotations.append(annotation)
     }
     
-    private func reset() {
-        stateDone = false
+    private func reset() {        
         annotations = []
         laidPath = []
         trackPath = []
@@ -155,12 +188,11 @@ class TrackMapModel:NSObject, ObservableObject {
 extension TrackMapModel:CLLocationManagerDelegate
 {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if state == .started {
-            if tracking {
-                trackPath.append(contentsOf: locations)
-            }else{
-                laidPath.append(contentsOf: locations)
-            }
+        if state == .layPathStarted {
+            laidPath.append(contentsOf: locations)
+        }
+        else if state == .trackingStarted {
+            trackPath.append(contentsOf: locations)
         }
         
         currentLocation = manager.location

@@ -70,13 +70,17 @@ struct EditTrackView: View {
             HStack {
                 Spacer()
                 VStack {
-                    if trackModel.finished == nil {
+                    
                         NavigationLink(destination: TrackMapView(trackModel: trackModel))
                         {
-                            Text("Track!").font(.title)
+                            if trackModel.finished == nil {
+                                Text("Track!").font(.title)
+                            }else{
+                                Text("Show!").font(.title)
+                            }
                         }
                         .isDetailLink(false)
-                    }
+                    
                 }
                 Spacer()
             }

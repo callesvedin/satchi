@@ -20,12 +20,14 @@ struct TrackMapOverlayView: View {
     var body: some View {
         var buttonText:String
         switch mapModel.state {
-        case .notStarted:
+        case .layPathNotStarted, .trackingNotStarted:
             buttonText = "Start"
-        case .started:
+        case .layPathStarted, .trackingStarted:
             buttonText = "Stop"
-        case .stopped, .done:
+        case .layPathStopped, .trackingStopped:
             buttonText = "Save"
+        case .layPathDone, .trackingDone, .finishedTrack, .allDone:
+            buttonText = "Close"
         }
         return
             VStack{
@@ -41,26 +43,30 @@ struct TrackMapOverlayView: View {
                 Spacer()
                 
                 Button(buttonText) {
-//                    switch mapModel.timer.mode {
-//
-//                    case .running:
-//                        mapModel.timer.stop()
-//                    case .stopped:
-//                        mapModel.timer.start()
-//                    }
-                    
                     switch mapModel.state {
-                    case .started:
-                        mapModel.state = .stopped
-                    case .notStarted:
-                        mapModel.state = .started
-                    case .stopped:
-                        mapModel.state = .done
-                    default:
-                        break;
+                    case .layPathNotStarted:
+                        mapModel.state = .layPathStarted
+                    case .layPathStarted:
+                        mapModel.state = .layPathStopped
+                    case .layPathStopped:
+                        mapModel.state = .layPathDone
+                    case .layPathDone:
+                        print("layPath done should never occur")
+                    case .trackingNotStarted:
+                        mapModel.state = .trackingStarted
+                    case .trackingStarted:
+                        mapModel.state = .trackingStopped
+                    case .trackingStopped:
+                        mapModel.state = .trackingDone
+                    case .trackingDone:
+                        print("trackPathDone should never occur")
+                    case .finishedTrack:
+                        mapModel.state = .allDone
+                    case .allDone:
+                        print("All done")
                     }
                 }
-                .buttonStyle(OverlayButtonStyle(backgroundColor: mapModel.state == .started ? .red : .green))
+                .buttonStyle(OverlayButtonStyle(backgroundColor: mapModel.state == .layPathStarted ? .red : .green))
                 .padding(.bottom, 60)
             
             

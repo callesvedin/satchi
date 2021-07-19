@@ -16,40 +16,55 @@ struct TrackMapView: View {
     @State private var name = ""
     @State var showModal:Bool = false
     @State var done:Bool = false
-    
+    @State var showView = false
     
     init(trackModel:TrackModel) {
         self.trackModel = trackModel
-        mapModel = TrackMapModel(laidPath: trackModel.laidPath)
+        mapModel = TrackMapModel(laidPath: trackModel.laidPath,trackedPath: trackModel.trackPath)
     }
     
     var body: some View {
         ZStack {
-            MapView(mapModel: mapModel)
-            TrackMapOverlayView(mapModel:mapModel)
+            if showView {
+                MapView(mapModel: mapModel)
+                TrackMapOverlayView(mapModel:mapModel)
+            }
         }
-//        .sheet(isPresented: $showModal) {
-//            TextInputDialog(prompt: "Track name:" , value: $name)
-//        }
+        //        .sheet(isPresented: $showModal) {
+        //            TextInputDialog(prompt: "Track name:" , value: $name)
+        //        }
         .navigationBarHidden(true)
         .ignoresSafeArea()
-        .onChange(of:mapModel.stateDone) { value in
-            trackModel.laidPath = mapModel.laidPath
-            trackModel.trackPath = mapModel.trackPath
-            trackModel.timeToCreate = mapModel.timer.secondsElapsed
-            trackModel.finished = mapModel.tracking ? Date():nil
-            if !mapModel.tracking
-            {
+        .onChange(of:mapModel.state) { value in
+            
+            switch value {
+            case .layPathDone:
+                trackModel.laidPath = mapModel.laidPath
+                trackModel.trackPath = mapModel.trackPath
+                trackModel.timeToCreate = mapModel.timer.secondsElapsed
                 trackModel.length = Int(mapModel.distance)
+                trackModel.save()
+                presentationMode.wrappedValue.dismiss()
+            case .trackingDone:
+                trackModel.trackPath = mapModel.trackPath
+                trackModel.timeToFinish = mapModel.timer.secondsElapsed
+                trackModel.finished = Date()
+                trackModel.save()
+                presentationMode.wrappedValue.dismiss()
+            case .allDone:
+                presentationMode.wrappedValue.dismiss()            
+            default:
+                print("Map model state changed to \(value)")
             }
-            trackModel.save()
-            presentationMode.wrappedValue.dismiss()
             
         }
-//        .onChange(of: name) { value in
-//            showModal = false
-//            presentationMode.dismiss()
-//        }
+        .onAppear() {
+            showView = true
+        }
+        //        .onChange(of: name) { value in
+        //            showModal = false
+        //            presentationMode.dismiss()
+        //        }
     }
 }
 
