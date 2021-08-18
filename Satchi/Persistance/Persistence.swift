@@ -19,7 +19,7 @@ struct PersistenceController {
             newTrack.id = UUID()
             newTrack.name = "Trc \(nr)"
             newTrack.length = Int32(nr * 500)
-            newTrack.created = Date()
+            newTrack.created = Date(timeIntervalSinceNow: TimeInterval(-60*60*24+3))
             newTrack.difficulty = 4
         }
         for nr in 2..<6 {
@@ -31,6 +31,7 @@ struct PersistenceController {
             newTrack.created = Calendar.current.date(byAdding: createdTimeInterval, to: Date())
             var finishedTimeInterval = DateComponents(day: nr+1)
             newTrack.finished = Calendar.current.date(byAdding: finishedTimeInterval, to: Date())
+            newTrack.timeToFinish = (35+Double(nr))*60
             newTrack.difficulty = 5
         }
         
@@ -43,6 +44,7 @@ struct PersistenceController {
         newTrack.created = Date()
         newTrack.difficulty = 4
         newTrack.finished = Calendar.current.date(byAdding: timeInterval, to: Date())
+        newTrack.timeToFinish = 68 * 60
 
         let newTrack2 = Track(context: viewContext)
         newTrack2.id = UUID()
@@ -51,7 +53,7 @@ struct PersistenceController {
         newTrack2.created = Date()
         newTrack.difficulty = 2
         newTrack2.finished = Calendar.current.date(byAdding: timeInterval, to: Date())
-
+        newTrack.timeToFinish = 98*60
         
         do {
             try viewContext.save()

@@ -16,14 +16,18 @@ struct EditTrackView: View {
     @State private var editName = false
     @State private var save = true
     
-    let dateFormatter:DateFormatter
-    
+    let dateFormatter: DateFormatter
+    let elapsedTimeFormatter: DateComponentsFormatter
     
     init(trackModel:TrackModel) {
         self.trackModel = trackModel
         dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd hh:mm"
         difficulty = max(100, Int(trackModel.difficulty * 100))
+        elapsedTimeFormatter = DateComponentsFormatter()
+        elapsedTimeFormatter.unitsStyle = .abbreviated
+        elapsedTimeFormatter.zeroFormattingBehavior = .dropAll
+        elapsedTimeFormatter.allowedUnits = [.day, .hour, .minute]
     }
     
     var body: some View {
@@ -57,12 +61,14 @@ struct EditTrackView: View {
                 Text("Length: \(trackModel.length ?? 0)m").padding(.vertical, 4)
                 Text(String(format:"Time to create: %.1f sec", trackModel.timeToCreate ?? 0)).padding(.vertical, 4)
                 Text("Created: \(dateFormatter.string(from: trackModel.created))").padding(.vertical, 4)
-                Text("Time since created:").padding(.vertical, 4)
+                if trackModel.finished != nil {
+                    Text("Time creation to finished: \(elapsedTimeFormatter.string(from:  trackModel.created.distance(to:trackModel.finished!)) ?? "-")").padding(.vertical,4)
+                }else{
+                    Text("Time since created: \(elapsedTimeFormatter.string(from:  trackModel.created.distance(to:Date())) ?? "-")").padding(.vertical, 4)
+                }
                 if trackModel.finished != nil {
                     Text("Finished: \(dateFormatter.string(from: trackModel.finished!))").padding(.vertical, 4)
-                    Text("Time to finish:").padding(.vertical, 4)
-                }else {
-                    Text("Finished: -").padding(.vertical, 4)
+                    Text("Time to finish:\(elapsedTimeFormatter.string(from: trackModel.timeToFinish!) ?? "-")").padding(.vertical, 4)
                 }
                 
             }
@@ -70,17 +76,16 @@ struct EditTrackView: View {
             HStack {
                 Spacer()
                 VStack {
-                    
                         NavigationLink(destination: TrackMapView(trackModel: trackModel))
                         {
                             if trackModel.finished == nil {
-                                Text("Track!").font(.title)
+                                Text("Start Tracking").font(.headline)
                             }else{
-                                Text("Show!").font(.title)
+                                Text("Show Track").font(.headline)
                             }
                         }
                         .isDetailLink(false)
-                    
+                        .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
                 }
                 Spacer()
             }
@@ -93,14 +98,7 @@ struct EditTrackView: View {
     }
 }
 
-struct EditTrackView_Previews: PreviewProvider {
-    static var previews: some View {
-        let track = TrackStorage.preview.tracks.value[1]
-        return NavigationView {
-            EditTrackView(trackModel: TrackModel(track:track))
-        }
-    }
-}
+
 
 struct DifficultySlider: View {
     @Binding var difficulty:Int
@@ -119,5 +117,14 @@ struct DifficultySlider: View {
                     thumbSize:CGSize(width:10,height:15)
                 )
             )
+    }
+}
+
+struct EditTrackView_Previews: PreviewProvider {
+    static var previews: some View {
+        let track = TrackStorage.preview.tracks.value[2]
+        return NavigationView {
+            EditTrackView(trackModel: TrackModel(track:track))
+        }
     }
 }
