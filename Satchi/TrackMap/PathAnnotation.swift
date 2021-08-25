@@ -33,11 +33,11 @@ class PathAnnotation: MKPointAnnotation {
         case .LayPathStop:
             self.reuseIdentifier = "LayStop"
             self.imageIdentifier = "flag.circle"
-            self.color = UIColor.systemRed
+            self.color = UIColor.systemGreen
         case .TrackPathStart:
             self.reuseIdentifier = "TrackStart"
             self.imageIdentifier = "figure.walk.circle"
-            self.color = UIColor.systemGreen
+            self.color = UIColor.systemRed
         case .TrackPathStop:
             self.reuseIdentifier = "TrackStop"
             self.imageIdentifier = "figure.walk.circle"

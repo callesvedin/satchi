@@ -66,7 +66,7 @@ struct MapView: UIViewRepresentable {
         if mapModel.laidPath.count > 0 {
             var laidCoordinates = mapModel.laidPath.map({$0.coordinate})
             let polyline = TrackPolyline(coordinates: &laidCoordinates, count: laidCoordinates.count)
-            polyline.color = .systemBlue
+            polyline.color = .systemGreen
             uiView.addOverlay(polyline)
         }
         
@@ -101,6 +101,8 @@ struct MapView: UIViewRepresentable {
             if let over = overlay as? TrackPolyline {
                 renderer.strokeColor = over.color
                 renderer.lineWidth = 5
+                renderer.lineDashPhase = 2
+                renderer.lineDashPattern = [NSNumber(value: 1),NSNumber(value:5)]
             }
             return renderer
         }
