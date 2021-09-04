@@ -44,8 +44,8 @@ struct TrackCellView: View {
                 
                 HStack {
                     Image(systemName: "flag.fill").foregroundColor(.red)
-                    if track.finished != nil {
-                        Text("\(track.finished!, formatter: itemFormatter)")
+                    if track.started != nil {
+                        Text("\(track.started!, formatter: itemFormatter)")
                     }else{
                         Text("--/--/--")
                     }

@@ -65,7 +65,7 @@ class TrackStorage:NSObject, ObservableObject {
         do {
             let track = try getTrack(trackModel.uuid)
             track.difficulty = Int16(trackModel.difficulty)
-            track.finished = trackModel.finished
+            track.started = trackModel.started
             track.laidPath = trackModel.laidPath
             track.trackPath = trackModel.trackPath
             if trackModel.length != nil {
@@ -75,8 +75,11 @@ class TrackStorage:NSObject, ObservableObject {
             if trackModel.timeToCreate != nil {
                 track.timeToCreate = trackModel.timeToCreate!
             }
+            if trackModel.timeToFinish != nil {
+                track.timeToFinish = trackModel.timeToFinish!
+            }
             
-            track.finished = trackModel.finished
+            track.started = trackModel.started
             try persistanceController.container.viewContext.save()
             
         } catch {

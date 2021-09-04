@@ -10,7 +10,7 @@ import Foundation
 class TrackViewModel:ObservableObject {
     var name:String = ""
     var length:Int?
-    var finished:Date?
+    var started:Date?
     var created:Date?
     var uuid:UUID?
     
@@ -21,7 +21,7 @@ class TrackViewModel:ObservableObject {
             self.uuid = track.id
             self.length = Int(track.length)
             self.name = track.name ?? ""
-            self.finished = track.finished
+            self.started = track.started
             self.created = track.created
         }
     }

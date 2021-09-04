@@ -18,16 +18,27 @@ struct EditTrackView: View {
     
     let dateFormatter: DateFormatter
     let elapsedTimeFormatter: DateComponentsFormatter
+    let shortElapsedTimeFormatter: DateComponentsFormatter
     
     init(trackModel:TrackModel) {
         self.trackModel = trackModel
         dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd hh:mm"
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        dateFormatter.locale = Locale.current
+//        dateFormatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd hh:mm")
+        
         difficulty = max(100, Int(trackModel.difficulty * 100))
         elapsedTimeFormatter = DateComponentsFormatter()
         elapsedTimeFormatter.unitsStyle = .abbreviated
         elapsedTimeFormatter.zeroFormattingBehavior = .dropAll
         elapsedTimeFormatter.allowedUnits = [.day, .hour, .minute]
+        
+        shortElapsedTimeFormatter = DateComponentsFormatter()
+        shortElapsedTimeFormatter.unitsStyle = .abbreviated
+        shortElapsedTimeFormatter.zeroFormattingBehavior = .dropAll
+        shortElapsedTimeFormatter.allowedUnits = [.hour, .minute, .second]
+
     }
     
     var body: some View {
@@ -59,16 +70,16 @@ struct EditTrackView: View {
             }.frame(height: 22).padding(.vertical, 4)
             Group {
                 Text("Length: \(trackModel.length ?? 0)m").padding(.vertical, 4)
-                Text(String(format:"Time to create: %.1f sec", trackModel.timeToCreate ?? 0)).padding(.vertical, 4)
+                Text("Time to create: \(shortElapsedTimeFormatter.string(from: trackModel.timeToCreate!) ?? "-")").padding(.vertical, 4)
                 Text("Created: \(dateFormatter.string(from: trackModel.created))").padding(.vertical, 4)
-                if trackModel.finished != nil {
-                    Text("Time creation to finished: \(elapsedTimeFormatter.string(from:  trackModel.created.distance(to:trackModel.finished!)) ?? "-")").padding(.vertical,4)
+                if trackModel.started != nil {
+                    Text("Time between creation and start: \(elapsedTimeFormatter.string(from:  trackModel.created.distance(to:trackModel.started!)) ?? "-")").padding(.vertical,4)
                 }else{
                     Text("Time since created: \(elapsedTimeFormatter.string(from:  trackModel.created.distance(to:Date())) ?? "-")").padding(.vertical, 4)
                 }
-                if trackModel.finished != nil {
-                    Text("Finished: \(dateFormatter.string(from: trackModel.finished!))").padding(.vertical, 4)
-                    Text("Time to finish:\(elapsedTimeFormatter.string(from: trackModel.timeToFinish!) ?? "-")").padding(.vertical, 4)
+                if trackModel.started != nil {
+                    Text("Tracking started: \(dateFormatter.string(from: trackModel.started!))").padding(.vertical, 4)
+                    Text("Time to finish:\(shortElapsedTimeFormatter.string(from: trackModel.timeToFinish!) ?? "-")").padding(.vertical, 4)
                 }
                 
             }
@@ -78,7 +89,7 @@ struct EditTrackView: View {
                 VStack {
                         NavigationLink(destination: TrackMapView(trackModel: trackModel))
                         {
-                            if trackModel.finished == nil {
+                            if trackModel.started == nil {
                                 Text("Start Tracking").font(.headline)
                             }else{
                                 Text("Show Track").font(.headline)

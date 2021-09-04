@@ -11,11 +11,6 @@ import SwiftUI
 import MapKit
 
 
-//struct TrackAnnotation: Identifiable {
-//    let id = UUID()
-//    let coordinate: CLLocationCoordinate2D
-//}
-
 enum RunningState {
     case layPathNotStarted, layPathStarted, layPathStopped, layPathDone,
          trackingNotStarted, trackingStarted, trackingStopped, trackingDone, finishedTrack, allDone
@@ -25,7 +20,7 @@ class TrackMapModel:NSObject, ObservableObject {
     private var locationManager = CLLocationManager()
     public var annotations:[MKAnnotation] = []
     public var region:MKCoordinateRegion?
-    
+    public var trackingStarted:Date?
     @Published var timer:TrackTimer = TrackTimer()
     @Published var distance:CLLocationDistance = 0
     @Published public var gotUserLocation = false
@@ -45,6 +40,10 @@ class TrackMapModel:NSObject, ObservableObject {
             if state == .layPathStarted && currentLocation != nil {
                 reset()
                 addStartAnnotation(at: currentLocation!)
+                timer.start()
+            }else if state == .trackingStarted && currentLocation != nil {
+                trackingStarted = Date()
+                addTrackStartAnnotation(at: currentLocation!)
                 timer.start()
             }else if (state == .layPathStopped || state == .trackingStopped) && currentLocation != nil {
                 if state == .trackingStopped {
@@ -70,12 +69,16 @@ class TrackMapModel:NSObject, ObservableObject {
 
     public var trackPath:[CLLocation] = [] {
         didSet {
-            if trackPath.count == 1 {
-                addTrackStartAnnotation(at: trackPath.first!)
+            if trackPath.count >= 2 {
+                distance = getLength(from: trackPath)
             }
         }
     }
     
+    public override init() {
+        super.init()
+        self.state = .layPathNotStarted
+    }
     
     init(laidPath:[CLLocation]? = nil, trackedPath:[CLLocation]? = nil) {
         super.init()

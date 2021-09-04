@@ -24,8 +24,8 @@ class TrackListViewModel:ObservableObject {
     }
     
     public func reload() {
-        self.finishedTracks = tracks.filter({track in track.finished != nil})
-        self.availableTracks = tracks.filter({track in track.finished == nil})
+        self.finishedTracks = tracks.filter({track in track.started != nil})
+        self.availableTracks = tracks.filter({track in track.started == nil})
     }
     
     public func delete(track:Track) {

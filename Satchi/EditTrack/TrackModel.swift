@@ -13,7 +13,7 @@ class TrackModel: ObservableObject {
     var laidPath : [CLLocation]?
     var trackPath : [CLLocation]?
     var created : Date
-    var finished : Date?
+    var started : Date?
     var length : Int?
     var timeToCreate : Double?
     var timeToFinish : Double?
@@ -26,12 +26,12 @@ class TrackModel: ObservableObject {
         self.name = name
     }
     
-    convenience init(uuid:UUID? = nil, laidPath:[CLLocation], trackPath:[CLLocation], length:Int, created:Date, finished:Date?,  name:String, difficulty:Int, timeToCreate:Double, timeToFinish:Double){
+    convenience init(uuid:UUID? = nil, laidPath:[CLLocation], trackPath:[CLLocation], length:Int, created:Date, started:Date?,  name:String, difficulty:Int, timeToCreate:Double, timeToFinish:Double){
         self.init(created:created, difficulty:difficulty)
         self.uuid = uuid
         self.laidPath = laidPath
         self.trackPath = trackPath
-        self.finished = finished
+        self.started = started
         self.length = length
         self.name = name
         self.difficulty = difficulty
@@ -45,7 +45,7 @@ class TrackModel: ObservableObject {
                   trackPath: track.trackPath ?? [],
                   length: Int(track.length),
                   created: track.created ?? Date(),
-                  finished: track.finished,
+                  started: track.started,
                   name: track.name ?? "New Track",
                   difficulty: Int(track.difficulty),
                   timeToCreate: track.timeToCreate,

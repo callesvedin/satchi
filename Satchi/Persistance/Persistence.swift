@@ -30,7 +30,7 @@ struct PersistenceController {
             var createdTimeInterval = DateComponents(day: nr)
             newTrack.created = Calendar.current.date(byAdding: createdTimeInterval, to: Date())
             var finishedTimeInterval = DateComponents(day: nr+1)
-            newTrack.finished = Calendar.current.date(byAdding: finishedTimeInterval, to: Date())
+            newTrack.started = Calendar.current.date(byAdding: finishedTimeInterval, to: Date())
             newTrack.timeToFinish = (35+Double(nr))*60
             newTrack.difficulty = 5
         }
@@ -43,7 +43,7 @@ struct PersistenceController {
         newTrack.length = 5000
         newTrack.created = Date()
         newTrack.difficulty = 4
-        newTrack.finished = Calendar.current.date(byAdding: timeInterval, to: Date())
+        newTrack.started = Calendar.current.date(byAdding: timeInterval, to: Date())
         newTrack.timeToFinish = 68 * 60
 
         let newTrack2 = Track(context: viewContext)
@@ -52,7 +52,7 @@ struct PersistenceController {
         newTrack2.length = 5400
         newTrack2.created = Date()
         newTrack.difficulty = 2
-        newTrack2.finished = Calendar.current.date(byAdding: timeInterval, to: Date())
+        newTrack2.started = Calendar.current.date(byAdding: timeInterval, to: Date())
         newTrack.timeToFinish = 98*60
         
         do {

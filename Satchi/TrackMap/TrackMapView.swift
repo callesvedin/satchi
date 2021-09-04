@@ -11,7 +11,7 @@ import MapKit
 
 struct TrackMapView: View {
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject private var mapModel:TrackMapModel
+    @ObservedObject public var mapModel:TrackMapModel
     var trackModel:TrackModel
     @State private var name = ""
     @State var showModal:Bool = false
@@ -48,7 +48,7 @@ struct TrackMapView: View {
             case .trackingDone:
                 trackModel.trackPath = mapModel.trackPath
                 trackModel.timeToFinish = mapModel.timer.secondsElapsed
-                trackModel.finished = Date()
+                trackModel.started = mapModel.trackingStarted
                 trackModel.save()
                 presentationMode.wrappedValue.dismiss()
             case .allDone:

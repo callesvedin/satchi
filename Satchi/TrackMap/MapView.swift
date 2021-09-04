@@ -82,10 +82,6 @@ struct MapView: UIViewRepresentable {
             mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 50.0, left: 50.0, bottom: 50.0, right: 50.0), animated: true)
         }
         
-        #if DEBUG
-        print("Annotations:\(uiView.annotations.count)")
-        print("Overlays:\(uiView.overlays.count)")
-        #endif
     }
     
     
