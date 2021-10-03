@@ -9,16 +9,16 @@ import Foundation
 import SwiftUI
 
 struct OverlayButtonStyle: ButtonStyle {
-    var backgroundColor:Color
-    
+    var backgroundColor: Color
+
     func makeBody(configuration: Configuration) -> some View {
         configuration
             .label
             .foregroundColor(configuration.isPressed ? .gray : .black)
             .padding(6)
-            .frame(minWidth:80)
+            .frame(minWidth: 80)
             .background(backgroundColor)
             .opacity(0.6)
-            .cornerRadius(8)        
+            .cornerRadius(8)
     }
 }

@@ -7,18 +7,17 @@
 
 import SwiftUI
 
+struct TrackMapOverlayView: View {
+    @ObservedObject var mapModel: TrackMapModel
+    @ObservedObject var timer: TrackTimer
 
-struct TrackMapOverlayView: View {    
-    @ObservedObject var mapModel:TrackMapModel
-    @ObservedObject var timer : TrackTimer
-    
-    init(mapModel:TrackMapModel) {
+    init(mapModel: TrackMapModel) {
         self.mapModel = mapModel
         self.timer = mapModel.timer
     }
-    
+
     var body: some View {
-        var buttonText:String
+        var buttonText: String
         switch mapModel.state {
         case .layPathNotStarted, .trackingNotStarted:
             buttonText = "Start"
@@ -30,18 +29,18 @@ struct TrackMapOverlayView: View {
             buttonText = "Close"
         }
         return
-            VStack{
-                HStack{
+            VStack {
+                HStack {
                     Text(String(format: "Distance: %.2f m", (mapModel.distance)))
                     Spacer()
-                    Text(String(format:"Time: %.1f sec", mapModel.timer.secondsElapsed))
+                    Text(String(format: "Time: %.1f sec", mapModel.timer.secondsElapsed))
                 }
                 .padding(.top, 30)
                 .padding()
                 .background(Color.white)
                 .opacity(0.5)
                 Spacer()
-                
+
                 Button(buttonText) {
                     switch mapModel.state {
                     case .layPathNotStarted:
@@ -68,14 +67,13 @@ struct TrackMapOverlayView: View {
                 }
                 .buttonStyle(OverlayButtonStyle(backgroundColor: mapModel.state == .layPathStarted ? .red : .green))
                 .padding(.bottom, 60)
-            
-            
-        }
+
+            }
     }
 }
 
 struct TrackMapOverlayView_Previews: PreviewProvider {
     static var previews: some View {
-        TrackMapOverlayView(mapModel:TrackMapModel())
+        TrackMapOverlayView(mapModel: TrackMapModel())
     }
 }

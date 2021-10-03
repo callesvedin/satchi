@@ -6,19 +6,17 @@
 //
 
 import SwiftUI
-import SwiftUI
 
 struct TextInputDialog: View {
     @Environment(\.presentationMode) var presentationMode
-    
     @Binding var value: String
 
     /// Prompt message
     var prompt: String = ""
-    
+
     /// The value currently edited
     @State var fieldValue: String
-    
+
     /// Init the Dialog view
     /// Passed @binding value is duplicated to @state value while editing
     init(prompt: String, value: Binding<String>) {
@@ -30,10 +28,10 @@ struct TextInputDialog: View {
     var body: some View {
         VStack {
             Text(prompt).frame(width: 100)
-            
+
             TextField("", text: $fieldValue)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .frame(width: 200, alignment: .center)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .frame(width: 200, alignment: .center)
 
             HStack {
                 Button("Save") {
@@ -43,7 +41,7 @@ struct TextInputDialog: View {
             }.padding()
         }
         .padding()
-        }
+    }
 }
 
 #if DEBUG
@@ -51,7 +49,8 @@ struct TextInputDialog_Previews: PreviewProvider {
     static var previews: some View {
         var name = "Stensö"
         TextInputDialog(prompt: "Track name:",
-                        value: Binding<String>.init(get: { name }, set: {name = $0})).frame(width: 100, height: 100, alignment: .center)
+                        value: Binding<String>.init(get: { name }, set: {name = $0}))
+            .frame(width: 100, height: 100, alignment: .center)
     }
 }
 #endif

@@ -6,28 +6,32 @@
 //
 
 import Foundation
+import UIKit
 import CoreLocation
 
 class TrackModel: ObservableObject {
-    var uuid : UUID?
-    var laidPath : [CLLocation]?
-    var trackPath : [CLLocation]?
-    var created : Date
-    var started : Date?
-    var length : Int?
-    var timeToCreate : Double?
-    var timeToFinish : Double?
-    var difficulty : Int
-    var name : String
-    
-    init(created:Date = Date(), difficulty:Int = 3, name:String = "New Track") {
+    var uuid: UUID?
+    var laidPath: [CLLocation]?
+    var trackPath: [CLLocation]?
+    var created: Date
+    var started: Date?
+    var length: Int?
+    var timeToCreate: Double?
+    var timeToFinish: Double?
+    var difficulty: Int
+    var name: String
+    var image: UIImage?
+
+    init(created: Date = Date(), difficulty: Int = 3, name: String = "New Track") {
         self.created = created
         self.difficulty = difficulty
         self.name = name
     }
-    
-    convenience init(uuid:UUID? = nil, laidPath:[CLLocation], trackPath:[CLLocation], length:Int, created:Date, started:Date?,  name:String, difficulty:Int, timeToCreate:Double, timeToFinish:Double){
-        self.init(created:created, difficulty:difficulty)
+
+    convenience init(uuid: UUID? = nil, laidPath: [CLLocation],
+                     trackPath: [CLLocation], length: Int, created: Date, started: Date?,
+                     name: String, difficulty: Int, timeToCreate: Double, timeToFinish: Double, image: UIImage?) {
+        self.init(created: created, difficulty: difficulty)
         self.uuid = uuid
         self.laidPath = laidPath
         self.trackPath = trackPath
@@ -37,10 +41,11 @@ class TrackModel: ObservableObject {
         self.difficulty = difficulty
         self.timeToCreate = timeToCreate
         self.timeToFinish = timeToFinish
+        self.image = image
     }
 
-    convenience init(track:Track) {
-        self.init(uuid:track.id,
+    convenience init(track: Track) {
+        self.init(uuid: track.id,
                   laidPath: track.laidPath ?? [],
                   trackPath: track.trackPath ?? [],
                   length: Int(track.length),
@@ -49,11 +54,12 @@ class TrackModel: ObservableObject {
                   name: track.name ?? "New Track",
                   difficulty: Int(track.difficulty),
                   timeToCreate: track.timeToCreate,
-                  timeToFinish: track.timeToFinish
+                  timeToFinish: track.timeToFinish,
+                  image: track.image != nil ? UIImage(data: track.image!) : nil
         )
     }
-    
+
     func save() {
-        TrackStorage.shared.update(with:self)        
+        TrackStorage.shared.update(with: self)
     }
 }

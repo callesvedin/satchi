@@ -9,31 +9,31 @@ import SwiftUI
 
 struct TrackCellView: View {
     @Environment(\.colorScheme) var colorScheme
-    
+
     var model: TrackListViewModel
-    @ObservedObject var track:Track
+    @ObservedObject var track: Track
     let columns = [
         GridItem(.flexible()),
-        GridItem(.flexible()),
+        GridItem(.flexible())
     ]
-    
+
     var body: some View {
         VStack {
-            HStack{
+            HStack {
                 Text("\(track.name ?? "")")
                     .font(.title)
                     .bold()
                 Spacer()
                 Button(action: {
-                    withAnimation(){
-                        model.delete(track:track)
+                    withAnimation {
+                        model.delete(track: track)
                         model.reload()
                     }
-                }) {
+                }, label: {
                     Image(systemName: "trash")
-                }
+                })
             }
-            
+
             LazyVGrid(columns: columns, alignment: .leading, spacing: 0) {
                 HStack {
                     Image(systemName: "flag.fill").foregroundColor(.green)
@@ -41,20 +41,18 @@ struct TrackCellView: View {
                     Spacer()
                 }
                 Label("\(track.length) m", systemImage: "arrow.left.and.right")
-                
+
                 HStack {
                     Image(systemName: "flag.fill").foregroundColor(.red)
                     if track.started != nil {
                         Text("\(track.started!, formatter: itemFormatter)")
-                    }else{
+                    } else {
                         Text("--/--/--")
                     }
                     Spacer()
                 }
                 Text("Difficulty:\(track.difficulty)")
-
             }
-            
         }
         .padding(.vertical, 10)
         .padding(.horizontal)
@@ -66,7 +64,6 @@ struct TrackCellView: View {
         .shadow(color: Color.gray, radius: 5, x: 0, y: 4)
         .padding(8)
     }
-    
 }
 
 private let itemFormatter: DateFormatter = {
@@ -76,12 +73,11 @@ private let itemFormatter: DateFormatter = {
     return formatter
 }()
 
-
 struct TrackCellView_Previews: PreviewProvider {
     static var previews: some View {
         let track = TrackStorage.preview.tracks.value[1]
         ForEach(ColorScheme.allCases, id: \.self) {
-            TrackCellView(model:TrackListViewModel(), track: track).frame(height: 90).preferredColorScheme($0)
-        }        
+            TrackCellView(model: TrackListViewModel(), track: track).frame(height: 90).preferredColorScheme($0)
+        }
     }
 }

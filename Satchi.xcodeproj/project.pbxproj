@@ -14,6 +14,13 @@
 		EB5688E0269C304000AF9AB1 /* TrackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5688DF269C304000AF9AB1 /* TrackCellView.swift */; };
 		EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE225261CBA3D00D56711 /* TrackMapView.swift */; };
 		EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */; };
+		EB673F6827036BA500AAED57 /* Track+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB673F6627036BA500AAED57 /* Track+CoreDataClass.swift */; };
+		EB673F6927036BA500AAED57 /* Track+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB673F6727036BA500AAED57 /* Track+CoreDataProperties.swift */; };
+		EB673F6A27036E3D00AAED57 /* Track+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB673F6627036BA500AAED57 /* Track+CoreDataClass.swift */; };
+		EB673F6B27036E4100AAED57 /* Track+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB673F6727036BA500AAED57 /* Track+CoreDataProperties.swift */; };
+		EB673F6C27036E5E00AAED57 /* TrackStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872547260CC190008AD8E7 /* TrackStorage.swift */; };
+		EB673F6D27036E7400AAED57 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872510260CC0C5008AD8E7 /* Persistence.swift */; };
+		EB673F6E27036E9600AAED57 /* TrackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A5F261AF3C10080C4FE /* TrackModel.swift */; };
 		EB7D868F265438AE0088F13E /* TrackTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D868E265438AE0088F13E /* TrackTimer.swift */; };
 		EB7DFD2B261E0D6A0056D6B4 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DFD2A261E0D6A0056D6B4 /* MapView.swift */; };
 		EB872508260CC0C4008AD8E7 /* SatchiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872507260CC0C4008AD8E7 /* SatchiApp.swift */; };
@@ -60,6 +67,8 @@
 		EB5688DF269C304000AF9AB1 /* TrackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCellView.swift; sourceTree = "<group>"; };
 		EB5CE225261CBA3D00D56711 /* TrackMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapView.swift; sourceTree = "<group>"; };
 		EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapModel.swift; sourceTree = "<group>"; };
+		EB673F6627036BA500AAED57 /* Track+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Track+CoreDataClass.swift"; path = "Satchi/Persistance/Entities/Track+CoreDataClass.swift"; sourceTree = "<group>"; };
+		EB673F6727036BA500AAED57 /* Track+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Track+CoreDataProperties.swift"; path = "Satchi/Persistance/Entities/Track+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		EB7D868E265438AE0088F13E /* TrackTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTimer.swift; sourceTree = "<group>"; };
 		EB7DFD2A261E0D6A0056D6B4 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		EB872504260CC0C4008AD8E7 /* Satchi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Satchi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -127,6 +136,8 @@
 		EB8724FB260CC0C4008AD8E7 = {
 			isa = PBXGroup;
 			children = (
+				EB673F6627036BA500AAED57 /* Track+CoreDataClass.swift */,
+				EB673F6727036BA500AAED57 /* Track+CoreDataProperties.swift */,
 				EB872506260CC0C4008AD8E7 /* Satchi */,
 				EB87251D260CC0C5008AD8E7 /* SatchiTests */,
 				EB872528260CC0C5008AD8E7 /* SatchiUITests */,
@@ -226,6 +237,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EB87252E260CC0C5008AD8E7 /* Build configuration list for PBXNativeTarget "Satchi" */;
 			buildPhases = (
+				EBC070E226FFC3B600A96FD4 /* ShellScript */,
 				EB872500260CC0C4008AD8E7 /* Sources */,
 				EB872501260CC0C4008AD8E7 /* Frameworks */,
 				EB872502260CC0C4008AD8E7 /* Resources */,
@@ -349,6 +361,26 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		EBC070E226FFC3B600A96FD4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		EB872500260CC0C4008AD8E7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -363,6 +395,7 @@
 				EB872508260CC0C4008AD8E7 /* SatchiApp.swift in Sources */,
 				EBD13A55261AF3760080C4FE /* EditTrackView.swift in Sources */,
 				EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */,
+				EB673F6927036BA500AAED57 /* Track+CoreDataProperties.swift in Sources */,
 				EB05E19526277868002941B6 /* PathAnnotation.swift in Sources */,
 				EB5688E0269C304000AF9AB1 /* TrackCellView.swift in Sources */,
 				EB0D4754260E930F006BCBB8 /* MainTabView.swift in Sources */,
@@ -374,6 +407,7 @@
 				EB2F91212624B6500026773D /* TrackMapOverlayView.swift in Sources */,
 				EB87253F260CC158008AD8E7 /* TrackListViewModel.swift in Sources */,
 				EBD13A60261AF3C10080C4FE /* TrackModel.swift in Sources */,
+				EB673F6827036BA500AAED57 /* Track+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,7 +416,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB872540260CC158008AD8E7 /* TrackListViewModel.swift in Sources */,
+				EB673F6B27036E4100AAED57 /* Track+CoreDataProperties.swift in Sources */,
+				EB673F6E27036E9600AAED57 /* TrackModel.swift in Sources */,
+				EB673F6C27036E5E00AAED57 /* TrackStorage.swift in Sources */,
+				EB673F6D27036E7400AAED57 /* Persistence.swift in Sources */,
 				EB87251F260CC0C5008AD8E7 /* SatchiTests.swift in Sources */,
+				EB673F6A27036E3D00AAED57 /* Track+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

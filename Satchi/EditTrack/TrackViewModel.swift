@@ -7,16 +7,16 @@
 
 import Foundation
 
-class TrackViewModel:ObservableObject {
-    var name:String = ""
-    var length:Int?
-    var started:Date?
-    var created:Date?
-    var uuid:UUID?
-    
+class TrackViewModel: ObservableObject {
+    var name: String = ""
+    var length: Int?
+    var started: Date?
+    var created: Date?
+    var uuid: UUID?
+
     init() {}
-    
-    init(track inTrack:Track?) {
+
+    init(track inTrack: Track?) {
         if let track = inTrack {
             self.uuid = track.id
             self.length = Int(track.length)
@@ -25,5 +25,5 @@ class TrackViewModel:ObservableObject {
             self.created = track.created
         }
     }
-    
+
 }

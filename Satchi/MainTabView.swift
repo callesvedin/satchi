@@ -7,22 +7,20 @@
 
 import SwiftUI
 
+struct MainTabView: View {
 
-struct MainTabView: View {    
-    
-    var body: some View {        
+    var body: some View {
         NavigationView {
             TrackListView()
         }
-    }    
+    }
 }
-
 
 struct MainTabView2: View {
     var body: some View {
         TabView {
             NavigationView {
-                TrackListView()                   
+                TrackListView()
             }
             .tabItem {
                 Image(systemName: "map")
