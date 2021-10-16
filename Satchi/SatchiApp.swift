@@ -23,4 +23,6 @@ struct SatchiApp: App {
             MainTabView()
         }
     }
+
+
 }
