@@ -45,7 +45,6 @@ struct TrackListView: View {
                     }.buttonStyle(PlainButtonStyle())
                 }
             }
-
         }
         .navigationTitle("Tracks")
         .toolbar {
@@ -61,6 +60,7 @@ struct TrackListView: View {
             viewModel.reload()
         }
     }
+
 }
 
 struct TrackSectionView: View {

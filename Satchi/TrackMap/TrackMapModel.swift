@@ -12,7 +12,8 @@ import MapKit
 
 enum RunningState {
     case layPathNotStarted, layPathStarted, layPathStopped, layPathDone,
-         trackingNotStarted, trackingStarted, trackingStopped, trackingDone, finishedTrack, allDone
+         trackingNotStarted, trackingStarted, trackingStopped,
+         trackingDone, finishedTrack, allDone, cancelled
 }
 
 class TrackMapModel: NSObject, ObservableObject {
@@ -21,6 +22,7 @@ class TrackMapModel: NSObject, ObservableObject {
     public var annotations: [MKAnnotation] = []
     public var region: MKCoordinateRegion?
     public var trackingStarted: Date?
+    public var previousState: RunningState = .allDone
     @Published var timer: TrackTimer = TrackTimer()
     @Published var distance: CLLocationDistance = 0
     @Published public var gotUserLocation = false
@@ -76,6 +78,7 @@ class TrackMapModel: NSObject, ObservableObject {
     public override init() {
         super.init()
         self.state = .layPathNotStarted
+        self.previousState = self.state
     }
 
     init(laidPath: [CLLocation]? = nil, trackedPath: [CLLocation]? = nil) {
@@ -103,6 +106,7 @@ class TrackMapModel: NSObject, ObservableObject {
             locationManager.delegate = self
             setStartLocation()
         }
+        self.previousState = self.state
     }
 
     private func createImage() {

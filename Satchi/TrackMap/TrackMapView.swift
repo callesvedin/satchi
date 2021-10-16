@@ -29,9 +29,8 @@ struct TrackMapView: View {
                 TrackMapOverlayView(mapModel: mapModel)
             }
         }
-        //        .sheet(isPresented: $showModal) {
-        //            TextInputDialog(prompt: "Track name:" , value: $name)
-        //        }
+//        .navigationTitle("Track")
+//        .navigationBarTitleDisplayMode(.inline)
         .navigationBarHidden(true)
         .ignoresSafeArea()
         .onChange(of: mapModel.state) { value in
@@ -54,6 +53,10 @@ struct TrackMapView: View {
                 presentationMode.wrappedValue.dismiss()
             case .allDone:
                 presentationMode.wrappedValue.dismiss()
+            case .cancelled:
+                presentationMode.wrappedValue.dismiss()
+                mapModel.state = mapModel.previousState
+
             default:
                 print("Map model state changed to \(value)")
             }
@@ -62,10 +65,6 @@ struct TrackMapView: View {
         .onAppear {
             showView = true
         }
-        //        .onChange(of: name) { value in
-        //            showModal = false
-        //            presentationMode.dismiss()
-        //        }
     }
 }
 
