@@ -16,6 +16,7 @@ struct SatchiApp: App {
                                                         FileManager.SearchPathDomainMask.userDomainMask, true)
         print(paths[0])
         #endif
+        ValueTransformer.setValueTransformer(TrackTransformer(), forName: NSValueTransformerName("TrackTransformer"))
     }
 
     var body: some Scene {
@@ -23,6 +24,4 @@ struct SatchiApp: App {
             MainTabView()
         }
     }
-
-
 }

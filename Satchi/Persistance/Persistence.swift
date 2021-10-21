@@ -4,12 +4,16 @@
 //
 //  Created by carl-johan.svedin on 2021-03-25.
 //
-
+import Foundation
 import CoreData
 import UIKit
+import CloudKit
 
-struct PersistenceController {
+class PersistenceController {
     static let shared = PersistenceController()
+    let appTransactionAuthorName = "Satchi"
+    var privatePersistentStore: NSPersistentStore!
+    var sharedPersistentStore: NSPersistentStore!
 
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
@@ -80,23 +84,21 @@ struct PersistenceController {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }
 
-
         let privateStoreDescription = container.persistentStoreDescriptions.first!
         let storesURL = privateStoreDescription.url!.deletingLastPathComponent()
         privateStoreDescription.url = storesURL.appendingPathComponent("private.sqlite")
         privateStoreDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-        privateStoreDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        privateStoreDescription.setOption(true as NSNumber,
+                                          forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
 
-
-
-        //Add Shared Database
+        // Add Shared Database
         let sharedStoreURL = storesURL.appendingPathComponent("shared.sqlite")
         guard let sharedStoreDescription = privateStoreDescription.copy() as? NSPersistentStoreDescription else {
             fatalError("Copying the private store description returned an unexpected value.")
         }
         sharedStoreDescription.url = sharedStoreURL
 
-        if appDelegate.allowCloudKitSync {
+        if LaunchArguments.shared.allowCloudKitSync {
             let containerIdentifier = privateStoreDescription.cloudKitContainerOptions!.containerIdentifier
             let sharedStoreOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: containerIdentifier)
             sharedStoreOptions.databaseScope = .shared
@@ -106,22 +108,25 @@ struct PersistenceController {
             sharedStoreDescription.cloudKitContainerOptions = nil
         }
 
-
         container.persistentStoreDescriptions.append(sharedStoreDescription)
-        container.loadPersistentStores(completionHandler: { (loadedStoreDescription, error) in
+        container.loadPersistentStores(completionHandler: { [self] (loadedStoreDescription, error) in
             if let loadError = error as NSError? {
                 fatalError("###\(#function): Failed to load persistent stores:\(loadError)")
             } else if let cloudKitContainerOptions = loadedStoreDescription.cloudKitContainerOptions {
                 if .private == cloudKitContainerOptions.databaseScope {
-                    self._privatePersistentStore = container.persistentStoreCoordinator.persistentStore(for: loadedStoreDescription.url!)
+                    self.privatePersistentStore = container.persistentStoreCoordinator
+                        .persistentStore(for: loadedStoreDescription.url!)
                 } else if .shared == cloudKitContainerOptions.databaseScope {
-                    self._sharedPersistentStore = container.persistentStoreCoordinator.persistentStore(for: loadedStoreDescription.url!)
+                    self.sharedPersistentStore = container.persistentStoreCoordinator
+                        .persistentStore(for: loadedStoreDescription.url!)
                 }
-            } else if appDelegate.testingEnabled {
+            } else if LaunchArguments.shared.testingEnabled {
                 if loadedStoreDescription.url!.lastPathComponent.hasSuffix("private.sqlite") {
-                    self._privatePersistentStore = container.persistentStoreCoordinator.persistentStore(for: loadedStoreDescription.url!)
+                    self.privatePersistentStore = container
+                        .persistentStoreCoordinator.persistentStore(for: loadedStoreDescription.url!)
                 } else if loadedStoreDescription.url!.lastPathComponent.hasSuffix("shared.sqlite") {
-                    self._sharedPersistentStore = container.persistentStoreCoordinator.persistentStore(for: loadedStoreDescription.url!)
+                    self.sharedPersistentStore = container
+                        .persistentStoreCoordinator.persistentStore(for: loadedStoreDescription.url!)
                 }
             }
         })
@@ -142,28 +147,6 @@ struct PersistenceController {
                                                selector: #selector(storeRemoteChange(_:)),
                                                name: .NSPersistentStoreRemoteChange,
                                                object: container.persistentStoreCoordinator)
-
-
-
-        container.loadPersistentStores(completionHandler: { (_, error) in
-            if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate.
-                // You should not use this function in a shipping application,
-                // although it may be useful during development.
-
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible,
-                 * due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
     }
 
     func deleteAllTracks(inContext context: NSManagedObjectContext) {
@@ -181,4 +164,20 @@ struct PersistenceController {
 
     }
 
+}
+
+// MARK: - Notifications
+
+extension PersistenceController {
+    /**
+     Handle remote store change notifications (.NSPersistentStoreRemoteChange).
+     */
+    @objc
+    func storeRemoteChange(_ notification: Notification) {
+        print("Got remote change notification")
+        // Process persistent history to merge changes from other coordinators.
+//        historyQueue.addOperation {
+//            self.processPersistentHistory()
+//        }
+    }
 }
