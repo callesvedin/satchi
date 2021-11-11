@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import CoreLocation
+import Combine
 
 class TrackModel: ObservableObject {
     var uuid: UUID?
@@ -21,6 +22,7 @@ class TrackModel: ObservableObject {
     var difficulty: Int
     var name: String
     var image: UIImage?
+    let objectWillChange = PassthroughSubject<Void, Never>()
 
     init(created: Date = Date(), difficulty: Int = 3, name: String = "New Track") {
         self.created = created
@@ -60,6 +62,8 @@ class TrackModel: ObservableObject {
     }
 
     func save() {
+        print("TrackModel saved")
+        objectWillChange.send()
         TrackStorage.shared.update(with: self)
     }
 }

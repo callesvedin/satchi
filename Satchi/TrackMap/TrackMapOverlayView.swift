@@ -10,6 +10,7 @@ import SwiftUI
 struct TrackMapOverlayView: View {
     @ObservedObject var mapModel: TrackMapModel
     @ObservedObject var timer: TrackTimer
+    @Environment(\.colorScheme) var colorScheme
 
     init(mapModel: TrackMapModel) {
         self.mapModel = mapModel
@@ -38,11 +39,10 @@ struct TrackMapOverlayView: View {
                 Spacer()
                 Text(String(format: "Time: %.1f sec", mapModel.timer.secondsElapsed))
             }
-//            .padding()
             .padding(.top, topPadding)
             .padding(.horizontal)
             .padding(.bottom)
-            .background(Color.white)
+            .background(colorScheme == .light ? Color.white : Color.black)
             .opacity(0.8)
             Spacer()
             HStack {
@@ -100,6 +100,9 @@ struct TrackMapOverlayView: View {
 
 struct TrackMapOverlayView_Previews: PreviewProvider {
     static var previews: some View {
-        TrackMapOverlayView(mapModel: TrackMapModel()).ignoresSafeArea()
+        Group {
+            TrackMapOverlayView(mapModel: TrackMapModel()).ignoresSafeArea()
+            TrackMapOverlayView(mapModel: TrackMapModel()).ignoresSafeArea().preferredColorScheme(.dark)
+        }
     }
 }

@@ -23,6 +23,7 @@ class TrackMapModel: NSObject, ObservableObject {
     public var region: MKCoordinateRegion?
     public var trackingStarted: Date?
     public var previousState: RunningState = .allDone
+    public var previewing = false
     @Published var timer: TrackTimer = TrackTimer()
     @Published var distance: CLLocationDistance = 0
     @Published public var gotUserLocation = false
@@ -52,7 +53,7 @@ class TrackMapModel: NSObject, ObservableObject {
                 } else {
                     addStopAnnotation(at: currentLocation!)
                 }
-                createImage()
+//                createImage()
                 timer.stop()
                 stopTracking()
             }
@@ -75,61 +76,50 @@ class TrackMapModel: NSObject, ObservableObject {
         }
     }
 
-    public override init() {
-        super.init()
-        self.state = .layPathNotStarted
-        self.previousState = self.state
-    }
+//    private func createImage() {
+//        if region != nil {
+//            let snapShotOptions: MKMapSnapshotter.Options = MKMapSnapshotter.Options()
+//            var snapShot: MKMapSnapshotter!
+//
+//            snapShotOptions.region = region!
+//            //            _snapShotOptions.size = mapView.frame.size
+//            snapShotOptions.scale = UIScreen.main.scale
+//
+//            // Set MKMapSnapShotOptions to MKMapSnapShotter.
+//            snapShot = MKMapSnapshotter(options: snapShotOptions)
+//
+//            snapShot.start { [self] (snapshot, error) -> Void in
+//                if error == nil {
+//                    image = snapshot!.image
+//                } else {
+//                    print("error")
+//                }
+//            }
+//        }
+//
+//    }
 
-    init(laidPath: [CLLocation]? = nil, trackedPath: [CLLocation]? = nil) {
-        super.init()
-
-        if let lPath = laidPath, !lPath.isEmpty, let tPath = trackedPath, !tPath.isEmpty {
-            self.laidPath = lPath
-            self.trackPath = tPath
-            self.addStartAnnotation(at: lPath.first!)
-            self.addStopAnnotation(at: lPath.last!)
-            self.addTrackStartAnnotation(at: tPath.first!)
-            self.addTrackStopAnnotation(at: tPath.last!)
+    public func start() {
+        if !laidPath.isEmpty && !trackPath.isEmpty {
+            self.addStartAnnotation(at: laidPath.first!)
+            self.addStopAnnotation(at: laidPath.last!)
+            self.addTrackStartAnnotation(at: trackPath.first!)
+            self.addTrackStopAnnotation(at: trackPath.last!)
             self.state = .finishedTrack
-        } else if let lPath = laidPath, !lPath.isEmpty {
-            self.laidPath = lPath
-            self.addStartAnnotation(at: lPath.first!)
-            self.addStopAnnotation(at: lPath.last!)
+        } else if !laidPath.isEmpty {
+            self.addStartAnnotation(at: laidPath.first!)
+            self.addStopAnnotation(at: laidPath.last!)
             self.state = .trackingNotStarted
         } else {
             self.state = .layPathNotStarted
         }
 
-        if self.state == .trackingNotStarted || self.state == .layPathNotStarted {
+        if !previewing && (self.state == .trackingNotStarted || self.state == .layPathNotStarted) {
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.delegate = self
-            setStartLocation()
+            startTracking()
         }
         self.previousState = self.state
-    }
-
-    private func createImage() {
-        if region != nil {
-            let snapShotOptions: MKMapSnapshotter.Options = MKMapSnapshotter.Options()
-            var snapShot: MKMapSnapshotter!
-
-            snapShotOptions.region = region!
-            //            _snapShotOptions.size = mapView.frame.size
-            snapShotOptions.scale = UIScreen.main.scale
-
-            // Set MKMapSnapShotOptions to MKMapSnapShotter.
-            snapShot = MKMapSnapshotter(options: snapShotOptions)
-
-            snapShot.start { [self] (snapshot, error) -> Void in
-                if error == nil {
-                    image = snapshot!.image
-                } else {
-                    print("error")
-                }
-            }
-        }
-
     }
 
     private func addTrackStartAnnotation(at location: CLLocation) {
@@ -195,7 +185,7 @@ class TrackMapModel: NSObject, ObservableObject {
         trackPath = []
     }
 
-    public func setStartLocation() {
+    public func startTracking() {
         let status = locationManager.authorizationStatus
         if status == .notDetermined || status == .denied || status == .authorizedWhenInUse {
             // present an alert indicating location authorization required

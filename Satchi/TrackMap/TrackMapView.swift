@@ -10,22 +10,22 @@ import MapKit
 
 struct TrackMapView: View {
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject public var mapModel: TrackMapModel
+    @StateObject public var mapModel = TrackMapModel()
     var trackModel: TrackModel
     @State private var name = ""
     @State var showModal: Bool = false
     @State var done: Bool = false
-    @State var showView = false
+    var preview = true
 
-    init(trackModel: TrackModel) {
+    init(trackModel: TrackModel, preview: Bool = false) {
         self.trackModel = trackModel
-        mapModel = TrackMapModel(laidPath: trackModel.laidPath, trackedPath: trackModel.trackPath)
+        self.preview = preview
     }
 
     var body: some View {
         ZStack {
-            if showView {
-                MapView(mapModel: mapModel)
+            MapView(mapModel: mapModel)
+            if !preview {
                 TrackMapOverlayView(mapModel: mapModel)
             }
         }
@@ -53,6 +53,7 @@ struct TrackMapView: View {
                 presentationMode.wrappedValue.dismiss()
             case .allDone:
                 presentationMode.wrappedValue.dismiss()
+                mapModel.state = mapModel.previousState
             case .cancelled:
                 presentationMode.wrappedValue.dismiss()
                 mapModel.state = mapModel.previousState
@@ -60,10 +61,12 @@ struct TrackMapView: View {
             default:
                 print("Map model state changed to \(value)")
             }
-
         }
         .onAppear {
-            showView = true
+            mapModel.laidPath = trackModel.laidPath ?? []
+            mapModel.trackPath = trackModel.trackPath ?? []
+            mapModel.previewing = preview
+            mapModel.start()
         }
     }
 }

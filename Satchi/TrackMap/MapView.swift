@@ -7,11 +7,8 @@ struct MapView: UIViewRepresentable {
 
     @ObservedObject var mapModel: TrackMapModel
 
-    private var mapView: MKMapView
-
     init(mapModel: TrackMapModel) {
         self.mapModel = mapModel
-        self.mapView = MKMapView()
     }
 
     func makeCoordinator() -> MapViewCoordinator {
@@ -19,6 +16,7 @@ struct MapView: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> MKMapView {
+        let mapView = MKMapView()
         mapView.delegate = context.coordinator
 
         mapView.showsUserLocation = true
@@ -74,9 +72,9 @@ struct MapView: UIViewRepresentable {
             uiView.addOverlay(polyline)
         }
 
-        if mapModel.state == .finishedTrack, let first = mapView.overlays.first {
-            let rect = mapView.overlays.reduce(first.boundingMapRect, {$0.union($1.boundingMapRect)})
-            mapView.setVisibleMapRect(rect,
+        if (mapModel.state == .finishedTrack || mapModel.previewing), let first = uiView.overlays.first {
+            let rect = uiView.overlays.reduce(first.boundingMapRect, {$0.union($1.boundingMapRect)})
+            uiView.setVisibleMapRect(rect,
                                       edgePadding: UIEdgeInsets(top: 50.0, left: 50.0, bottom: 50.0, right: 50.0),
                                       animated: true)
         }
@@ -114,9 +112,7 @@ struct MapView: UIViewRepresentable {
             }
             return nil
         }
-
     }
-
 }
 
 class TrackPolyline: MKPolyline {

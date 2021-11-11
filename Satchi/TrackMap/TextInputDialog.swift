@@ -11,14 +11,9 @@ struct TextInputDialog: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var value: String
 
-    /// Prompt message
     var prompt: String = ""
-
-    /// The value currently edited
     @State var fieldValue: String
 
-    /// Init the Dialog view
-    /// Passed @binding value is duplicated to @state value while editing
     init(prompt: String, value: Binding<String>) {
         _value = value
         self.prompt = prompt
