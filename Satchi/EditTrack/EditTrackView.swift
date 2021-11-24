@@ -10,7 +10,7 @@ import Sliders
 
 struct EditTrackView: View {
     var trackModel: TrackModel
-    @State private var difficulty: Int = 100
+    @State private var difficulty: Int = 1
     @State private var showTrackView = false
     @State private var editName = false
     @State private var trackName: String = ""
@@ -49,30 +49,30 @@ struct EditTrackView: View {
                 Spacer()
             }
             HStack {
-                Text("Difficulty: \(difficulty/100)")
-                DifficultySlider(difficulty: $difficulty)
+                Text("**Difficulty**: \(difficulty)")
+                DifficultySlider(difficulty: $difficulty, sliderValue: difficulty*100)
             }
             .frame(height: 22)
             .padding(.vertical, 4)
             Group {
-                Text("Length: \(trackModel.length ?? 0)m").padding(.vertical, 4)
-                Text("Time to create: \(shortElapsedTimeFormatter.string(from: trackModel.timeToCreate!) ?? "-")")
+                Text("**Length**: \(trackModel.length ?? 0)m").padding(.vertical, 4)
+                Text("**Time to create**: \(shortElapsedTimeFormatter.string(from: trackModel.timeToCreate!) ?? "-")")
                     .padding(.vertical, 4)
-                Text("Created: \(dateFormatter.string(from: trackModel.created))").padding(.vertical, 4)
+                Text("**Created:** \(dateFormatter.string(from: trackModel.created))").padding(.vertical, 4)
                 if trackModel.started != nil {
                     Text("""
-                        Time between creation and start: \
+                        **Track rested:** \
                         \(getTimeBetween(date: trackModel.created, and: trackModel.started!))
                         """
                     ).padding(.vertical, 4)
                 } else {
-                    Text("Time since created:\(getTimeSinceCreated())")
+                    Text("**Time since created**:\(getTimeSinceCreated())")
                         .padding(.vertical, 4)
                 }
                 if trackModel.started != nil {
-                    Text("Tracking started: \(dateFormatter.string(from: trackModel.started!))").padding(.vertical, 4)
+                    Text("**Tracking started:** \(dateFormatter.string(from: trackModel.started!))").padding(.vertical, 4)
                     Text("""
-                         Time to finish:\(shortElapsedTimeFormatter.string(from: trackModel.timeToFinish!) ?? "-")
+                         **Time to finish:**\(shortElapsedTimeFormatter.string(from: trackModel.timeToFinish!) ?? "**-**")
                          """
                     ).padding(.vertical, 4)
                 }
@@ -81,17 +81,15 @@ struct EditTrackView: View {
             Divider()
             HStack {
                 Spacer()
-                VStack {
-                    NavigationLink(destination: TrackMapView(trackModel: trackModel)) {
-                        if trackModel.started == nil {
-                            Text("Start Tracking").font(.headline)
-                        } else {
-                            Text("Show Track").font(.headline)
-                        }
+                NavigationLink(destination: TrackMapView(trackModel: trackModel)) {
+                    if trackModel.started == nil {
+                        Text("Start Tracking").font(.headline)
+                    } else {
+                        Text("Show Track").font(.headline)
                     }
-                    .isDetailLink(false)
-                    .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
                 }
+                .isDetailLink(false)
+                .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
                 Spacer()
             }
             Spacer()
@@ -108,7 +106,7 @@ struct EditTrackView: View {
                     .font(Font.largeTitle)
                 } else {
                     HStack {
-                        Text(trackName).font(Font.largeTitle)
+                        Text(trackName).font(Font.largeTitle).bold()
                         Button(action: {editName = true}, label: {
                             Image(systemName: "square.and.pencil").font(Font.subheadline)
                         })
@@ -121,11 +119,11 @@ struct EditTrackView: View {
         .navigationBarBackButtonHidden(false)
         .onAppear {
             trackName = trackModel.name
-            difficulty = max(100, Int(trackModel.difficulty * 100))
+            difficulty = max(1, trackModel.difficulty)
         }
         .onDisappear {
             trackModel.name = trackName
-            trackModel.difficulty = Int(difficulty/100)
+            trackModel.difficulty = difficulty
             trackModel.save()
         }
     }
@@ -141,9 +139,10 @@ struct EditTrackView: View {
 
 struct DifficultySlider: View {
     @Binding var difficulty: Int
+    @State var sliderValue: Int
 
     var body: some View {
-        ValueSlider(value: $difficulty, in: 100...500)
+        ValueSlider(value: $sliderValue, in: 100...500)
             .valueSliderStyle(
                 HorizontalValueSliderStyle(
                     track: LinearGradient(
@@ -156,19 +155,34 @@ struct DifficultySlider: View {
                     thumbSize: CGSize(width: 10, height: 15)
                 )
             )
+        .onChange(of: sliderValue) { sliderV in
+            print("Value:\(sliderV)")
+            if difficulty != sliderV / 100 {
+                print("Changed difficulty:\(difficulty)")
+                difficulty = sliderV / 100
+            }
+        }
+        .onAppear {
+            sliderValue = difficulty * 100
+        }
+
     }
 }
 
 struct EditTrackView_Previews: PreviewProvider {
     static var previews: some View {
         let track = TrackStorage.preview.tracks.value[2]
-        return Group {
+        return
+        ForEach(ColorScheme.allCases, id: \.self) {
             NavigationView {
-                EditTrackView(trackModel: TrackModel(track: track))
-            }
-            NavigationView {
-                EditTrackView(trackModel: TrackModel(track: track)).preferredColorScheme(.dark)
-            }
+                EditTrackView(trackModel: TrackModel(track: track))        }.preferredColorScheme($0)
+//        Group {
+//            NavigationView {
+//                EditTrackView(trackModel: TrackModel(track: track))
+//            }
+//            NavigationView {
+//                EditTrackView(trackModel: TrackModel(track: track)).preferredColorScheme(.dark)
+//            }
         }
 
     }

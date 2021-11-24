@@ -12,6 +12,11 @@ struct MainTabView: View {
     var body: some View {
         NavigationView {
             TrackListView()
+//            TrackListView(viewModel:
+//                            TrackListViewModel.init(
+//                                trackPublisher: TrackStorage.preview.tracks.eraseToAnyPublisher())
+//            )
+
         }
     }
 }
