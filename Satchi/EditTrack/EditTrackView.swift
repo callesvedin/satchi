@@ -14,6 +14,7 @@ struct EditTrackView: View {
     @State private var showTrackView = false
     @State private var editName = false
     @State private var trackName: String = ""
+    @State private var finished = false
 
     let dateFormatter: DateFormatter
     let elapsedTimeFormatter: DateComponentsFormatter
@@ -82,10 +83,10 @@ struct EditTrackView: View {
             HStack {
                 Spacer()
                 NavigationLink(destination: TrackMapView(trackModel: trackModel)) {
-                    if trackModel.started == nil {
-                        Text("Start Tracking").font(.headline)
-                    } else {
+                    if finished {
                         Text("Show Track").font(.headline)
+                    } else {
+                        Text("Start Tracking").font(.headline)
                     }
                 }
                 .isDetailLink(false)
@@ -120,6 +121,7 @@ struct EditTrackView: View {
         .onAppear {
             trackName = trackModel.name
             difficulty = max(1, trackModel.difficulty)
+            finished = trackModel.started != nil
         }
         .onDisappear {
             trackModel.name = trackName
