@@ -25,7 +25,7 @@ struct TrackListView: View {
                         }
                     Divider().frame(height: 2)
                 }
-                ForEach(viewModel.availableTracks) { track in
+                ForEach(viewModel.availableTracks, id: \.id) { track in
                     NavigationLink(destination: EditTrackView(trackModel: TrackModel(track: track))) {
                         TrackCellView(model: viewModel, track: track)
                     }.buttonStyle(PlainButtonStyle())
@@ -39,7 +39,7 @@ struct TrackListView: View {
                     Divider().frame(height: 2)
                 }
 
-                ForEach(viewModel.finishedTracks) { track in
+                ForEach(viewModel.finishedTracks, id: \.id) { track in
                     NavigationLink(destination: EditTrackView(trackModel: TrackModel(track: track))) {
                         TrackCellView(model: viewModel, track: track)
                     }.buttonStyle(PlainButtonStyle())

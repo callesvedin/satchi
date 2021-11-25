@@ -41,14 +41,14 @@ struct TrackMapView: View {
                 trackModel.trackPath = mapModel.trackPath
                 trackModel.timeToCreate = mapModel.timer.secondsElapsed
                 trackModel.length = Int(mapModel.distance)
-                trackModel.image = mapModel.image
+//                trackModel.image = mapModel.image
                 trackModel.save()
                 presentationMode.wrappedValue.dismiss()
             case .trackingDone:
                 trackModel.trackPath = mapModel.trackPath
                 trackModel.timeToFinish = mapModel.timer.secondsElapsed
                 trackModel.started = mapModel.trackingStarted
-                trackModel.image = mapModel.image
+//                trackModel.image = mapModel.image
                 trackModel.save()
                 presentationMode.wrappedValue.dismiss()
             case .allDone:

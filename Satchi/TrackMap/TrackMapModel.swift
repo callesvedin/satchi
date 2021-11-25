@@ -18,7 +18,7 @@ enum RunningState {
 
 class TrackMapModel: NSObject, ObservableObject {
     private var locationManager = CLLocationManager()
-    public var image: UIImage?
+//    public var image: UIImage?
     public var annotations: [MKAnnotation] = []
     public var region: MKCoordinateRegion?
     public var trackingStarted: Date?
