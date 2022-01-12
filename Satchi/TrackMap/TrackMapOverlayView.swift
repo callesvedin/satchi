@@ -30,7 +30,7 @@ struct TrackMapOverlayView: View {
             actionText = "Close"
         }
 
-        let window = UIApplication.shared.windows.first
+        let window = UIApplication.shared.currentKeyWindow
         let topPadding = window == nil ? 40 : window!.safeAreaInsets.top + 10
 
         return VStack {

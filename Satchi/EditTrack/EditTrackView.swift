@@ -15,6 +15,7 @@ struct EditTrackView: View {
     @State private var editName = false
     @State private var trackName: String = ""
     @State private var finished = false
+    @State private var comments = ""
 
     let dateFormatter: DateFormatter
     let elapsedTimeFormatter: DateComponentsFormatter
@@ -49,51 +50,63 @@ struct EditTrackView: View {
                     .padding(.bottom, 30)
                 Spacer()
             }
-            HStack {
-                Text("**Difficulty**: \(difficulty)")
-                DifficultySlider(difficulty: $difficulty, sliderValue: difficulty*100)
-            }
-            .frame(height: 22)
-            .padding(.vertical, 4)
-            Group {
-                Text("**Length**: \(trackModel.length ?? 0)m").padding(.vertical, 4)
-                Text("**Time to create**: \(shortElapsedTimeFormatter.string(from: trackModel.timeToCreate!) ?? "-")")
+            ScrollView {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("**Difficulty**: \(difficulty)")
+                        DifficultySlider(difficulty: $difficulty, sliderValue: difficulty*100)
+                    }
+                    .frame(height: 22)
                     .padding(.vertical, 4)
-                Text("**Created:** \(dateFormatter.string(from: trackModel.created))").padding(.vertical, 4)
-                if trackModel.started != nil {
-                    Text("""
+                    Group {
+                        Text("**Length**: \(trackModel.length ?? 0)m").padding(.vertical, 4)
+                        Text("**Time to create:** \(shortElapsedTimeFormatter.string(from: trackModel.timeToCreate!) ?? "-")")
+
+                            .padding(.vertical, 4)
+                        Text("**Created:** \(dateFormatter.string(from: trackModel.created))").padding(.vertical, 4)
+                        if trackModel.started != nil {
+                            Text("""
                         **Track rested:** \
                         \(getTimeBetween(date: trackModel.created, and: trackModel.started!))
                         """
-                    ).padding(.vertical, 4)
-                } else {
-                    Text("**Time since created**:\(getTimeSinceCreated())")
-                        .padding(.vertical, 4)
-                }
-                if trackModel.started != nil {
-                    Text("**Tracking started:** \(dateFormatter.string(from: trackModel.started!))").padding(.vertical, 4)
-                    Text("""
-                         **Time to finish:**\(shortElapsedTimeFormatter.string(from: trackModel.timeToFinish!) ?? "**-**")
+                            ).padding(.vertical, 4)
+                        } else {
+                            Text("**Time since created**:\(getTimeSinceCreated())")
+                                .padding(.vertical, 4)
+                        }
+                        if trackModel.started != nil {
+                            Text("**Tracking started:** \(dateFormatter.string(from: trackModel.started!))")
+                                .padding(.vertical, 4)
+                            Text("""
+                         **Time to finish:** \
+                         \(shortElapsedTimeFormatter.string(from: trackModel.timeToFinish!) ?? "**-**")
                          """
-                    ).padding(.vertical, 4)
-                }
+                            ).padding(.vertical, 4)
+                        }
 
-            }
-            Divider()
-            HStack {
-                Spacer()
-                NavigationLink(destination: TrackMapView(trackModel: trackModel)) {
-                    if finished {
-                        Text("Show Track").font(.headline)
-                    } else {
-                        Text("Start Tracking").font(.headline)
                     }
+                    Text("**Comments:**")
+                    TextEditor(text: $comments)
+                        .font(.body)
+                        .frame(minHeight: 80)
+                        .border(Color.gray, width: 1)
+                    //            Divider()
+                    //            HStack {
+                    //                Spacer()
+                    //                NavigationLink(destination: TrackMapView(trackModel: trackModel)) {
+                    //                    if finished {
+                    //                        Text("Show Track").font(.headline)
+                    //                    } else {
+                    //                        Text("Start Tracking").font(.headline)
+                    //                    }
+                    //                }
+                    //                .isDetailLink(false)
+                    //                .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
+                    //                Spacer()
+                    //            }
+                    Spacer()
                 }
-                .isDetailLink(false)
-                .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
-                Spacer()
             }
-            Spacer()
         }
         .font(Font.system(size: 22))
         .padding()
@@ -104,7 +117,7 @@ struct EditTrackView: View {
                     TextField("Name", text: $trackName, onCommit: {
                         editName = false
                     })
-                    .font(Font.largeTitle)
+                        .font(Font.largeTitle)
                 } else {
                     HStack {
                         Text(trackName).font(Font.largeTitle).bold()
@@ -115,16 +128,30 @@ struct EditTrackView: View {
                     }
                 }
             }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                NavigationLink(destination: TrackMapView(trackModel: trackModel)) {
+                    if finished {
+                        Text("Show Track").font(.headline)
+                    } else {
+                        Text("Start Tracking").font(.headline)
+                    }
+                }
+                .isDetailLink(false)
+                //                .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
+            }
+
         }
         .navigationBarHidden(false)
         .navigationBarBackButtonHidden(false)
         .onAppear {
             trackName = trackModel.name
+            comments = trackModel.comments ?? ""
             difficulty = max(1, trackModel.difficulty)
             finished = trackModel.started != nil
         }
         .onDisappear {
             trackModel.name = trackName
+            trackModel.comments = comments
             trackModel.difficulty = difficulty
             trackModel.save()
         }
@@ -157,17 +184,16 @@ struct DifficultySlider: View {
                     thumbSize: CGSize(width: 10, height: 15)
                 )
             )
-        .onChange(of: sliderValue) { sliderV in
-            print("Value:\(sliderV)")
-            if difficulty != sliderV / 100 {
-                print("Changed difficulty:\(difficulty)")
-                difficulty = sliderV / 100
+            .onChange(of: sliderValue) { sliderV in
+                print("Value:\(sliderV)")
+                if difficulty != sliderV / 100 {
+                    print("Changed difficulty:\(difficulty)")
+                    difficulty = sliderV / 100
+                }
             }
-        }
-        .onAppear {
-            sliderValue = difficulty * 100
-        }
-
+            .onAppear {
+                sliderValue = difficulty * 100
+            }
     }
 }
 
@@ -177,15 +203,9 @@ struct EditTrackView_Previews: PreviewProvider {
         return
         ForEach(ColorScheme.allCases, id: \.self) {
             NavigationView {
-                EditTrackView(trackModel: TrackModel(track: track))        }.preferredColorScheme($0)
-//        Group {
-//            NavigationView {
-//                EditTrackView(trackModel: TrackModel(track: track))
-//            }
-//            NavigationView {
-//                EditTrackView(trackModel: TrackModel(track: track)).preferredColorScheme(.dark)
-//            }
+                EditTrackView(trackModel: TrackModel(track: track))
+            }
+            .preferredColorScheme($0)
         }
-
     }
 }

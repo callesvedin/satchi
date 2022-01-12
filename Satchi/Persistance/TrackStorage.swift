@@ -81,7 +81,9 @@ class TrackStorage: NSObject, ObservableObject {
             if trackModel.timeToFinish != nil {
                 track.timeToFinish = trackModel.timeToFinish!
             }
-
+            if trackModel.comments != nil {
+                track.comments = trackModel.comments!
+            }
             track.started = trackModel.started
             track.image = trackModel.image?.pngData()
             try persistanceController.container.viewContext.save()

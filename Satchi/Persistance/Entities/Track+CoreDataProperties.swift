@@ -2,7 +2,7 @@
 //  Track+CoreDataProperties.swift
 //  Satchi
 //
-//  Created by carl-johan.svedin on 2021-09-28.
+//  Created by Carl-Johan Svedin on 2022-01-12.
 //
 //
 
@@ -27,6 +27,7 @@ extension Track {
     @NSManaged public var timeToCreate: Double
     @NSManaged public var timeToFinish: Double
     @NSManaged public var trackPath: [CLLocation]?
+    @NSManaged public var comments: String?
 
 }
 

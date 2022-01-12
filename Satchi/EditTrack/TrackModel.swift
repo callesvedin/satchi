@@ -21,6 +21,7 @@ class TrackModel: ObservableObject {
     var timeToFinish: Double?
     var difficulty: Int
     var name: String
+    var comments: String?
     var image: UIImage?
     let objectWillChange = PassthroughSubject<Void, Never>()
 
