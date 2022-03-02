@@ -10,6 +10,7 @@ import CoreData
 
 struct TrackListView: View {
     @ObservedObject private var viewModel: TrackListViewModel
+    @State private var showMapView = false
 
     init(viewModel: TrackListViewModel = TrackListViewModel()) {
         self.viewModel = viewModel
@@ -49,10 +50,21 @@ struct TrackListView: View {
         .navigationTitle("Tracks")
         .toolbar {
             HStack {
-                NavigationLink(destination: TrackMapView(trackModel: TrackModel())) {
-                    Text("Add")
-                }
+                NavigationLink(destination: TrackMapView(trackModel: TrackModel()), isActive: $showMapView) { EmptyView() }
                 .isDetailLink(false)
+
+                Button("Add") {
+                    showMapView = true
+                }
+                .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
+                .padding(0)
+//                NavigationLink(destination: TrackMapView(trackModel: TrackModel())) {
+//                    Button("Add") {
+//
+//                    }
+//                    .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
+//                }
+//                .isDetailLink(false)
 
             }
         }

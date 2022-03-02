@@ -201,11 +201,11 @@ struct EditTrackView_Previews: PreviewProvider {
     static var previews: some View {
         let track = TrackStorage.preview.tracks.value[2]
         return
-        ForEach(ColorScheme.allCases, id: \.self) {
-            NavigationView {
-                EditTrackView(trackModel: TrackModel(track: track))
+            ForEach(ColorScheme.allCases, id: \.self) {
+                NavigationView {
+                    EditTrackView(trackModel: TrackModel(track: track))
+                }
+                .preferredColorScheme($0)
             }
-            .preferredColorScheme($0)
-        }
     }
 }

@@ -64,7 +64,6 @@ class TrackStorage: NSObject, ObservableObject {
     }
 
     func update(with trackModel: TrackModel) {
-        // Perform the fetch with the predicate
         do {
             let track = try getTrack(trackModel.uuid)
             track.difficulty = Int16(trackModel.difficulty)
