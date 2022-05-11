@@ -44,12 +44,8 @@ class TrackStorage: NSObject, ObservableObject {
     func create() -> Track {
         print("Creating new track")
         let newTrack = Track(context: persistanceController.container.viewContext)
-        //        newTrack.name = name
         newTrack.created = Date()
-        //        newTrack.timeToCreate = timeToCreate
-        //        newTrack.length = Int32(length)
         newTrack.id = UUID()
-        //        newTrack.laidPath = laidPath
 
         do {
             try persistanceController.container.viewContext.save()
@@ -105,7 +101,10 @@ class TrackStorage: NSObject, ObservableObject {
             // Perform the fetch with the predicate
             do {
                 let foundEntities: [Track] = try persistanceController.container.viewContext.fetch(trackRequest)
-
+                guard !foundEntities.isEmpty else {
+                    debugPrint("Track not found", uuid ?? "")
+                    return TrackStorage.shared.create()
+                }
                 return foundEntities.first!
             } catch {
                 let fetchError = error as NSError

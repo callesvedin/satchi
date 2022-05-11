@@ -53,19 +53,10 @@ struct TrackListView: View {
                 NavigationLink(destination: TrackMapView(trackModel: TrackModel()), isActive: $showMapView) { EmptyView() }
                 .isDetailLink(false)
 
-                Button("Add") {
+                Button("Add Track") {
                     showMapView = true
                 }
-                .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
                 .padding(0)
-//                NavigationLink(destination: TrackMapView(trackModel: TrackModel())) {
-//                    Button("Add") {
-//
-//                    }
-//                    .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
-//                }
-//                .isDetailLink(false)
-
             }
         }
         .onAppear {

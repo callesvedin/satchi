@@ -8,22 +8,14 @@
 import Foundation
 
 class TrackViewModel: ObservableObject {
-    var name: String = ""
-    var length: Int?
-    var started: Date?
-    var created: Date?
-    var uuid: UUID?
+
+    @Published var difficulty: Int = 1
+    @Published var showTrackView = false
+    @Published var editName = false
+    @Published var trackName: String = ""
+    @Published var finished = false
+    @Published var comments = ""
 
     init() {}
-
-    init(track inTrack: Track?) {
-        if let track = inTrack {
-            self.uuid = track.id
-            self.length = Int(track.length)
-            self.name = track.name ?? ""
-            self.started = track.started
-            self.created = track.created
-        }
-    }
 
 }

@@ -17,7 +17,7 @@ enum RunningState {
 }
 
 class TrackMapModel: NSObject, ObservableObject {
-    private var locationManager = CLLocationManager()
+    private var locationManager: CLLocationManager
 //    public var image: UIImage?
     public var annotations: [MKAnnotation] = []
     public var region: MKCoordinateRegion?
@@ -99,6 +99,13 @@ class TrackMapModel: NSObject, ObservableObject {
 //
 //    }
 
+    override init() {
+        self.locationManager = CLLocationManager()
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        super.init()
+    }
+
     public func start() {
         if !laidPath.isEmpty && !trackPath.isEmpty {
             self.addStartAnnotation(at: laidPath.first!)
@@ -117,7 +124,8 @@ class TrackMapModel: NSObject, ObservableObject {
         if !previewing && (self.state == .trackingNotStarted || self.state == .layPathNotStarted) {
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.delegate = self
-            startTracking()
+            locationManager.requestAlwaysAuthorization()
+//            startTracking()
         }
         self.previousState = self.state
     }
@@ -186,16 +194,22 @@ class TrackMapModel: NSObject, ObservableObject {
     }
 
     public func startTracking() {
-        let status = locationManager.authorizationStatus
-        if status == .notDetermined || status == .denied || status == .authorizedWhenInUse {
-            // present an alert indicating location authorization required
-            // and offer to take the user to Settings for the app via
-            // UIApplication -openUrl: and UIApplicationOpenSettingsURLString
-            locationManager.requestAlwaysAuthorization()
-            locationManager.requestWhenInUseAuthorization()
-        }
+        locationManager.requestLocation()
         locationManager.startUpdatingLocation()
         locationManager.startUpdatingHeading()
+
+//        let status = locationManager.authorizationStatus
+//        if status == .notDetermined || status == .denied || status == .authorizedWhenInUse {
+//            // present an alert indicating location authorization required
+//            // and offer to take the user to Settings for the app via
+//            // UIApplication -openUrl: and UIApplicationOpenSettingsURLString
+//            locationManager.requestWhenInUseAuthorization()
+//            locationManager.requestAlwaysAuthorization()
+//
+//        }else{
+//            locationManager.startUpdatingLocation()
+//            locationManager.startUpdatingHeading()
+//        }
     }
 
     private func stopTracking() {
@@ -216,8 +230,13 @@ extension TrackMapModel: CLLocationManagerDelegate {
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        switch locationManager.authorizationStatus {
+        print("locationManagerDidChangeAuthorization:manager. Status:\(manager.authorizationStatus)")
+        switch manager.authorizationStatus {
+        case .notDetermined:
+            print("Status not determined")
+            manager.requestAlwaysAuthorization()
         case .authorizedWhenInUse, .authorizedAlways:
+            startTracking()
             self.gotUserLocation = true
         default:
             self.gotUserLocation = false

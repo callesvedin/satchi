@@ -10,13 +10,8 @@ import Sliders
 
 struct EditTrackView: View {
     var trackModel: TrackModel
-    @State private var difficulty: Int = 1
-    @State private var showTrackView = false
-    @State private var editName = false
-    @State private var trackName: String = ""
-    @State private var finished = false
-    @State private var comments = ""
-
+    @StateObject var viewModel = TrackViewModel()
+    @FocusState var isFocused: Bool
     let dateFormatter: DateFormatter
     let elapsedTimeFormatter: DateComponentsFormatter
     let shortElapsedTimeFormatter: DateComponentsFormatter
@@ -27,7 +22,6 @@ struct EditTrackView: View {
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short
         dateFormatter.locale = Locale.current
-        //        dateFormatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd hh:mm")
 
         elapsedTimeFormatter = DateComponentsFormatter()
         elapsedTimeFormatter.unitsStyle = .abbreviated
@@ -53,8 +47,8 @@ struct EditTrackView: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     HStack {
-                        Text("**Difficulty**: \(difficulty)")
-                        DifficultySlider(difficulty: $difficulty, sliderValue: difficulty*100)
+                        Text("**Difficulty**: \(viewModel.difficulty)")
+                        DifficultySlider(difficulty: $viewModel.difficulty, sliderValue: viewModel.difficulty*100)
                     }
                     .frame(height: 22)
                     .padding(.vertical, 4)
@@ -86,24 +80,10 @@ struct EditTrackView: View {
 
                     }
                     Text("**Comments:**")
-                    TextEditor(text: $comments)
+                    TextEditor(text: $viewModel.comments)
                         .font(.body)
                         .frame(minHeight: 80)
                         .border(Color.gray, width: 1)
-                    //            Divider()
-                    //            HStack {
-                    //                Spacer()
-                    //                NavigationLink(destination: TrackMapView(trackModel: trackModel)) {
-                    //                    if finished {
-                    //                        Text("Show Track").font(.headline)
-                    //                    } else {
-                    //                        Text("Start Tracking").font(.headline)
-                    //                    }
-                    //                }
-                    //                .isDetailLink(false)
-                    //                .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
-                    //                Spacer()
-                    //            }
                     Spacer()
                 }
             }
@@ -113,16 +93,20 @@ struct EditTrackView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                if editName {
-                    TextField("Name", text: $trackName, onCommit: {
-                        editName = false
+                if viewModel.editName {
+                    TextField("Name", text: $viewModel.trackName, onCommit: {
+                        viewModel.editName = false
                     })
-                        .font(Font.largeTitle)
+                    .focused($isFocused)
+                    .font(Font.largeTitle)
                 } else {
                     HStack {
-                        Text(trackName).font(Font.largeTitle).bold()
-                        Button(action: {editName = true}, label: {
-                            Image(systemName: "square.and.pencil").font(Font.subheadline)
+                        Button(action: {
+                            viewModel.editName = true
+                            isFocused = true
+                        }, label: {
+                            Text(viewModel.trackName).font(Font.largeTitle).bold().foregroundColor(Color.black)
+//                            Image(systemName: "square.and.pencil").font(Font.subheadline)
                         })
                         Spacer()
                     }
@@ -130,29 +114,28 @@ struct EditTrackView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(destination: TrackMapView(trackModel: trackModel)) {
-                    if finished {
+                    if viewModel.finished {
                         Text("Show Track").font(.headline)
                     } else {
-                        Text("Start Tracking").font(.headline)
+                        Text("Follow Track").font(.headline)
                     }
                 }
                 .isDetailLink(false)
-                //                .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
             }
 
         }
         .navigationBarHidden(false)
         .navigationBarBackButtonHidden(false)
         .onAppear {
-            trackName = trackModel.name
-            comments = trackModel.comments ?? ""
-            difficulty = max(1, trackModel.difficulty)
-            finished = trackModel.started != nil
+            viewModel.trackName = trackModel.name
+            viewModel.comments = trackModel.comments ?? ""
+            viewModel.difficulty = max(1, trackModel.difficulty)
+            viewModel.finished = trackModel.started != nil
         }
         .onDisappear {
-            trackModel.name = trackName
-            trackModel.comments = comments
-            trackModel.difficulty = difficulty
+            trackModel.name = viewModel.trackName
+            trackModel.comments = viewModel.comments
+            trackModel.difficulty = viewModel.difficulty
             trackModel.save()
         }
     }
