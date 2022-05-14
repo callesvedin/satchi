@@ -9,8 +9,8 @@ import SwiftUI
 
 struct TrackCellView: View {
     @Environment(\.colorScheme) var colorScheme
+    private let stack = CoreDataStack.shared
 
-    var model: TrackListViewModel
     @ObservedObject var track: Track
     let columns = [
         GridItem(.flexible()),
@@ -26,8 +26,7 @@ struct TrackCellView: View {
                 Spacer()
                 Button(action: {
                     withAnimation {
-                        model.delete(track: track)
-                        model.reload()
+                        stack.delete(track)
                     }
                 }, label: {
                     Image(systemName: "trash")
@@ -37,7 +36,7 @@ struct TrackCellView: View {
             LazyVGrid(columns: columns, alignment: .leading, spacing: 0) {
                 HStack {
                     Image(systemName: "flag.fill").foregroundColor(.green)
-                    Text("\(track.created ?? Date(), formatter: itemFormatter)")
+                    Text("\(track.created != nil ? itemFormatter.string(from: track.created!) : "--/--/--" )")
                     Spacer()
                 }
                 Label("\(track.length) m", systemImage: "arrow.left.and.right")
@@ -77,7 +76,7 @@ struct TrackCellView_Previews: PreviewProvider {
     static var previews: some View {
         let track = TrackStorage.preview.tracks.value[1]
         ForEach(ColorScheme.allCases, id: \.self) {
-            TrackCellView(model: TrackListViewModel(), track: track).frame(height: 90).preferredColorScheme($0)
+            TrackCellView(track: track).frame(height: 90).preferredColorScheme($0)
         }
     }
 }

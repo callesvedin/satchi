@@ -64,6 +64,23 @@ class TrackModel: ObservableObject {
         )
     }
 
+    func initialize(with track: Track) {
+
+        uuid = track.id
+
+        laidPath = track.laidPath ?? []
+        trackPath = track.trackPath ?? []
+        length = Int(track.length)
+        created = track.created ?? Date()
+        started = track.started
+        name = track.name ?? "New Track"
+        comments = track.comments
+        difficulty = Int(track.difficulty)
+        timeToCreate = track.timeToCreate
+        timeToFinish = track.timeToFinish
+        image = track.image != nil ? UIImage(data: track.image!) : nil
+    }
+
     func save() {
         print("TrackModel saved")
         objectWillChange.send()

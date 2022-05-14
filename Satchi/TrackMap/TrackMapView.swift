@@ -10,15 +10,16 @@ import MapKit
 
 struct TrackMapView: View {
     @Environment(\.presentationMode) var presentationMode
+    fileprivate var stack = CoreDataStack.shared
     @StateObject public var mapModel = TrackMapModel()
-    var trackModel: TrackModel
+    var track: Track
     @State private var name = ""
     @State var showModal: Bool = false
     @State var done: Bool = false
-    var preview = true
+    var preview = false
 
-    init(trackModel: TrackModel, preview: Bool = false) {
-        self.trackModel = trackModel
+    init(track: Track, preview: Bool = false) {
+        self.track = track
         self.preview = preview
     }
 
@@ -37,19 +38,19 @@ struct TrackMapView: View {
 
             switch value {
             case .layPathDone:
-                trackModel.laidPath = mapModel.laidPath
-                trackModel.trackPath = mapModel.trackPath
-                trackModel.timeToCreate = mapModel.timer.secondsElapsed
-                trackModel.length = Int(mapModel.distance)
+                track.laidPath = mapModel.laidPath
+                track.trackPath = mapModel.trackPath
+                track.timeToCreate = mapModel.timer.secondsElapsed
+                track.length = Int32(mapModel.distance)
 //                trackModel.image = mapModel.image
-                trackModel.save()
+                stack.save()
                 presentationMode.wrappedValue.dismiss()
             case .trackingDone:
-                trackModel.trackPath = mapModel.trackPath
-                trackModel.timeToFinish = mapModel.timer.secondsElapsed
-                trackModel.started = mapModel.trackingStarted
+                track.trackPath = mapModel.trackPath
+                track.timeToFinish = mapModel.timer.secondsElapsed
+                track.started = mapModel.trackingStarted
 //                trackModel.image = mapModel.image
-                trackModel.save()
+                stack.save()
                 presentationMode.wrappedValue.dismiss()
             case .allDone:
                 presentationMode.wrappedValue.dismiss()
@@ -63,8 +64,8 @@ struct TrackMapView: View {
             }
         }
         .onAppear {
-            mapModel.laidPath = trackModel.laidPath ?? []
-            mapModel.trackPath = trackModel.trackPath ?? []
+            mapModel.laidPath = track.laidPath ?? []
+            mapModel.trackPath = track.trackPath ?? []
             mapModel.previewing = preview
             mapModel.start()
         }
@@ -72,7 +73,9 @@ struct TrackMapView: View {
 }
 
 struct TrackMapView_Previews: PreviewProvider {
+
     static var previews: some View {
-        TrackMapView(trackModel: TrackModel())
+        let stack = CoreDataStack.shared
+        TrackMapView(track: stack.createTrack())
     }
 }

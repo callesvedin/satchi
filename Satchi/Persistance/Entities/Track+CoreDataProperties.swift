@@ -2,7 +2,7 @@
 //  Track+CoreDataProperties.swift
 //  Satchi
 //
-//  Created by Carl-Johan Svedin on 2022-03-02.
+//  Created by Carl-Johan Svedin on 2022-05-14.
 //
 //
 
