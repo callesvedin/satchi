@@ -42,6 +42,7 @@ struct TrackMapView: View {
                 track.trackPath = mapModel.trackPath
                 track.timeToCreate = mapModel.timer.secondsElapsed
                 track.length = Int32(mapModel.distance)
+                track.created = Date()
 //                trackModel.image = mapModel.image
                 stack.save()
                 presentationMode.wrappedValue.dismiss()

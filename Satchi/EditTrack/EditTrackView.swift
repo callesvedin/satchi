@@ -54,51 +54,55 @@ struct EditTrackView: View {
                     }
 
                     VStack(alignment: .leading) {
-                        HStack {
-                            Text("**Name**")
-                            TextField("Name", text: $viewModel.trackName)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                        }
 
-                        HStack {
-                            Text("**Difficulty**: \(viewModel.difficulty)")
-                            DifficultySlider(difficulty: $viewModel.difficulty, sliderValue: viewModel.difficulty*100)
-                        }
-                        .frame(height: 22)
-                        .padding(.vertical, 4)
+
                         Group {
-                            Text("**Length**: \(track.length)m").padding(.vertical, 4)
+                            HStack {
+                                Text("**Name**")
+                                TextField("Name", text: $viewModel.trackName)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                            }
+
+//                            .frame(height: 22)
+
+                            Text("**Created:** \(track.created != nil ? dateFormatter.string(from: track.created!) : "-")")
+
+                            HStack {
+                                Text("**Difficulty**: \(viewModel.difficulty)").padding(.vertical, 0)
+                                DifficultySlider(difficulty: $viewModel.difficulty, sliderValue: viewModel.difficulty*100).padding(.vertical, 0)
+                            }.padding(0)
+
+                            Text("**Length**: \(track.length)m")
                             Text("**Time to create:** \(shortElapsedTimeFormatter.string(from: track.timeToCreate) ?? "-")")
 
-                                .padding(.vertical, 4)
-                            Text("**Created:** \(track.created != nil ? dateFormatter.string(from: track.created!) : "-")")
-                                .padding(.vertical, 4)
+                        }.padding(.vertical,4)
+                        Group {
                             if track.started != nil {
                                 Text("""
                             **Track rested:** \
                             \(getTimeBetween(date: track.created, and: track.started))
                             """
-                                ).padding(.vertical, 4)
+                                )
                             } else {
                                 Text("**Time since created**:\(getTimeSinceCreated())")
-                                    .padding(.vertical, 4)
                             }
                             if track.started != nil {
                                 Text("**Tracking started:** \(dateFormatter.string(from: track.started!))")
-                                    .padding(.vertical, 4)
+
                                 Text("""
                              **Time to finish:** \
                              \(shortElapsedTimeFormatter.string(from: track.timeToFinish) ?? "**-**")
                              """
-                                ).padding(.vertical, 4)
+                                )
                             }
 
-                        }
+
                         Text("**Comments:**")
                         TextEditor(text: $viewModel.comments)
                             .font(.body)
                             .frame(minHeight: 80)
                             .border(Color.gray, width: 1)
+                        }.padding(.vertical,4)
                     }
                 }
             }
@@ -174,7 +178,7 @@ struct DifficultySlider: View {
                         startPoint: .leading,
                         endPoint: .trailing
                     )
-                    .frame(height: 8)
+                    .frame(height: 10)
                     .cornerRadius(4),
                     thumbSize: CGSize(width: 10, height: 15)
                 )
@@ -196,13 +200,11 @@ struct EditTrackView_Previews: PreviewProvider {
     static var previews: some View {
         let track = TrackStorage.preview.tracks.value[2]
         return
-        Group {
+//        NavigationView {
             ForEach(ColorScheme.allCases, id: \.self) {
-                NavigationView {
                     EditTrackView(track)
-                }
                 .preferredColorScheme($0)
             }
-        }
+//        }
     }
 }
