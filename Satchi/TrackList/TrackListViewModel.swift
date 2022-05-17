@@ -7,28 +7,51 @@
 
 import Foundation
 import Combine
+import CoreData
 
-class TrackListViewModel: ObservableObject {
+class TrackListViewModel: NSObject, ObservableObject {
     var tracks: [Track] = []
-
+    private let trackFetchController: NSFetchedResultsController<Track>
+    private var stack = CoreDataStack.shared
     @Published var finishedTracks: [Track] = []
-    @Published var availableTracks: [Track] = []
+    @Published var startedTracks: [Track] = []
+    @Published var newTracks: [Track] = []
 
     private var cancellable: AnyCancellable?
 
-    init(trackPublisher: AnyPublisher<[Track], Never> = TrackStorage.shared.tracks.eraseToAnyPublisher()) {
-        cancellable = trackPublisher.sink {tracks in
-            NSLog("Updating tracks")
-            self.tracks = tracks
+    override init() {
+        let fetchRequest: NSFetchRequest = Track.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Track.created, ascending: true)]
+        trackFetchController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: stack.context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        super.init()
+        trackFetchController.delegate = self
+
+        do {
+            try trackFetchController.performFetch()
+            tracks = trackFetchController.fetchedObjects ?? []
+            reload()
+        } catch {
+            NSLog("Error: could not fetch objects")
         }
     }
 
     public func reload() {
-        self.finishedTracks = tracks.filter({track in track.started != nil})
-        self.availableTracks = tracks.filter({track in track.started == nil})
+        self.finishedTracks = tracks.filter({track in track.getState() == .finished})
+        self.startedTracks = tracks.filter({track in track.getState() == .started})
+        self.newTracks = tracks.filter({track in track.getState() == .notStarted})
     }
+}
 
-    public func delete(track: Track) {
-        TrackStorage.shared.delete(track: track)
+extension TrackListViewModel: NSFetchedResultsControllerDelegate {
+    public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        guard let tracks = controller.fetchedObjects as? [Track] else {return}
+        NSLog("Context has changed, reloading courses")
+        self.tracks = tracks
+        reload()
     }
 }

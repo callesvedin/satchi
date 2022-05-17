@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct SatchiApp: App {
-
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     init() {
         #if DEBUG
         let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory,

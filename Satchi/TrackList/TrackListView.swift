@@ -9,48 +9,68 @@ import SwiftUI
 import CoreData
 
 struct TrackListView: View {
-//    @ObservedObject private var viewModel: TrackListViewModel
-    @Environment(\.managedObjectContext) var managedObjectContext
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.created, order: .forward)])
-    var tracks: FetchedResults<Track>
-
-    private let stack = CoreDataStack.shared
-
+    @ObservedObject private var viewModel = TrackListViewModel()
+    @State var selectedTrack: Track?
+    @State var showEdit = false
     @State private var showMapView = false
-
-//    init(viewModel: TrackListViewModel = TrackListViewModel()) {
-//        self.viewModel = viewModel
-//    }
 
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                if !tracks.isEmpty {
-                    TrackSectionView(sectionName: "Current")
+                if !viewModel.newTracks.isEmpty {
+                    TrackSectionView(sectionName: "Not started")
                         .onTapGesture {
                             print("Header TAP")
                         }
                     Divider().frame(height: 2)
                 }
-                ForEach(tracks, id: \.objectID) { track in
-                    NavigationLink(destination: EditTrackView(track)) {
+                ForEach(viewModel.newTracks, id: \.objectID) { track in
+                    if track.getState() == .notStarted {
                         TrackCellView(track: track)
-                    }.buttonStyle(PlainButtonStyle())
+                            .onTapGesture {
+                                selectedTrack = track
+                                showEdit = true
+                            }
+                    }
                 }
 
-//                if !viewModel.finishedTracks.isEmpty {
-//                    TrackSectionView(sectionName: "Finished")
-//                        .onTapGesture {
-//                            print("Header TAP")
-//                        }
-//                    Divider().frame(height: 2)
-//                }
-//
-//                ForEach(viewModel.finishedTracks, id: \.id) { track in
-//                    NavigationLink(destination: EditTrackView(trackModel: TrackModel(track: track))) {
-//                        TrackCellView(model: viewModel, track: track)
-//                    }.buttonStyle(PlainButtonStyle())
-//                }
+                if !viewModel.startedTracks.isEmpty {
+                    TrackSectionView(sectionName: "Started")
+                        .onTapGesture {
+                            print("Header TAP")
+                        }
+                    Divider().frame(height: 2)
+                }
+                ForEach(viewModel.startedTracks, id: \.objectID) { track in
+                    if track.getState() == .started {
+                        TrackCellView(track: track)
+                            .onTapGesture {
+                                selectedTrack = track
+                                showEdit = true
+                        }
+                    }
+                }
+                if !viewModel.finishedTracks.isEmpty {
+                    TrackSectionView(sectionName: "Finished")
+                        .onTapGesture {
+                            print("Header TAP")
+                        }.padding(.top, 20)
+                    Divider().frame(height: 2)
+
+                    ForEach(viewModel.finishedTracks, id: \.objectID) { track in
+                        if track.getState() == .finished {
+                            TrackCellView(track: track)
+                                .onTapGesture {
+                                    selectedTrack = track
+                                    showEdit = true
+                                }
+                        }
+                    }
+                }
+            }
+            if selectedTrack != nil {
+                NavigationLink("", destination: EditTrackView(selectedTrack!), isActive: $showEdit)
+                    .opacity(0)
             }
         }
         .navigationTitle("Tracks")
@@ -65,6 +85,7 @@ struct TrackListView: View {
         .sheet(isPresented: $showMapView, content: {
             AddTrackView()
         })
+
     }
 
 }
@@ -88,10 +109,6 @@ struct ContentView_Previews: PreviewProvider {
         ForEach(ColorScheme.allCases, id: \.self) {
             NavigationView {
                 TrackListView()
-//                TrackListView(viewModel:
-//                                TrackListViewModel.init(
-//                                    trackPublisher: TrackStorage.preview.tracks.eraseToAnyPublisher())
-//                )
             }.preferredColorScheme($0)
         }
     }

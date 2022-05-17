@@ -34,3 +34,19 @@ extension Track {
 extension Track: Identifiable {
 
 }
+
+extension Track {
+    public func getState() -> CurrentState {
+        if trackPath != nil && !(trackPath?.isEmpty ?? true) {
+            return .finished
+        } else if laidPath != nil && !(laidPath?.isEmpty ?? true) {
+            return .started
+        } else {
+            return .notStarted
+        }
+    }
+}
+
+public enum CurrentState {
+    case notStarted, started, finished
+}

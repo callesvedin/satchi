@@ -11,8 +11,6 @@
 		EB0D4754260E930F006BCBB8 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0D4753260E930F006BCBB8 /* MainTabView.swift */; };
 		EB2F91212624B6500026773D /* TrackMapOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F91202624B6500026773D /* TrackMapOverlayView.swift */; };
 		EB2F91262624B8DF0026773D /* OverlayButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */; };
-		EB352C84278CE9E00015AC5A /* TrackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A5F261AF3C10080C4FE /* TrackModel.swift */; };
-		EB352C85278CE9E20015AC5A /* TrackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A5F261AF3C10080C4FE /* TrackModel.swift */; };
 		EB352C86278CEA170015AC5A /* TrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */; };
 		EB352C8C278CEB310015AC5A /* Track+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB352C8A278CEB310015AC5A /* Track+CoreDataClass.swift */; };
 		EB352C8E278EB6720015AC5A /* Satchi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EBCB4815266762F800E5631C /* Satchi.xcdatamodeld */; };
@@ -20,9 +18,10 @@
 		EB59DE3C283003830043DE33 /* AddTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59DE3B283003830043DE33 /* AddTrackView.swift */; };
 		EB59DE3E2830051F0043DE33 /* StringExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59DE3D2830051F0043DE33 /* StringExt.swift */; };
 		EB59DE40283045A60043DE33 /* Track+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59DE3F283045A60043DE33 /* Track+CoreDataProperties.swift */; };
+		EB59DE42283104050043DE33 /* CloudSharingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59DE41283104050043DE33 /* CloudSharingController.swift */; };
+		EB59DE4428310BF60043DE33 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59DE4328310BF60043DE33 /* AppDelegate.swift */; };
 		EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE225261CBA3D00D56711 /* TrackMapView.swift */; };
 		EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */; };
-		EB673F6C27036E5E00AAED57 /* TrackStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872547260CC190008AD8E7 /* TrackStorage.swift */; };
 		EB673F6D27036E7400AAED57 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872510260CC0C5008AD8E7 /* Persistence.swift */; };
 		EB7D2145282C6181006CB703 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB7D2144282C6181006CB703 /* CloudKit.framework */; };
 		EB7D2147282C62BF006CB703 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D2146282C62BF006CB703 /* CoreDataStack.swift */; };
@@ -38,7 +37,6 @@
 		EB87252A260CC0C5008AD8E7 /* SatchiUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872529260CC0C5008AD8E7 /* SatchiUITests.swift */; };
 		EB87253F260CC158008AD8E7 /* TrackListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */; };
 		EB872540260CC158008AD8E7 /* TrackListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */; };
-		EB872548260CC190008AD8E7 /* TrackStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872547260CC190008AD8E7 /* TrackStorage.swift */; };
 		EBC69ACE2641B88F0094EAA3 /* TextInputDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */; };
 		EBCB480E2667540E00E5631C /* Sliders in Frameworks */ = {isa = PBXBuildFile; productRef = EBCB480D2667540E00E5631C /* Sliders */; };
 		EBD13A55261AF3760080C4FE /* EditTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A54261AF3760080C4FE /* EditTrackView.swift */; };
@@ -71,6 +69,8 @@
 		EB59DE3B283003830043DE33 /* AddTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrackView.swift; sourceTree = "<group>"; };
 		EB59DE3D2830051F0043DE33 /* StringExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExt.swift; sourceTree = "<group>"; };
 		EB59DE3F283045A60043DE33 /* Track+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Track+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		EB59DE41283104050043DE33 /* CloudSharingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingController.swift; sourceTree = "<group>"; };
+		EB59DE4328310BF60043DE33 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EB5BDF0E28181E03009DF497 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		EB5BDF0F28181E61009DF497 /* Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Notes.md; sourceTree = "<group>"; };
 		EB5CE225261CBA3D00D56711 /* TrackMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapView.swift; sourceTree = "<group>"; };
@@ -95,11 +95,9 @@
 		EB872529260CC0C5008AD8E7 /* SatchiUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatchiUITests.swift; sourceTree = "<group>"; };
 		EB87252B260CC0C5008AD8E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListViewModel.swift; sourceTree = "<group>"; };
-		EB872547260CC190008AD8E7 /* TrackStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackStorage.swift; sourceTree = "<group>"; };
 		EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputDialog.swift; sourceTree = "<group>"; };
 		EBCB4816266762F800E5631C /* Satchi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Satchi.xcdatamodel; sourceTree = "<group>"; };
 		EBD13A54261AF3760080C4FE /* EditTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackView.swift; sourceTree = "<group>"; };
-		EBD13A5F261AF3C10080C4FE /* TrackModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackModel.swift; sourceTree = "<group>"; };
 		EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -190,6 +188,7 @@
 				EBD13A53261AF3520080C4FE /* EditTrack */,
 				EB87253D260CC132008AD8E7 /* TrackList */,
 				EB872507260CC0C4008AD8E7 /* SatchiApp.swift */,
+				EB59DE4328310BF60043DE33 /* AppDelegate.swift */,
 				EB7D2148282C6553006CB703 /* UIApplicationExt.swift */,
 				EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */,
 				EB0D4753260E930F006BCBB8 /* MainTabView.swift */,
@@ -245,9 +244,9 @@
 			children = (
 				EB352C89278CEB0D0015AC5A /* Entities */,
 				EB872510260CC0C5008AD8E7 /* Persistence.swift */,
-				EB872547260CC190008AD8E7 /* TrackStorage.swift */,
 				EBCB4815266762F800E5631C /* Satchi.xcdatamodeld */,
 				EB7D2146282C62BF006CB703 /* CoreDataStack.swift */,
+				EB59DE41283104050043DE33 /* CloudSharingController.swift */,
 			);
 			path = Persistance;
 			sourceTree = "<group>";
@@ -256,7 +255,6 @@
 			isa = PBXGroup;
 			children = (
 				EBD13A54261AF3760080C4FE /* EditTrackView.swift */,
-				EBD13A5F261AF3C10080C4FE /* TrackModel.swift */,
 				EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */,
 				EB59DE3B283003830043DE33 /* AddTrackView.swift */,
 			);
@@ -423,7 +421,6 @@
 				EB352C8E278EB6720015AC5A /* Satchi.xcdatamodeld in Sources */,
 				EB59DE40283045A60043DE33 /* Track+CoreDataProperties.swift in Sources */,
 				EB2F91262624B8DF0026773D /* OverlayButtonStyle.swift in Sources */,
-				EB872548260CC190008AD8E7 /* TrackStorage.swift in Sources */,
 				EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */,
 				EB87250A260CC0C4008AD8E7 /* TrackListView.swift in Sources */,
 				EB352C8C278CEB310015AC5A /* Track+CoreDataClass.swift in Sources */,
@@ -432,13 +429,14 @@
 				EBD13A55261AF3760080C4FE /* EditTrackView.swift in Sources */,
 				EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */,
 				EB7D2149282C6553006CB703 /* UIApplicationExt.swift in Sources */,
-				EB352C84278CE9E00015AC5A /* TrackModel.swift in Sources */,
 				EB59DE3E2830051F0043DE33 /* StringExt.swift in Sources */,
 				EB59DE3C283003830043DE33 /* AddTrackView.swift in Sources */,
 				EB05E19526277868002941B6 /* PathAnnotation.swift in Sources */,
 				EB5688E0269C304000AF9AB1 /* TrackCellView.swift in Sources */,
 				EB7D2147282C62BF006CB703 /* CoreDataStack.swift in Sources */,
 				EB0D4754260E930F006BCBB8 /* MainTabView.swift in Sources */,
+				EB59DE42283104050043DE33 /* CloudSharingController.swift in Sources */,
+				EB59DE4428310BF60043DE33 /* AppDelegate.swift in Sources */,
 				EBC69ACE2641B88F0094EAA3 /* TextInputDialog.swift in Sources */,
 				EB352C86278CEA170015AC5A /* TrackViewModel.swift in Sources */,
 				EB7D868F265438AE0088F13E /* TrackTimer.swift in Sources */,
@@ -452,9 +450,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB872540260CC158008AD8E7 /* TrackListViewModel.swift in Sources */,
-				EB673F6C27036E5E00AAED57 /* TrackStorage.swift in Sources */,
 				EB673F6D27036E7400AAED57 /* Persistence.swift in Sources */,
-				EB352C85278CE9E20015AC5A /* TrackModel.swift in Sources */,
 				EB87251F260CC0C5008AD8E7 /* SatchiTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
