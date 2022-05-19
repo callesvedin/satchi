@@ -12,14 +12,15 @@ import CoreData
 class TrackListViewModel: NSObject, ObservableObject {
     var tracks: [Track] = []
     private let trackFetchController: NSFetchedResultsController<Track>
-    private var stack = CoreDataStack.shared
+    private var stack: CoreDataStack
     @Published var finishedTracks: [Track] = []
     @Published var startedTracks: [Track] = []
     @Published var newTracks: [Track] = []
 
     private var cancellable: AnyCancellable?
 
-    override init() {
+    init(stack: CoreDataStack) {
+        self.stack = stack
         let fetchRequest: NSFetchRequest = Track.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Track.created, ascending: true)]
         trackFetchController = NSFetchedResultsController(

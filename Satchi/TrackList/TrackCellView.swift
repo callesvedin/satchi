@@ -9,8 +9,8 @@ import SwiftUI
 
 struct TrackCellView: View {
     @Environment(\.colorScheme) var colorScheme
-    private let stack = CoreDataStack.shared
-
+//    private let stack = CoreDataStack.shared
+    @EnvironmentObject private var stack: CoreDataStack
     @ObservedObject var track: Track
     let columns = [
         GridItem(.flexible()),
@@ -78,12 +78,15 @@ struct TrackCellView: View {
         return formatter
     }()
 }
-//
-// struct TrackCellView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let track = TrackStorage.preview.tracks.value[1]
+
+ struct TrackCellView_Previews: PreviewProvider {
+    static var previews: some View {
+        let track = CoreDataStack.preview.getTracks()[0]
 //        ForEach(ColorScheme.allCases, id: \.self) {
-//            TrackCellView(track: track).frame(height: 90).preferredColorScheme($0)
+            TrackCellView(track: track).frame(height: 90)
+//            .preferredColorScheme($0)
+            .environmentObject(CoreDataStack.preview)
+                .environment(\.managedObjectContext, CoreDataStack.preview.context)
 //        }
-//    }
-// }
+    }
+ }

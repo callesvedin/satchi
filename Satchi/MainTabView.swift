@@ -12,6 +12,7 @@ struct MainTabView: View {
     var body: some View {
         NavigationView {
             TrackListView()
+                .environmentObject(CoreDataStack.shared)
                 .environment(\.managedObjectContext, CoreDataStack.shared.context)
         }
     }

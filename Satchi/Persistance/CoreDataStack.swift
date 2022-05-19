@@ -10,6 +10,16 @@ import CloudKit
 
 final class CoreDataStack: ObservableObject {
     static let shared = CoreDataStack()
+    static let preview: CoreDataStack = {
+        let stack = CoreDataStack(inMemory: true)
+
+        createTestData(stack.context)
+
+        stack.save()
+
+        return stack
+    }()
+
     var context: NSManagedObjectContext {
         persistentContainer.viewContext
     }
@@ -21,48 +31,45 @@ final class CoreDataStack: ObservableObject {
         return privateStore
     }
 
-    var sharedPersistentStore: NSPersistentStore {
-        guard let sharedStore = _sharedPersistentStore else {
-            fatalError("Shared store is not set")
-        }
-        return sharedStore
+    var sharedPersistentStore: NSPersistentStore? {
+//        guard let sharedStore = _sharedPersistentStore else {
+//            fatalError("Shared store is not set")
+//        }
+//        return sharedStore
+        return _sharedPersistentStore
     }
 
     lazy var persistentContainer: NSPersistentCloudKitContainer = {
         let container = NSPersistentCloudKitContainer(name: "Satchi")
-
         guard let privateStoreDescription = container.persistentStoreDescriptions.first else {
             fatalError("Unable to get persistentStoreDescription")
         }
         let storesURL = privateStoreDescription.url?.deletingLastPathComponent()
-        privateStoreDescription.url = storesURL?.appendingPathComponent("private.sqlite")
+        privateStoreDescription.url = inMemory ? URL(fileURLWithPath: "/dev/null") : storesURL?.appendingPathComponent("private.sqlite")
 
         // TODO: 1
-        let sharedStoreURL = storesURL?.appendingPathComponent("shared.sqlite")
-        guard let sharedStoreDescription = privateStoreDescription
-            .copy() as? NSPersistentStoreDescription else {
-            fatalError(
-                "Copying the private store description returned an unexpected value."
+        if !inMemory {
+            let sharedStoreURL = storesURL?.appendingPathComponent("shared.sqlite")
+            guard let sharedStoreDescription = privateStoreDescription
+                .copy() as? NSPersistentStoreDescription else {
+                fatalError(
+                    "Copying the private store description returned an unexpected value."
+                )
+            }
+            sharedStoreDescription.url = inMemory ? URL(fileURLWithPath: "/dev/null") : sharedStoreURL
+
+            guard let containerIdentifier = privateStoreDescription
+                .cloudKitContainerOptions?.containerIdentifier else {
+                fatalError("Unable to get containerIdentifier")
+            }
+            let sharedStoreOptions = NSPersistentCloudKitContainerOptions(
+                containerIdentifier: containerIdentifier
             )
+            sharedStoreOptions.databaseScope = .shared
+            sharedStoreDescription.cloudKitContainerOptions = sharedStoreOptions
+
+            container.persistentStoreDescriptions.append(sharedStoreDescription)
         }
-        sharedStoreDescription.url = sharedStoreURL
-
-        // TODO: 2
-        guard let containerIdentifier = privateStoreDescription
-            .cloudKitContainerOptions?.containerIdentifier else {
-            fatalError("Unable to get containerIdentifier")
-        }
-        let sharedStoreOptions = NSPersistentCloudKitContainerOptions(
-            containerIdentifier: containerIdentifier
-        )
-        sharedStoreOptions.databaseScope = .shared
-        sharedStoreDescription.cloudKitContainerOptions = sharedStoreOptions
-
-        // TODO: 3
-        container.persistentStoreDescriptions.append(sharedStoreDescription)
-
-        // TODO: 4
-
         container.loadPersistentStores { loadedStoreDescription, error in
             if let error = error as NSError? {
                 fatalError("Failed to load persistent stores: \(error)")
@@ -97,9 +104,37 @@ final class CoreDataStack: ObservableObject {
         return CKContainer(identifier: identifier)
     }
 
+    private static func createTestData(_ context: NSManagedObjectContext) {
+        let trackNames = ["Track 1", "Track 3", "Track 4"]
+        for trackName in trackNames {
+            let newTrack = Track(context: context)
+            newTrack.id = UUID()
+
+            newTrack.started = Date()
+            newTrack.timeToFinish = 3600 * 2
+            newTrack.laidPath = [
+                CLLocation(latitude: 56.65418, longitude: 16.32639),
+                CLLocation(latitude: 58.41190, longitude: 15.61221)
+            ]
+            newTrack.trackPath = [
+                CLLocation(latitude: 56.65418, longitude: 16.32639),
+                CLLocation(latitude: 58.20236, longitude: 15.99773)
+            ]
+            newTrack.name = trackName
+            newTrack.length = 12312
+            newTrack.comments = "\(trackName) comments"
+            newTrack.created = Date()
+            newTrack.difficulty = Int16.random(in: 1...5)
+        }
+
+    }
+
+    private var inMemory = false
     private var _privatePersistentStore: NSPersistentStore?
     private var _sharedPersistentStore: NSPersistentStore?
-    private init() {}
+    private init(inMemory: Bool = false) {
+        self.inMemory = inMemory
+    }
 }
 
 // MARK: Save or delete from Core Data
@@ -129,6 +164,24 @@ extension CoreDataStack {
         return newTrack
     }
 
+    func getTracks() -> [Track] {
+        let fetchRequest: NSFetchRequest = Track.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Track.created, ascending: true)]
+        let trackFetchController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+
+        do {
+            try trackFetchController.performFetch()
+            return trackFetchController.fetchedObjects ?? []
+        } catch {
+            NSLog("Error: could not fetch objects")
+        }
+        return []
+    }
 }
 
 extension CoreDataStack {

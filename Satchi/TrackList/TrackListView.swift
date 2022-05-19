@@ -9,10 +9,14 @@ import SwiftUI
 import CoreData
 
 struct TrackListView: View {
-    @ObservedObject private var viewModel = TrackListViewModel()
+    @ObservedObject private var viewModel: TrackListViewModel
     @State var selectedTrack: Track?
     @State var showEdit = false
     @State private var showMapView = false
+
+    init(stack: CoreDataStack = CoreDataStack.shared) {
+        viewModel = TrackListViewModel(stack: stack)
+    }
 
     var body: some View {
         ScrollView {
@@ -85,9 +89,7 @@ struct TrackListView: View {
         .sheet(isPresented: $showMapView, content: {
             AddTrackView()
         })
-
     }
-
 }
 
 struct TrackSectionView: View {
@@ -104,12 +106,12 @@ struct TrackSectionView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct TrackListView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(ColorScheme.allCases, id: \.self) {
             NavigationView {
-                TrackListView()
+                TrackListView(stack: CoreDataStack.preview)
             }.preferredColorScheme($0)
-        }
+        }.environmentObject(CoreDataStack.preview)
     }
 }
