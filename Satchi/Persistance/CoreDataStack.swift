@@ -7,6 +7,7 @@
 //
 import CoreData
 import CloudKit
+import UIKit
 
 final class CoreDataStack: ObservableObject {
     static let shared = CoreDataStack()
@@ -47,7 +48,6 @@ final class CoreDataStack: ObservableObject {
         let storesURL = privateStoreDescription.url?.deletingLastPathComponent()
         privateStoreDescription.url = inMemory ? URL(fileURLWithPath: "/dev/null") : storesURL?.appendingPathComponent("private.sqlite")
 
-        // TODO: 1
         if !inMemory {
             let sharedStoreURL = storesURL?.appendingPathComponent("shared.sqlite")
             guard let sharedStoreDescription = privateStoreDescription
@@ -105,13 +105,33 @@ final class CoreDataStack: ObservableObject {
     }
 
     private static func createTestData(_ context: NSManagedObjectContext) {
-        let trackNames = ["Track 1", "Track 3", "Track 4"]
-        for trackName in trackNames {
+
+        let testImage = UIImage(named: "SVTTestImage")?.pngData()
+        for number in 0..<2 {
             let newTrack = Track(context: context)
             newTrack.id = UUID()
-
-            newTrack.started = Date()
-            newTrack.timeToFinish = 3600 * 2
+            newTrack.name = "Trc \(number)"
+            newTrack.length = Int32(number * 500)
+            newTrack.created = Date(timeIntervalSinceNow: TimeInterval(-60*60*24+3))
+            newTrack.difficulty = 4
+            newTrack.image = testImage
+            newTrack.laidPath = [
+                CLLocation(latitude: 56.65418, longitude: 16.32639),
+                CLLocation(latitude: 58.41190, longitude: 15.61221)
+            ]
+        }
+        for number in 2..<6 {
+            let newTrack = Track(context: context)
+            newTrack.id = UUID()
+            newTrack.name = "Trc \(number)"
+            newTrack.length = Int32(number * 500)
+            var createdTimeInterval = DateComponents(day: number)
+            newTrack.created = Calendar.current.date(byAdding: createdTimeInterval, to: Date())
+            var finishedTimeInterval = DateComponents(day: number+1)
+            newTrack.started = Calendar.current.date(byAdding: finishedTimeInterval, to: Date())
+            newTrack.timeToFinish = (35+Double(number))*60
+            newTrack.difficulty = 5
+            newTrack.image = testImage
             newTrack.laidPath = [
                 CLLocation(latitude: 56.65418, longitude: 16.32639),
                 CLLocation(latitude: 58.41190, longitude: 15.61221)
@@ -120,13 +140,46 @@ final class CoreDataStack: ObservableObject {
                 CLLocation(latitude: 56.65418, longitude: 16.32639),
                 CLLocation(latitude: 58.20236, longitude: 15.99773)
             ]
-            newTrack.name = trackName
-            newTrack.length = 12312
-            newTrack.comments = "\(trackName) comments"
-            newTrack.created = Date()
-            newTrack.difficulty = Int16.random(in: 1...5)
+
         }
 
+        var timeInterval = DateComponents(day: 2)
+
+        let newTrack = Track(context: context)
+        newTrack.id = UUID()
+        newTrack.name = "Stensö"
+        newTrack.length = 5000
+        newTrack.created = Date()
+        newTrack.difficulty = 4
+        newTrack.started = Calendar.current.date(byAdding: timeInterval, to: Date())
+        newTrack.timeToFinish = 68 * 60
+        newTrack.image = testImage
+        newTrack.laidPath = [
+            CLLocation(latitude: 56.65418, longitude: 16.32639),
+            CLLocation(latitude: 58.41190, longitude: 15.61221)
+        ]
+        newTrack.trackPath = [
+            CLLocation(latitude: 56.65418, longitude: 16.32639),
+            CLLocation(latitude: 58.20236, longitude: 15.99773)
+        ]
+
+        let newTrack2 = Track(context: context)
+        newTrack2.id = UUID()
+        newTrack2.name = "Udden"
+        newTrack2.length = 5400
+        newTrack2.created = Date()
+        newTrack2.difficulty = 2
+        newTrack2.started = Calendar.current.date(byAdding: timeInterval, to: Date())
+        newTrack2.timeToFinish = 98*60
+        newTrack2.image = testImage
+        newTrack2.laidPath = [
+            CLLocation(latitude: 56.65418, longitude: 16.32639),
+            CLLocation(latitude: 58.41190, longitude: 15.61221)
+        ]
+        newTrack2.trackPath = [
+            CLLocation(latitude: 56.65418, longitude: 16.32639),
+            CLLocation(latitude: 58.20236, longitude: 15.99773)
+        ]
     }
 
     private var inMemory = false

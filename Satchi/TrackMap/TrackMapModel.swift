@@ -102,7 +102,7 @@ class TrackMapModel: NSObject, ObservableObject {
     override init() {
         self.locationManager = CLLocationManager()
         locationManager.allowsBackgroundLocationUpdates = true
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         super.init()
     }
 
@@ -197,19 +197,6 @@ class TrackMapModel: NSObject, ObservableObject {
         locationManager.requestLocation()
         locationManager.startUpdatingLocation()
         locationManager.startUpdatingHeading()
-
-//        let status = locationManager.authorizationStatus
-//        if status == .notDetermined || status == .denied || status == .authorizedWhenInUse {
-//            // present an alert indicating location authorization required
-//            // and offer to take the user to Settings for the app via
-//            // UIApplication -openUrl: and UIApplicationOpenSettingsURLString
-//            locationManager.requestWhenInUseAuthorization()
-//            locationManager.requestAlwaysAuthorization()
-//
-//        }else{
-//            locationManager.startUpdatingLocation()
-//            locationManager.startUpdatingHeading()
-//        }
     }
 
     private func stopTracking() {
@@ -225,7 +212,7 @@ extension TrackMapModel: CLLocationManagerDelegate {
         } else if state == .trackingStarted {
             trackPath.append(contentsOf: locations)
         }
-
+        print("GPS location Accuracy \(locations.first?.horizontalAccuracy ?? 0)")
         currentLocation = manager.location
     }
 

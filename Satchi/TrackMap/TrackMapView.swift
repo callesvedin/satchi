@@ -10,7 +10,7 @@ import MapKit
 
 struct TrackMapView: View {
     @Environment(\.presentationMode) var presentationMode
-    fileprivate var stack = CoreDataStack.shared
+    @EnvironmentObject private var stack: CoreDataStack
     @StateObject public var mapModel = TrackMapModel()
     var track: Track
     @State private var name = ""
@@ -30,8 +30,6 @@ struct TrackMapView: View {
                 TrackMapOverlayView(mapModel: mapModel)
             }
         }
-//        .navigationTitle("Track")
-//        .navigationBarTitleDisplayMode(.inline)
         .navigationBarHidden(true)
         .ignoresSafeArea()
         .onChange(of: mapModel.state) { value in
@@ -76,7 +74,10 @@ struct TrackMapView: View {
 struct TrackMapView_Previews: PreviewProvider {
 
     static var previews: some View {
-        let stack = CoreDataStack.shared
-        TrackMapView(track: stack.createTrack())
+        let stack = CoreDataStack.preview
+        NavigationView {
+        TrackMapView(track: stack.getTracks()[0])
+            .environmentObject(CoreDataStack.preview)
+        }
     }
 }
