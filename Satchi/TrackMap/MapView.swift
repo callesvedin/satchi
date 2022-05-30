@@ -16,19 +16,19 @@ struct MapView: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> MKMapView {
-        let mapView = MKMapView()
-        mapView.delegate = context.coordinator
+        let theView = MKMapView()
+        theView.delegate = context.coordinator
 
-        mapView.showsUserLocation = true
-        mapView.mapType = .satellite
-        mapView.userTrackingMode = .followWithHeading
+        theView.showsUserLocation = true
+        theView.mapType = .satellite
+        theView.userTrackingMode = .follow
 
-        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "LayStart")
-        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "LayStop")
-        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "TrackStart")
-        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "TrackStop")
+        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "LayStart")
+        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "LayStop")
+        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "TrackStart")
+        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "TrackStop")
 
-        return mapView
+        return theView
     }
 
     func removeOverlays(mapView: MKMapView) {
@@ -43,40 +43,60 @@ struct MapView: UIViewRepresentable {
         mapView.removeAnnotations(annotations)
     }
 
-    func updateUIView(_ uiView: MKMapView, context: Context) {
-        if mapModel.region != nil {
-            uiView.setRegion(
-                mapModel.region!, animated: true
-            )
+    func updateUIView(_ mapView: MKMapView, context: Context) {
+        print("Map span:\(mapView.region.span.longitudeDelta)")
+//        if !mapModel.regionIsSet && mapModel.currentLocation != nil {
+//            let viewRegion = MKCoordinateRegion(center: mapModel.currentLocation!.coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
+//            let adjustedRegion = uiView.regionThatFits(viewRegion)
+////            let region = MKCoordinateRegion(center:
+////                                            CLLocationCoordinate2D(latitude: mapModel.currentLocation!.coordinate.latitude,
+////                                                                   longitude: mapModel.currentLocation!.coordinate.longitude),
+////                                            span: MKCoordinateSpan(latitudeDelta: 0.002,
+////                                                               longitudeDelta: 0.002)
+////            )
+//            print("Setting span to \(adjustedRegion.span.longitudeDelta)")
+//            uiView.setRegion(
+//                adjustedRegion, animated: true
+//            )
+//            mapModel.regionIsSet.toggle()
+//        }
+        if mapModel.followUser {
+            mapView.userTrackingMode = .follow
+        } else {
+            mapView.userTrackingMode = .none
         }
 
         if mapModel.annotations.isEmpty {
-            removeAnnotations(mapView: uiView)
+            removeAnnotations(mapView: mapView)
         } else {
-            uiView.addAnnotations(mapModel.annotations)
+            mapView.addAnnotations(mapModel.annotations)
         }
 
-        removeOverlays(mapView: uiView)
+//        removeOverlays(mapView: uiView)
 
         if mapModel.laidPath.count > 0 {
             var laidCoordinates = mapModel.laidPath.map({$0.coordinate})
             let polyline = TrackPolyline(coordinates: &laidCoordinates, count: laidCoordinates.count)
             polyline.color = .systemGreen
-            uiView.addOverlay(polyline)
+            mapView.addOverlay(polyline)
         }
 
         if mapModel.trackPath.count > 0 {
             var trackCoordinates = mapModel.trackPath.map({$0.coordinate})
             let polyline = TrackPolyline(coordinates: &trackCoordinates, count: trackCoordinates.count)
             polyline.color = .systemRed
-            uiView.addOverlay(polyline)
+            mapView.addOverlay(polyline)
         }
 
-        if (mapModel.state == .finishedTrack || mapModel.previewing), let first = uiView.overlays.first {
-            let rect = uiView.overlays.reduce(first.boundingMapRect, {$0.union($1.boundingMapRect)})
-            uiView.setVisibleMapRect(rect,
+        if (mapModel.state == .finishedTrack || mapModel.previewing), let first = mapView.overlays.first {
+            let rect = mapView.overlays.reduce(first.boundingMapRect, {$0.union($1.boundingMapRect)})
+            mapView.setVisibleMapRect(rect,
                                       edgePadding: UIEdgeInsets(top: 50.0, left: 50.0, bottom: 50.0, right: 50.0),
                                       animated: true)
+        }
+        if !mapModel.regionIsSet && mapModel.currentLocation != nil {
+            mapView.centerToLocation(mapModel.currentLocation!)
+            mapModel.regionIsSet.toggle()
         }
 
     }
@@ -88,13 +108,17 @@ struct MapView: UIViewRepresentable {
             self.mapModel = mapModel
         }
 
+        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+            print("New region:\(mapView.region)")
+        }
+
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
             let renderer = MKPolylineRenderer(overlay: overlay)
             if let over = overlay as? TrackPolyline {
                 renderer.strokeColor = over.color
-                renderer.lineWidth = 5
-                renderer.lineDashPhase = 2
-                renderer.lineDashPattern = [NSNumber(value: 1), NSNumber(value: 5)]
+                renderer.lineWidth = 2
+//                renderer.lineDashPhase = 2
+//                renderer.lineDashPattern = [NSNumber(value: 1), NSNumber(value: 5)]
             }
             return renderer
         }
@@ -112,9 +136,56 @@ struct MapView: UIViewRepresentable {
             }
             return nil
         }
+
+        func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+            print("Region will change")
+        }
+
+        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+            print("Region did change")
+        }
+
+        func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+            print("did finish loading map")
+        }
+        func mapViewWillStartLoadingMap(_ mapView: MKMapView) {
+            print("Will start loading map")
+        }
+        func mapViewWillStartRenderingMap(_ mapView: MKMapView) {
+            print("Will start rendering map")
+        }
+        func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
+            print("Finished rendering map")
+        }
+        func mapViewWillStartLocatingUser(_ mapView: MKMapView) {
+            print("Will start locating user")
+        }
+
     }
+//
+//    - (void)mapViewWillStartLoadingMap:(MKMapView *)mapView;
+//    - (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView;
+//    - (void)mapViewDidFailLoadingMap:(MKMapView *)mapView withError:(NSError *)error;
+//
+//    - (void)mapViewWillStartRenderingMap:(MKMapView *)mapView NS_AVAILABLE(10_9, 7_0);
+//    - (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered NS_AVAILABLE(10_9, 7_0);
+//
+
 }
 
 class TrackPolyline: MKPolyline {
     var color: UIColor?
+}
+
+private extension MKMapView {
+    func centerToLocation(
+        _ location: CLLocation,
+        regionRadius: CLLocationDistance = 500
+    ) {
+        let coordinateRegion = MKCoordinateRegion(
+            center: location.coordinate,
+            latitudinalMeters: regionRadius,
+            longitudinalMeters: regionRadius)
+        setRegion(coordinateRegion, animated: true)
+    }
 }

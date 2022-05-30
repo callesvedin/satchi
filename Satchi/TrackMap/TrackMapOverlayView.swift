@@ -42,8 +42,26 @@ struct TrackMapOverlayView: View {
             .padding(.top, topPadding)
             .padding(.horizontal)
             .padding(.bottom)
-            .background(colorScheme == .light ? Color.white : Color.black)
+            .background(Color(UIColor.systemBackground))
             .opacity(0.8)
+            if mapModel.state != .finishedTrack {
+                HStack {
+                    Spacer()
+                    Button(
+                        action: {mapModel.followUser.toggle()},
+                        label: {
+                            Image.init(systemName: "location")
+                                .symbolVariant(mapModel.followUser ? .fill: .none)
+                                .imageScale(.large).padding(8)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 6, style: .continuous).fill(Color(UIColor.systemBackground).opacity(0.8))
+                                )
+                            }
+                    ).buttonStyle(.plain)
+                }
+                .frame(height: 40)
+                .padding(.horizontal, 10)
+            }
             Spacer()
             HStack {
                 if showCancel(state: mapModel.state) {
@@ -100,9 +118,12 @@ struct TrackMapOverlayView: View {
 
 struct TrackMapOverlayView_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-            TrackMapOverlayView(mapModel: TrackMapModel()).ignoresSafeArea()
-            TrackMapOverlayView(mapModel: TrackMapModel()).ignoresSafeArea().preferredColorScheme(.dark)
+        let model: TrackMapModel = TrackMapModel()
+        model.followUser = false
+
+        return Group {
+            TrackMapOverlayView(mapModel: model).ignoresSafeArea()
+            TrackMapOverlayView(mapModel: model).ignoresSafeArea().preferredColorScheme(.dark)
         }
     }
 }

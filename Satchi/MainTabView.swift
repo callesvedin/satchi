@@ -12,8 +12,6 @@ struct MainTabView: View {
     var body: some View {
         NavigationView {
             TrackListView()
-                .environmentObject(CoreDataStack.shared)
-                .environment(\.managedObjectContext, CoreDataStack.shared.context)
         }
     }
 }
@@ -40,5 +38,8 @@ struct MainTabView2: View {
 struct MainTabView_Previews: PreviewProvider {
     static var previews: some View {
         MainTabView()
+            .environmentObject(CoreDataStack.preview)
+            .environment(\.managedObjectContext, CoreDataStack.preview.context)
+
     }
 }

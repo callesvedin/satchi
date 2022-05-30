@@ -21,6 +21,9 @@ struct SatchiApp: App {
     var body: some Scene {
         WindowGroup {
             MainTabView()
+                .environmentObject(CoreDataStack.shared)
+                .environment(\.managedObjectContext, CoreDataStack.shared.context)
+
         }
     }
 }

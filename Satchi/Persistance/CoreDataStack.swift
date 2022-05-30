@@ -125,9 +125,9 @@ final class CoreDataStack: ObservableObject {
             newTrack.id = UUID()
             newTrack.name = "Trc \(number)"
             newTrack.length = Int32(number * 500)
-            var createdTimeInterval = DateComponents(day: number)
+            let createdTimeInterval = DateComponents(day: number)
             newTrack.created = Calendar.current.date(byAdding: createdTimeInterval, to: Date())
-            var finishedTimeInterval = DateComponents(day: number+1)
+            let finishedTimeInterval = DateComponents(day: number+1)
             newTrack.started = Calendar.current.date(byAdding: finishedTimeInterval, to: Date())
             newTrack.timeToFinish = (35+Double(number))*60
             newTrack.difficulty = 5
@@ -143,7 +143,7 @@ final class CoreDataStack: ObservableObject {
 
         }
 
-        var timeInterval = DateComponents(day: 2)
+        let timeInterval = DateComponents(day: 2)
 
         let newTrack = Track(context: context)
         newTrack.id = UUID()

@@ -19,8 +19,9 @@ enum RunningState {
 class TrackMapModel: NSObject, ObservableObject {
     private var locationManager: CLLocationManager
 //    public var image: UIImage?
+    @Published var followUser: Bool = true
     public var annotations: [MKAnnotation] = []
-    public var region: MKCoordinateRegion?
+    public var regionIsSet: Bool = false
     public var trackingStarted: Date?
     public var previousState: RunningState = .allDone
     public var previewing = false
@@ -28,13 +29,7 @@ class TrackMapModel: NSObject, ObservableObject {
     @Published var distance: CLLocationDistance = 0
     @Published public var gotUserLocation = false
 
-    @Published public var currentLocation: CLLocation? {
-        didSet {
-            if currentLocation != nil {
-                setRegion(center: currentLocation)
-            }
-        }
-    }
+    @Published public var currentLocation: CLLocation?
 
     @Published public var state = RunningState.layPathNotStarted {
         didSet {
@@ -112,12 +107,15 @@ class TrackMapModel: NSObject, ObservableObject {
             self.addStopAnnotation(at: laidPath.last!)
             self.addTrackStartAnnotation(at: trackPath.first!)
             self.addTrackStopAnnotation(at: trackPath.last!)
+            self.followUser = false
             self.state = .finishedTrack
         } else if !laidPath.isEmpty {
             self.addStartAnnotation(at: laidPath.first!)
             self.addStopAnnotation(at: laidPath.last!)
+            self.followUser = true
             self.state = .trackingNotStarted
         } else {
+            self.followUser = true
             self.state = .layPathNotStarted
         }
 
@@ -160,20 +158,6 @@ class TrackMapModel: NSObject, ObservableObject {
         addAnnotation(annotation)
     }
 
-    private func setRegion(center: CLLocation?, spanDelta: Double = 0.001) {
-        guard let center = center else {return}
-        if region != nil {
-            region!.center = CLLocationCoordinate2D(
-                latitude: center.coordinate.latitude, longitude: center.coordinate.longitude)
-        } else {
-            self.region = MKCoordinateRegion(center:
-                                                CLLocationCoordinate2D(latitude: center.coordinate.latitude,
-                                                                       longitude: center.coordinate.longitude),
-                                             span: MKCoordinateSpan(latitudeDelta: spanDelta,
-                                                                    longitudeDelta: spanDelta)
-            )
-        }
-    }
     private func getLength(from locations: [CLLocation]) -> Double {
         var length: Double = 0
         for (count, location) in locations.enumerated() {

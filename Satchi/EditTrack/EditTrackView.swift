@@ -56,18 +56,18 @@ struct EditTrackView: View {
                     }
                     Group {
                         HStack {
-                            Text("**Name**")
+                            Text("**Name:**")
                             TextField("Name", text: $viewModel.trackName)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
 
-                        //                            .frame(height: 22)
-
                         Text("**Created:** \(track.created != nil ? dateFormatter.string(from: track.created!) : "-")")
 
                         HStack {
-                            Text("**Difficulty**: \(viewModel.difficulty)").padding(.vertical, 0)
-                            DifficultySlider(difficulty: $viewModel.difficulty, sliderValue: viewModel.difficulty*100).padding(.vertical, 0) // This damded slider is to fat.
+                            Text("**Difficulty:**")
+                            DifficultyView(difficulty: $viewModel.difficulty)
+//                            DifficultySlider(difficulty: $viewModel.difficulty,
+//                                             sliderValue: viewModel.difficulty*100).padding(.vertical, 0) // This damded slider is to fat.
                         }.padding(0)
 
                         Text("**Length**: \(track.length)m")
@@ -242,36 +242,35 @@ extension EditTrackView {
     }
 }
 
-struct DifficultySlider: View {
-    @Binding var difficulty: Int16
-    @State var sliderValue: Int16
-
-    var body: some View {
-        ValueSlider(value: $sliderValue, in: 100...500)
-            .valueSliderStyle(
-                HorizontalValueSliderStyle(
-                    track: LinearGradient(
-                        gradient: Gradient(colors: [.green, .blue, .orange, .yellow, .purple, .red]),
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                    .frame(height: 10)
-                    .cornerRadius(4),
-                    thumbSize: CGSize(width: 10, height: 15)
-                )
-            )
-            .onChange(of: sliderValue) { sliderV in
-                print("Value:\(sliderV)")
-                if difficulty != sliderV / 100 {
-                    print("Changed difficulty:\(difficulty)")
-                    difficulty = sliderV / 100
-                }
-            }
-            .onAppear {
-                sliderValue = difficulty * 100
-            }
-    }
-}
+// struct DifficultySlider: View {
+//    @Binding var difficulty: Int16
+//    @State var sliderValue: Int16
+//
+//    var body: some View {
+//        ValueSlider(value: $sliderValue, in: 100...500)
+//            .valueSliderStyle(
+//                HorizontalValueSliderStyle(
+//                    track: LinearGradient(
+//                        gradient: Gradient(colors: [.green, .blue, .orange, .yellow, .purple, .red]),
+//                        startPoint: .leading,
+//                        endPoint: .trailing
+//                    )
+//                    .frame(height: 10)
+//                    .cornerRadius(4),
+//                    thumbSize: CGSize(width: 10, height: 15)
+//                )
+//            )
+//            .onChange(of: sliderValue) { sliderV in
+//                if difficulty != sliderV / 100 {
+//                    print("Changed difficulty:\(difficulty)")
+//                    difficulty = sliderV / 100
+//                }
+//            }
+//            .onAppear {
+//                sliderValue = difficulty * 100
+//            }
+//    }
+// }
 //
 // struct EditTrackView_Previews: PreviewProvider {
 //    static var previews: some View {
