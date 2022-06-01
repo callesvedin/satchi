@@ -7,11 +7,14 @@
 
 import SwiftUI
 
+typealias DeleteFunction = (Track) -> Void
+
 struct TrackCellView: View {
     @Environment(\.colorScheme) var colorScheme
 //    private let stack = CoreDataStack.shared
-    @EnvironmentObject private var stack: CoreDataStack
-    @ObservedObject var track: Track
+//    @EnvironmentObject private var stack: CoreDataStack
+    let deleteFunction: DeleteFunction
+    var track: Track
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
@@ -26,7 +29,7 @@ struct TrackCellView: View {
                 Spacer()
                 Button(action: {
                     withAnimation {
-                        stack.delete(track)
+                        deleteFunction(track)
                     }
                 }, label: {
                     Image(systemName: "trash")
@@ -51,7 +54,7 @@ struct TrackCellView: View {
                     Spacer()
                 }
                 Text("Difficulty:\(track.difficulty)")
-                if stack.isShared(object: track) {
+                if CoreDataStack.shared.isShared(object: track) {
                     Image(systemName: "person.3.fill")
                         .resizable()
                         .scaledToFit()
@@ -83,7 +86,7 @@ struct TrackCellView: View {
     static var previews: some View {
         let track = CoreDataStack.preview.getTracks()[0]
 //        ForEach(ColorScheme.allCases, id: \.self) {
-            TrackCellView(track: track).frame(height: 90)
+        TrackCellView(deleteFunction: {_ in }, track: track).frame(height: 90)
 //            .preferredColorScheme($0)
             .environmentObject(CoreDataStack.preview)
                 .environment(\.managedObjectContext, CoreDataStack.preview.context)

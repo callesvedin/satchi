@@ -1,11 +1,17 @@
 import MapKit
 import SwiftUI
 import Combine
+import os.log
 
 struct MapView: UIViewRepresentable {
     typealias UIViewType = MKMapView
 
     @ObservedObject var mapModel: TrackMapModel
+
+    private static let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: MapView.self)
+    )
 
     init(mapModel: TrackMapModel) {
         self.mapModel = mapModel
@@ -44,22 +50,7 @@ struct MapView: UIViewRepresentable {
     }
 
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        print("Map span:\(mapView.region.span.longitudeDelta)")
-//        if !mapModel.regionIsSet && mapModel.currentLocation != nil {
-//            let viewRegion = MKCoordinateRegion(center: mapModel.currentLocation!.coordinate, latitudinalMeters: 500, longitudinalMeters: 500)
-//            let adjustedRegion = uiView.regionThatFits(viewRegion)
-////            let region = MKCoordinateRegion(center:
-////                                            CLLocationCoordinate2D(latitude: mapModel.currentLocation!.coordinate.latitude,
-////                                                                   longitude: mapModel.currentLocation!.coordinate.longitude),
-////                                            span: MKCoordinateSpan(latitudeDelta: 0.002,
-////                                                               longitudeDelta: 0.002)
-////            )
-//            print("Setting span to \(adjustedRegion.span.longitudeDelta)")
-//            uiView.setRegion(
-//                adjustedRegion, animated: true
-//            )
-//            mapModel.regionIsSet.toggle()
-//        }
+        print("Map span\(mapView.region.span.longitudeDelta)")
         if mapModel.followUser {
             mapView.userTrackingMode = .follow
         } else {
@@ -94,23 +85,24 @@ struct MapView: UIViewRepresentable {
                                       edgePadding: UIEdgeInsets(top: 50.0, left: 50.0, bottom: 50.0, right: 50.0),
                                       animated: true)
         }
-        if !mapModel.regionIsSet && mapModel.currentLocation != nil {
-            mapView.centerToLocation(mapModel.currentLocation!)
-            mapModel.regionIsSet.toggle()
-        }
 
     }
 
     class MapViewCoordinator: NSObject, MKMapViewDelegate {
         let mapModel: TrackMapModel
 
+        private static let logger = Logger(
+            subsystem: Bundle.main.bundleIdentifier!,
+            category: String(describing: MapViewCoordinator.self)
+        )
+
         init(mapModel: TrackMapModel) {
             self.mapModel = mapModel
         }
 
-        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-            print("New region:\(mapView.region)")
-        }
+//        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+//
+//        }
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
             let renderer = MKPolylineRenderer(overlay: overlay)
@@ -131,7 +123,7 @@ struct MapView: UIViewRepresentable {
                     view.markerTintColor = annotation.color
                     return view
                 } else {
-                    print("dequeued view not a MKMarkerAnnotationView")
+                    print("dequeued view not known")
                 }
             }
             return nil
@@ -162,15 +154,6 @@ struct MapView: UIViewRepresentable {
         }
 
     }
-//
-//    - (void)mapViewWillStartLoadingMap:(MKMapView *)mapView;
-//    - (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView;
-//    - (void)mapViewDidFailLoadingMap:(MKMapView *)mapView withError:(NSError *)error;
-//
-//    - (void)mapViewWillStartRenderingMap:(MKMapView *)mapView NS_AVAILABLE(10_9, 7_0);
-//    - (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered NS_AVAILABLE(10_9, 7_0);
-//
-
 }
 
 class TrackPolyline: MKPolyline {

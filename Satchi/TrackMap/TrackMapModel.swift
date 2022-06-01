@@ -9,8 +9,13 @@ import Foundation
 import CoreLocation
 import SwiftUI
 import MapKit
+import os.log
 
-enum RunningState {
+enum RunningState: String, CustomStringConvertible {
+    var description: String {
+        self.rawValue
+    }
+
     case layPathNotStarted, layPathStarted, layPathStopped, layPathDone,
          trackingNotStarted, trackingStarted, trackingStopped,
          trackingDone, finishedTrack, allDone, cancelled
@@ -28,12 +33,16 @@ class TrackMapModel: NSObject, ObservableObject {
     @Published var timer: TrackTimer = TrackTimer()
     @Published var distance: CLLocationDistance = 0
     @Published public var gotUserLocation = false
-
     @Published public var currentLocation: CLLocation?
+
+    private static let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: TrackMapModel.self)
+    )
 
     @Published public var state = RunningState.layPathNotStarted {
         didSet {
-            print("Running state changed:\(state)")
+            print("Running state changed:\(self.state)")
             if state == .layPathStarted && currentLocation != nil {
                 reset()
                 addStartAnnotation(at: currentLocation!)
@@ -123,7 +132,6 @@ class TrackMapModel: NSObject, ObservableObject {
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.delegate = self
             locationManager.requestAlwaysAuthorization()
-//            startTracking()
         }
         self.previousState = self.state
     }
@@ -132,16 +140,16 @@ class TrackMapModel: NSObject, ObservableObject {
         let annotation = PathAnnotation(kind: .trackPathStart)
         annotation.coordinate = location.coordinate
         annotation.title = "Start"
-
         addAnnotation(annotation)
+        print("Track path start annotation added")
     }
 
     private func addTrackStopAnnotation(at location: CLLocation) {
         let annotation = PathAnnotation(kind: .trackPathStop)
         annotation.coordinate = location.coordinate
         annotation.title = "Stop"
-
         addAnnotation(annotation)
+        print("Track path stop annotation added")
     }
 
     private func addStartAnnotation(at location: CLLocation) {
@@ -149,6 +157,7 @@ class TrackMapModel: NSObject, ObservableObject {
         annotation.coordinate = location.coordinate
         annotation.title = "Track Start"
         addAnnotation(annotation)
+        print("Lay path start annotation added")
     }
 
     private func addStopAnnotation(at location: CLLocation) {
@@ -156,6 +165,7 @@ class TrackMapModel: NSObject, ObservableObject {
         annotation.coordinate = location.coordinate
         annotation.title = "Track Stop"
         addAnnotation(annotation)
+        print("Lay path stop annotation added")
     }
 
     private func getLength(from locations: [CLLocation]) -> Double {
@@ -178,12 +188,14 @@ class TrackMapModel: NSObject, ObservableObject {
     }
 
     public func startTracking() {
+        print("Start tracking.")
         locationManager.requestLocation()
         locationManager.startUpdatingLocation()
         locationManager.startUpdatingHeading()
     }
 
     private func stopTracking() {
+        print("Stop tracking.")
         locationManager.stopUpdatingHeading()
         locationManager.stopUpdatingLocation()
     }
@@ -201,10 +213,10 @@ extension TrackMapModel: CLLocationManagerDelegate {
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        print("locationManagerDidChangeAuthorization:manager. Status:\(manager.authorizationStatus)")
+        print("locationManagerDidChangeAuthorization:manager. Status:\(manager.authorizationStatus.rawValue)")
         switch manager.authorizationStatus {
         case .notDetermined:
-            print("Status not determined")
+            print("Status not determined. Requesting authorization")
             manager.requestAlwaysAuthorization()
         case .authorizedWhenInUse, .authorizedAlways:
             startTracking()
@@ -219,7 +231,7 @@ extension TrackMapModel: CLLocationManagerDelegate {
     }
 
     func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {
-        print("Did pause location updates")
+        print("Location manager paused location updates.")
     }
 
 }

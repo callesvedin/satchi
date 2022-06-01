@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Sliders
 import CloudKit
 
 struct EditTrackView: View {

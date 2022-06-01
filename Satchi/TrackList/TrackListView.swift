@@ -21,57 +21,46 @@ struct TrackListView: View {
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                if !viewModel.newTracks.isEmpty {
-                    TrackSectionView(sectionName: "Not started")
-                        .onTapGesture {
-                            print("Header TAP")
-                        }
+                if !viewModel.tracks.filter({$0.getState() == .notStarted}).isEmpty {
+                    TrackSectionView(sectionName: "Created tracks")
                     Divider().frame(height: 2)
                 }
-                ForEach(viewModel.newTracks, id: \.objectID) { track in
-                    if track.getState() == .notStarted {
-                        TrackCellView(track: track)
+                ForEach(Array(viewModel.tracks.filter({$0.getState() == .notStarted}).enumerated()), id: \.element) { (_, track)  in
+                    TrackCellView(deleteFunction: deleteTrackFunction, track: track)
+                        .onTapGesture {
+                            selectedTrack = track
+                            showEdit = true
+                        }
+                }
+
+                if !viewModel.tracks.filter({$0.getState() == .started}).isEmpty {
+                    TrackSectionView(sectionName: "Started tracks")
+                    Divider().frame(height: 2)
+                }
+                ForEach(Array(viewModel.tracks.filter({$0.getState() == .started}).enumerated()), id: \.element) { (_, track)  in
+                    TrackCellView(deleteFunction: deleteTrackFunction, track: track)
+                        .onTapGesture {
+                            selectedTrack = track
+                            showEdit = true
+                        }
+
+                }
+                if !viewModel.tracks.filter({$0.getState() == .finished}).isEmpty {
+                    TrackSectionView(sectionName: "Finished tracks")
+                        .padding(.top, 20)
+                    Divider().frame(height: 2)
+
+                    ForEach(Array(viewModel.tracks.filter({$0.getState() == .finished}).enumerated()), id: \.element) { (_, track)  in
+                        TrackCellView(deleteFunction: deleteTrackFunction, track: track)
                             .onTapGesture {
                                 selectedTrack = track
                                 showEdit = true
                             }
                     }
                 }
-
-                if !viewModel.startedTracks.isEmpty {
-                    TrackSectionView(sectionName: "Started")
-                        .onTapGesture {
-                            print("Header TAP")
-                        }
-                    Divider().frame(height: 2)
-                }
-                ForEach(viewModel.startedTracks, id: \.objectID) { track in
-                    if track.getState() == .started {
-                        TrackCellView(track: track)
-                            .onTapGesture {
-                                selectedTrack = track
-                                showEdit = true
-                        }
-                    }
-                }
-                if !viewModel.finishedTracks.isEmpty {
-                    TrackSectionView(sectionName: "Finished")
-                        .onTapGesture {
-                            print("Header TAP")
-                        }.padding(.top, 20)
-                    Divider().frame(height: 2)
-
-                    ForEach(viewModel.finishedTracks, id: \.objectID) { track in
-                        if track.getState() == .finished {
-                            TrackCellView(track: track)
-                                .onTapGesture {
-                                    selectedTrack = track
-                                    showEdit = true
-                                }
-                        }
-                    }
-                }
             }
+            .transition(.scale)
+
             if selectedTrack != nil {
                 NavigationLink("", destination: EditTrackView(selectedTrack!), isActive: $showEdit)
                     .opacity(0)
@@ -89,6 +78,11 @@ struct TrackListView: View {
         .sheet(isPresented: $showMapView, content: {
             AddTrackView()
         })
+    }
+
+    func deleteTrackFunction(track: Track) {
+        viewModel.tracks.remove(at: viewModel.tracks.firstIndex(of: track)!)
+        viewModel.stack.delete(track)
     }
 }
 

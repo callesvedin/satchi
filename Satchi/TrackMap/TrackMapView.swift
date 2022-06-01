@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import os.log
 
 struct TrackMapView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -17,6 +18,11 @@ struct TrackMapView: View {
     @State var showModal: Bool = false
     @State var done: Bool = false
     var preview = false
+
+    private static let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: TrackMapView.self)
+    )
 
     init(track: Track, preview: Bool = false) {
         self.track = track
@@ -33,7 +39,7 @@ struct TrackMapView: View {
         .navigationBarHidden(true)
         .ignoresSafeArea()
         .onChange(of: mapModel.state) { value in
-
+            print("Map model state changed to \(value)")
             switch value {
             case .layPathDone:
                 track.laidPath = mapModel.laidPath
@@ -59,7 +65,7 @@ struct TrackMapView: View {
                 mapModel.state = mapModel.previousState
 
             default:
-                print("Map model state changed to \(value)")
+                print("Unhandled state")
             }
         }
         .onAppear {

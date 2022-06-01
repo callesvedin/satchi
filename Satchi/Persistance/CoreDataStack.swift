@@ -3,11 +3,11 @@
 //  Satchi
 //
 //  Created by Carl-Johan Svedin on 2022-05-11.
-//  From a copy of https://www.raywenderlich.com/29934862-sharing-core-data-with-cloudkit-in-swiftui
-//
+
 import CoreData
 import CloudKit
 import UIKit
+import os.log
 
 final class CoreDataStack: ObservableObject {
     static let shared = CoreDataStack()
@@ -20,6 +20,11 @@ final class CoreDataStack: ObservableObject {
 
         return stack
     }()
+
+    private static let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: CoreDataStack.self)
+    )
 
     var context: NSManagedObjectContext {
         persistentContainer.viewContext
@@ -197,24 +202,17 @@ extension CoreDataStack {
             do {
                 try context.save()
             } catch {
-                print("ViewContext save error: \(error)")
+                print("Could not save context \(error.localizedDescription)")
             }
         }
     }
 
     func delete(_ track: Track) {
+        print("Deleting track")
         context.perform {
             self.context.delete(track)
             self.save()
         }
-    }
-
-    func createTrack() -> Track {
-        print("Creating new track")
-        let newTrack = Track(context: context)
-        newTrack.created = Date()
-        newTrack.id = UUID()
-        return newTrack
     }
 
     func getTracks() -> [Track] {
@@ -231,8 +229,7 @@ extension CoreDataStack {
             try trackFetchController.performFetch()
             return trackFetchController.fetchedObjects ?? []
         } catch {
-            NSLog("Error: could not fetch objects")
-        }
+            print("Could not fetch objects. Error:\(error.localizedDescription)")}
         return []
     }
 }
@@ -256,7 +253,7 @@ extension CoreDataStack {
                         isShared = true
                     }
                 } catch {
-                    print("Failed to fetch share for \(objectID): \(error)")
+                    print("Failed to fetch share: \(error.localizedDescription)")
                 }
             }
         }
@@ -267,7 +264,7 @@ extension CoreDataStack {
         guard isShared(object: track) else { return nil }
         guard let shareDictionary = try? persistentContainer.fetchShares(matching: [track.objectID]),
               let share = shareDictionary[track.objectID] else {
-            print("Unable to get CKShare")
+            print("Failed to get share")
             return nil
         }
         share[CKShare.SystemFieldKey.title] = track.name

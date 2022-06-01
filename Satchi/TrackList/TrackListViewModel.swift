@@ -10,12 +10,12 @@ import Combine
 import CoreData
 
 class TrackListViewModel: NSObject, ObservableObject {
-    var tracks: [Track] = []
+    @Published var tracks: [Track] = []
     private let trackFetchController: NSFetchedResultsController<Track>
-    private var stack: CoreDataStack
-    @Published var finishedTracks: [Track] = []
-    @Published var startedTracks: [Track] = []
-    @Published var newTracks: [Track] = []
+    public var stack: CoreDataStack
+//    @Published var finishedTracks: [Track] = []
+//    @Published var startedTracks: [Track] = []
+//    @Published var newTracks: [Track] = []
 
     private var cancellable: AnyCancellable?
 
@@ -35,17 +35,17 @@ class TrackListViewModel: NSObject, ObservableObject {
         do {
             try trackFetchController.performFetch()
             tracks = trackFetchController.fetchedObjects ?? []
-            reload()
+//            reload()
         } catch {
             NSLog("Error: could not fetch objects")
         }
     }
 
-    public func reload() {
-        self.finishedTracks = tracks.filter({track in track.getState() == .finished})
-        self.startedTracks = tracks.filter({track in track.getState() == .started})
-        self.newTracks = tracks.filter({track in track.getState() == .notStarted})
-    }
+//    public func reload() {
+//        self.finishedTracks = tracks.filter({track in track.getState() == .finished})
+//        self.startedTracks = tracks.filter({track in track.getState() == .started})
+//        self.newTracks = tracks.filter({track in track.getState() == .notStarted})
+//    }
 }
 
 extension TrackListViewModel: NSFetchedResultsControllerDelegate {
@@ -53,6 +53,6 @@ extension TrackListViewModel: NSFetchedResultsControllerDelegate {
         guard let tracks = controller.fetchedObjects as? [Track] else {return}
         NSLog("Context has changed, reloading courses")
         self.tracks = tracks
-        reload()
+//        reload()
     }
 }
