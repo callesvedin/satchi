@@ -37,9 +37,9 @@ extension Track: Identifiable {
 
 extension Track {
     public func getState() -> CurrentState {
-        if trackPath != nil && !(trackPath?.isEmpty ?? true) {
+        if timeToFinish > 0 {
             return .finished
-        } else if laidPath != nil && !(laidPath?.isEmpty ?? true) {
+        } else if timeToCreate > 0 {
             return .started
         } else {
             return .notStarted

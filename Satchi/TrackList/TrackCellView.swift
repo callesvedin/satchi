@@ -11,6 +11,7 @@ typealias DeleteFunction = (Track) -> Void
 
 struct TrackCellView: View {
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject private var stack: CoreDataStack
 //    private let stack = CoreDataStack.shared
 //    @EnvironmentObject private var stack: CoreDataStack
     let deleteFunction: DeleteFunction
@@ -54,7 +55,7 @@ struct TrackCellView: View {
                     Spacer()
                 }
                 Text("Difficulty:\(track.difficulty)")
-                if CoreDataStack.shared.isShared(object: track) {
+                if stack.isShared(object: track) {
                     Image(systemName: "person.3.fill")
                         .resizable()
                         .scaledToFit()

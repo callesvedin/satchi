@@ -11,6 +11,7 @@ import CoreData
 
 class TrackListViewModel: NSObject, ObservableObject {
     @Published var tracks: [Track] = []
+
     private let trackFetchController: NSFetchedResultsController<Track>
     public var stack: CoreDataStack
 //    @Published var finishedTracks: [Track] = []

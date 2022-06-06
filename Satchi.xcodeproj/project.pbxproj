@@ -39,6 +39,7 @@
 		EB8D3FD8284567BE00D12C38 /* Track+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB352C8A278CEB310015AC5A /* Track+CoreDataClass.swift */; };
 		EB8D3FD9284567D700D12C38 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D2146282C62BF006CB703 /* CoreDataStack.swift */; };
 		EB9726602843B0DD00583007 /* DifficultyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB97265F2843B0DD00583007 /* DifficultyView.swift */; };
+		EBC61203284BD33900B5C534 /* FilteredList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC61202284BD33900B5C534 /* FilteredList.swift */; };
 		EBC69ACE2641B88F0094EAA3 /* TextInputDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */; };
 		EBD13A55261AF3760080C4FE /* EditTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A54261AF3760080C4FE /* EditTrackView.swift */; };
 /* End PBXBuildFile section */
@@ -96,6 +97,7 @@
 		EB87252B260CC0C5008AD8E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListViewModel.swift; sourceTree = "<group>"; };
 		EB97265F2843B0DD00583007 /* DifficultyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DifficultyView.swift; sourceTree = "<group>"; };
+		EBC61202284BD33900B5C534 /* FilteredList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredList.swift; sourceTree = "<group>"; };
 		EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputDialog.swift; sourceTree = "<group>"; };
 		EBCB4816266762F800E5631C /* Satchi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Satchi.xcdatamodel; sourceTree = "<group>"; };
 		EBD13A54261AF3760080C4FE /* EditTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackView.swift; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				EB872509260CC0C4008AD8E7 /* TrackListView.swift */,
 				EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */,
 				EB5688DF269C304000AF9AB1 /* TrackCellView.swift */,
+				EBC61202284BD33900B5C534 /* FilteredList.swift */,
 			);
 			path = TrackList;
 			sourceTree = "<group>";
@@ -419,6 +422,7 @@
 				EB59DE40283045A60043DE33 /* Track+CoreDataProperties.swift in Sources */,
 				EB2F91262624B8DF0026773D /* OverlayButtonStyle.swift in Sources */,
 				EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */,
+				EBC61203284BD33900B5C534 /* FilteredList.swift in Sources */,
 				EB87250A260CC0C4008AD8E7 /* TrackListView.swift in Sources */,
 				EB352C8C278CEB310015AC5A /* Track+CoreDataClass.swift in Sources */,
 				EB7DFD2B261E0D6A0056D6B4 /* MapView.swift in Sources */,

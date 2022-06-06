@@ -9,62 +9,43 @@ import SwiftUI
 import CoreData
 
 struct TrackListView: View {
-    @ObservedObject private var viewModel: TrackListViewModel
+    @EnvironmentObject private var stack: CoreDataStack
+
     @State var selectedTrack: Track?
     @State var showEdit = false
     @State private var showMapView = false
 
-    init(stack: CoreDataStack = CoreDataStack.shared) {
-        viewModel = TrackListViewModel(stack: stack)
-    }
-
     var body: some View {
+        //        LazyVStack {
         ScrollView {
-            LazyVStack(spacing: 0) {
-                if !viewModel.tracks.filter({$0.getState() == .notStarted}).isEmpty {
-                    TrackSectionView(sectionName: "Created tracks")
-                    Divider().frame(height: 2)
-                }
-                ForEach(Array(viewModel.tracks.filter({$0.getState() == .notStarted}).enumerated()), id: \.element) { (_, track)  in
-                    TrackCellView(deleteFunction: deleteTrackFunction, track: track)
-                        .onTapGesture {
-                            selectedTrack = track
-                            showEdit = true
-                        }
-                }
-
-                if !viewModel.tracks.filter({$0.getState() == .started}).isEmpty {
-                    TrackSectionView(sectionName: "Started tracks")
-                    Divider().frame(height: 2)
-                }
-                ForEach(Array(viewModel.tracks.filter({$0.getState() == .started}).enumerated()), id: \.element) { (_, track)  in
-                    TrackCellView(deleteFunction: deleteTrackFunction, track: track)
-                        .onTapGesture {
-                            selectedTrack = track
-                            showEdit = true
-                        }
-
-                }
-                if !viewModel.tracks.filter({$0.getState() == .finished}).isEmpty {
-                    TrackSectionView(sectionName: "Finished tracks")
-                        .padding(.top, 20)
-                    Divider().frame(height: 2)
-
-                    ForEach(Array(viewModel.tracks.filter({$0.getState() == .finished}).enumerated()), id: \.element) { (_, track)  in
-                        TrackCellView(deleteFunction: deleteTrackFunction, track: track)
-                            .onTapGesture {
-                                selectedTrack = track
-                                showEdit = true
-                            }
-                    }
-                }
+            VStack {
+                FilteredList(tracks: FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Track.created, ascending: true)],
+                                                 predicate: NSPredicate(format: "timeToCreate == 0")),
+                             header: "Created tracks",
+                             selection: $selectedTrack)
+                FilteredList(tracks: FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Track.created, ascending: true)],
+                                                 predicate: NSPredicate(format: "timeToCreate > 0 AND timeToFinish == 0")),
+                             header: "Started tracks",
+                             selection: $selectedTrack)
+                FilteredList(tracks: FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Track.created, ascending: true)],
+                                                 predicate: NSPredicate(format: "timeToCreate > 0 AND timeToFinish > 0")),
+                             header: "Finished tracks",
+                             selection: $selectedTrack)
             }
-            .transition(.scale)
 
             if selectedTrack != nil {
                 NavigationLink("", destination: EditTrackView(selectedTrack!), isActive: $showEdit)
                     .opacity(0)
             }
+        }
+        .onChange(of: selectedTrack, perform: {track in
+            print("selected track \(track?.name ?? "-")")
+            if selectedTrack != nil {
+                showEdit = true
+            }
+        })
+        .onAppear() {
+            selectedTrack = nil
         }
         .navigationTitle("Tracks")
         .toolbar {
@@ -78,11 +59,6 @@ struct TrackListView: View {
         .sheet(isPresented: $showMapView, content: {
             AddTrackView()
         })
-    }
-
-    func deleteTrackFunction(track: Track) {
-        viewModel.tracks.remove(at: viewModel.tracks.firstIndex(of: track)!)
-        viewModel.stack.delete(track)
     }
 }
 
@@ -104,8 +80,10 @@ struct TrackListView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(ColorScheme.allCases, id: \.self) {
             NavigationView {
-                TrackListView(stack: CoreDataStack.preview)
+                TrackListView()
             }.preferredColorScheme($0)
-        }.environmentObject(CoreDataStack.preview)
+        }
+        .environmentObject(CoreDataStack.preview)
+        .environment(\.managedObjectContext, CoreDataStack.preview.context)
     }
 }

@@ -117,7 +117,7 @@ final class CoreDataStack: ObservableObject {
             newTrack.id = UUID()
             newTrack.name = "Trc \(number)"
             newTrack.length = Int32(number * 500)
-            newTrack.created = Date(timeIntervalSinceNow: TimeInterval(-60*60*24+3))
+            newTrack.created = Date(timeIntervalSinceNow: TimeInterval(-60*60*24+365))
             newTrack.difficulty = 4
             newTrack.image = testImage
             newTrack.laidPath = [
@@ -130,6 +130,7 @@ final class CoreDataStack: ObservableObject {
             newTrack.id = UUID()
             newTrack.name = "Trc \(number)"
             newTrack.length = Int32(number * 500)
+            newTrack.timeToCreate = (35+Double(number))*60
             let createdTimeInterval = DateComponents(day: number)
             newTrack.created = Calendar.current.date(byAdding: createdTimeInterval, to: Date())
             let finishedTimeInterval = DateComponents(day: number+1)

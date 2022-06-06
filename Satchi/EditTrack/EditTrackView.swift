@@ -10,7 +10,7 @@ import CloudKit
 
 struct EditTrackView: View {
     @Environment(\.presentationMode) var presentationMode
-    private var stack = CoreDataStack.shared
+    @EnvironmentObject private var stack: CoreDataStack
     var track: Track
     @State private var share: CKShare?
     @State private var showShareSheet = false
@@ -241,45 +241,17 @@ extension EditTrackView {
     }
 }
 
-// struct DifficultySlider: View {
-//    @Binding var difficulty: Int16
-//    @State var sliderValue: Int16
-//
-//    var body: some View {
-//        ValueSlider(value: $sliderValue, in: 100...500)
-//            .valueSliderStyle(
-//                HorizontalValueSliderStyle(
-//                    track: LinearGradient(
-//                        gradient: Gradient(colors: [.green, .blue, .orange, .yellow, .purple, .red]),
-//                        startPoint: .leading,
-//                        endPoint: .trailing
-//                    )
-//                    .frame(height: 10)
-//                    .cornerRadius(4),
-//                    thumbSize: CGSize(width: 10, height: 15)
-//                )
-//            )
-//            .onChange(of: sliderValue) { sliderV in
-//                if difficulty != sliderV / 100 {
-//                    print("Changed difficulty:\(difficulty)")
-//                    difficulty = sliderV / 100
-//                }
-//            }
-//            .onAppear {
-//                sliderValue = difficulty * 100
-//            }
-//    }
-// }
-//
-// struct EditTrackView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let track = TrackStorage.preview.tracks.value[2]
-//        return
-//        //        NavigationView {
-//        ForEach(ColorScheme.allCases, id: \.self) {
-//            EditTrackView(track)
-//                .preferredColorScheme($0)
-//        }
-//        //        }
-//    }
-// }
+ struct EditTrackView_Previews: PreviewProvider {
+    static var previews: some View {
+        let track = CoreDataStack.preview.getTracks()[3]
+        return
+
+        ForEach(ColorScheme.allCases, id: \.self) {
+            EditTrackView(track)
+                .preferredColorScheme($0)
+                .environmentObject(CoreDataStack.preview)
+                .environment(\.managedObjectContext, CoreDataStack.preview.context)
+        }
+        //        }
+    }
+ }
