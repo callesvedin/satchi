@@ -9,6 +9,7 @@ import CloudKit
 import UIKit
 import os.log
 
+@MainActor
 final class CoreDataStack: ObservableObject {
     static let shared = CoreDataStack()
     static let preview: CoreDataStack = {

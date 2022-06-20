@@ -21,6 +21,7 @@ enum RunningState: String, CustomStringConvertible {
          trackingDone, finishedTrack, allDone, cancelled
 }
 
+@MainActor
 class TrackMapModel: NSObject, ObservableObject {
     private var locationManager: CLLocationManager
 //    public var image: UIImage?

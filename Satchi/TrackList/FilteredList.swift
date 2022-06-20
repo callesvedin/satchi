@@ -24,7 +24,7 @@ struct FilteredList: View {
         ForEach(tracks) { (track)  in
             TrackCellView(deleteFunction: deleteTrackFunction, track: track)
                 .onTapGesture {
-                    //                    print("Track \(track.name!) timeToCreate:\(track.timeToCreate) timeToFinish:\(track.timeToFinish)")
+//                  print("Track \(track.name!) timeToCreate:\(track.timeToCreate) timeToFinish:\(track.timeToFinish)")
                     selection = track
                 }
         }

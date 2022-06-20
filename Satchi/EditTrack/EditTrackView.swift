@@ -14,8 +14,9 @@ struct EditTrackView: View {
     var track: Track
     @State private var share: CKShare?
     @State private var showShareSheet = false
+    @State private var comment = ""
     @StateObject var viewModel = TrackViewModel()
-    @FocusState var isFocused: Bool
+
     let dateFormatter: DateFormatter
     let elapsedTimeFormatter: DateComponentsFormatter
     let shortElapsedTimeFormatter: DateComponentsFormatter
@@ -65,8 +66,8 @@ struct EditTrackView: View {
                         HStack {
                             Text("**Difficulty:**")
                             DifficultyView(difficulty: $viewModel.difficulty)
-//                            DifficultySlider(difficulty: $viewModel.difficulty,
-//                                             sliderValue: viewModel.difficulty*100).padding(.vertical, 0) // This damded slider is to fat.
+                            //                            DifficultySlider(difficulty: $viewModel.difficulty,
+                            //                                             sliderValue: viewModel.difficulty*100).padding(.vertical, 0) // This damded slider is to fat.
                         }.padding(0)
 
                         Text("**Length**: \(track.length)m")
@@ -94,11 +95,12 @@ struct EditTrackView: View {
                         }
 
                         Text("**Comments:**")
-                        TextEditor(text: $viewModel.comments)
-                            .font(.body)
+                        TextEditor(text: $comment)
+//                            .font(.body)
                             .frame(minHeight: 80)
-                            .border(Color.gray, width: 1)
-                    }.padding(.vertical, 4)
+//                            .border(Color.gray, width: 1)
+                    }
+                    .padding(.vertical, 4)
 
                 }
             }
@@ -241,17 +243,14 @@ extension EditTrackView {
     }
 }
 
- struct EditTrackView_Previews: PreviewProvider {
+struct EditTrackView_Previews: PreviewProvider {
     static var previews: some View {
         let track = CoreDataStack.preview.getTracks()[3]
-        return
-
-        ForEach(ColorScheme.allCases, id: \.self) {
+        return ForEach(ColorScheme.allCases, id: \.self) {
             EditTrackView(track)
                 .preferredColorScheme($0)
                 .environmentObject(CoreDataStack.preview)
                 .environment(\.managedObjectContext, CoreDataStack.preview.context)
         }
-        //        }
     }
- }
+}

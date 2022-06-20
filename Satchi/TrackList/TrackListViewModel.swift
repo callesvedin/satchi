@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import CoreData
 
+@MainActor
 class TrackListViewModel: NSObject, ObservableObject {
     @Published var tracks: [Track] = []
 

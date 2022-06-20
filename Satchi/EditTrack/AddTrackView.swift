@@ -13,20 +13,19 @@ struct AddTrackView: View {
 
     @State private var name: String = ""
 
-    private var stack = CoreDataStack.shared
+    @EnvironmentObject private var stack: CoreDataStack
 
     var body: some View {
         NavigationView {
-            Form {
-                Section {
-                    TextField("Name", text: $name)
-                } footer: {
-                    Text("Name is required")
-                        .font(.caption)
-                        .foregroundColor(name.isBlank ? .red : .clear)
-                }
-
-                Section {
+            VStack {
+                Form {
+                    Section {
+                        TextField("Name", text: $name)
+                    } footer: {
+                        Text("Name is required")
+                            .font(.caption)
+                            .foregroundColor(name.isBlank ? .red : .clear)
+                    }
                     Button {
                         createNewTrack()
                         presentationMode.wrappedValue.dismiss()
@@ -34,9 +33,10 @@ struct AddTrackView: View {
                         Text("Save")
                     }
                     .disabled(name.isBlank)
+
                 }
-            }
-            .navigationTitle("Add Track")
+
+            }.navigationTitle("Add Track")
         }
     }
 }

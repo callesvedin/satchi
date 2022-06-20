@@ -12,6 +12,7 @@ enum TimerMode {
     case stopped
 }
 
+@MainActor
 class TrackTimer: ObservableObject {
     var timer = Timer()
     @Published var secondsElapsed = 0.0
