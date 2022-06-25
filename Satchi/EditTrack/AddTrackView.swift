@@ -17,26 +17,29 @@ struct AddTrackView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                Form {
-                    Section {
-                        TextField("Name", text: $name)
-                    } footer: {
-                        Text("Name is required")
-                            .font(.caption)
-                            .foregroundColor(name.isBlank ? .red : .clear)
-                    }
-                    Button {
-                        createNewTrack()
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        Text("Save")
-                    }
-                    .disabled(name.isBlank)
-
+            Form {
+                Section {
+                    TextField("Name", text: $name)
+                } footer: {
+                    Text("Name is required")
+                        .font(.caption)
+                        .foregroundColor(name.isBlank ? .red : .clear)
                 }
+                Button {
+                    createNewTrack()
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Text("Save")
+                }
+                .disabled(name.isBlank)
 
-            }.navigationTitle("Add Track")
+            }
+            .submitLabel(.done)
+            .onSubmit {
+                createNewTrack()
+                presentationMode.wrappedValue.dismiss()
+            }
+            .navigationTitle("Add Track")
         }
     }
 }

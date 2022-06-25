@@ -10,6 +10,7 @@ import SwiftUI
 
 struct OverlayButtonStyle: ButtonStyle {
     var backgroundColor: Color
+    @Environment(\.isEnabled) var isEnabled: Bool
 
     func makeBody(configuration: Configuration) -> some View {
         configuration
@@ -18,7 +19,7 @@ struct OverlayButtonStyle: ButtonStyle {
             .padding(6)
             .frame(minWidth: 80)
             .background(backgroundColor)
-            .opacity(0.6)
+            .opacity(isEnabled ? 0.6:0.2)
             .cornerRadius(8)
     }
 }

@@ -35,6 +35,7 @@ class TrackMapModel: NSObject, ObservableObject {
     @Published var distance: CLLocationDistance = 0
     @Published public var gotUserLocation = false
     @Published public var currentLocation: CLLocation?
+    @Published public var accuracy: Double = 0
 
     private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
@@ -210,6 +211,7 @@ extension TrackMapModel: CLLocationManagerDelegate {
             trackPath.append(contentsOf: locations)
         }
         print("GPS location Accuracy \(locations.first?.horizontalAccuracy ?? 0)")
+        accuracy = locations.first?.horizontalAccuracy ?? 0
         currentLocation = manager.location
     }
 

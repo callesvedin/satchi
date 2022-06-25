@@ -47,12 +47,22 @@ struct TrackMapOverlayView: View {
             if mapModel.state != .finishedTrack {
                 HStack {
                     Spacer()
+                    if mapModel.accuracy > 10 {
+                        Image(systemName: "antenna.radiowaves.left.and.right.slash")
+                            .imageScale(.large)
+                            .padding(8)
+                            .foregroundColor(Color.red)
+                            .background(
+                                RoundedRectangle(cornerRadius: 6, style: .continuous).fill(Color(UIColor.systemBackground).opacity(0.8))
+                            )
+                    }
                     Button(
                         action: {mapModel.followUser.toggle()},
                         label: {
                             Image.init(systemName: "location")
                                 .symbolVariant(mapModel.followUser ? .fill: .none)
-                                .imageScale(.large).padding(8)
+                                .imageScale(.large)
+                                .padding(8)
                                 .background(
                                     RoundedRectangle(cornerRadius: 6, style: .continuous).fill(Color(UIColor.systemBackground).opacity(0.8))
                                 )
@@ -97,6 +107,7 @@ struct TrackMapOverlayView: View {
                         print("Cancelled should never occur")
                     }
                 }
+                .disabled((mapModel.state == .layPathNotStarted || mapModel.state == .trackingNotStarted) && mapModel.accuracy > 10)
                 .buttonStyle(OverlayButtonStyle(backgroundColor: mapModel.state == .layPathStarted ? .red : .green))
                 .padding(15)
             }.padding(.bottom, 30)
@@ -120,6 +131,7 @@ struct TrackMapOverlayView_Previews: PreviewProvider {
     static var previews: some View {
         let model: TrackMapModel = TrackMapModel()
         model.followUser = false
+        model.accuracy = 15
 
         return Group {
             TrackMapOverlayView(mapModel: model).ignoresSafeArea()

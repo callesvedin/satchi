@@ -271,7 +271,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EB87252E260CC0C5008AD8E7 /* Build configuration list for PBXNativeTarget "Satchi" */;
 			buildPhases = (
-				EBC070E226FFC3B600A96FD4 /* ShellScript */,
 				EB872500260CC0C4008AD8E7 /* Sources */,
 				EB872501260CC0C4008AD8E7 /* Frameworks */,
 				EB872502260CC0C4008AD8E7 /* Resources */,
@@ -392,26 +391,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		EBC070E226FFC3B600A96FD4 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint --fix\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EB872500260CC0C4008AD8E7 /* Sources */ = {

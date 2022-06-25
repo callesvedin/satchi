@@ -16,7 +16,6 @@ struct EditTrackView: View {
     @State private var showShareSheet = false
     @State private var comment = ""
     @StateObject var viewModel = TrackViewModel()
-
     let dateFormatter: DateFormatter
     let elapsedTimeFormatter: DateComponentsFormatter
     let shortElapsedTimeFormatter: DateComponentsFormatter
@@ -45,7 +44,6 @@ struct EditTrackView: View {
         VStack {
             ScrollView {
                 LazyVStack(alignment: .leading) {
-
                     HStack {
                         Spacer()
                         TrackMapView(track: track, preview: true)
@@ -66,8 +64,6 @@ struct EditTrackView: View {
                         HStack {
                             Text("**Difficulty:**")
                             DifficultyView(difficulty: $viewModel.difficulty)
-                            //                            DifficultySlider(difficulty: $viewModel.difficulty,
-                            //                                             sliderValue: viewModel.difficulty*100).padding(.vertical, 0) // This damded slider is to fat.
                         }.padding(0)
 
                         Text("**Length**: \(track.length)m")
@@ -95,39 +91,31 @@ struct EditTrackView: View {
                         }
 
                         Text("**Comments:**")
-                        TextEditor(text: $comment)
-//                            .font(.body)
+                        TextField("Comments", text: $viewModel.comments)
+                            .font(.body)
                             .frame(minHeight: 80)
-//                            .border(Color.gray, width: 1)
+                            .border(Color.gray, width: 1)
                     }
                     .padding(.vertical, 4)
-
                 }
-            }
-            HStack {
-                Spacer()
-                Button(action: {
-                    save()
-                    presentationMode.wrappedValue.dismiss()
-                }, label: {Text("Save")})
-                Spacer()
-            }
+            }            
         }
         .font(Font.system(size: 22))
         .padding()
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    if !stack.isShared(object: track) {
-                        Task {
-                            await createShare(track)
-                        }
-                    }
-                    print("URL to share:\(String(describing: share?.url))")
-                    showShareSheet = true
+                    Task {await createShare(track)}
                 } label: {
                     Image(systemName: "square.and.arrow.up")
-                }
+                }.sheet(isPresented: $showShareSheet, content: {
+                    if let share = share {
+                        CloudSharingView(
+                            container: stack.ckContainer,
+                            share: share
+                        )
+                    }
+                })
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(destination: TrackMapView(track: track)) {
@@ -154,15 +142,10 @@ struct EditTrackView: View {
             viewModel.setState(pathLaid: !(track.laidPath?.isEmpty ?? true),
                                tracked: !(track.trackPath?.isEmpty ?? true))
         }
-        .sheet(isPresented: $showShareSheet, content: {
-            if let share = share {
-                CloudSharingView(
-                    share: share,
-                    container: stack.ckContainer,
-                    track: track
-                )
-            }
-        })
+        .onDisappear() {
+            save()
+        }
+
     }
 
     private func getTimeBetween(date: Date?, and toDate: Date?) -> String {
@@ -232,14 +215,18 @@ extension EditTrackView {
         }
     }
     private func createShare(_ track: Track) async {
-        do {
-            let (_, share, _) =
-            try await stack.persistentContainer.share([track], to: nil)
-            share[CKShare.SystemFieldKey.title] = track.name
-            self.share = share
-        } catch {
-            print("Failed to create share")
+        if !stack.isShared(object: track) {
+            do {
+                let (_, share, _) = try await stack.persistentContainer.share([track], to: nil)
+                share[CKShare.SystemFieldKey.title] = track.name
+                self.share = share
+            } catch {
+                print("Failed to create share")
+            }
         }
+
+        print("URL to share:\(String(describing: share?.url))")
+        showShareSheet = true
     }
 }
 
