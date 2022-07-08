@@ -9,35 +9,19 @@ import SwiftUI
 import CloudKit
 
 struct EditTrackView: View {
-    @Environment(\.presentationMode) var presentationMode
+//    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject private var stack: CoreDataStack
+
     var track: Track
+    @State private var showMapView = false
     @State private var share: CKShare?
     @State private var showShareSheet = false
     @State private var comment = ""
     @StateObject var viewModel = TrackViewModel()
-    let dateFormatter: DateFormatter
-    let elapsedTimeFormatter: DateComponentsFormatter
-    let shortElapsedTimeFormatter: DateComponentsFormatter
-
-    @Environment(\.managedObjectContext) var managedObjectContext
+    
 
     init(_ track: Track) {
         self.track = track
-        dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
-        dateFormatter.locale = Locale.current
-
-        elapsedTimeFormatter = DateComponentsFormatter()
-        elapsedTimeFormatter.unitsStyle = .abbreviated
-        elapsedTimeFormatter.zeroFormattingBehavior = .dropAll
-        elapsedTimeFormatter.allowedUnits = [.day, .hour, .minute]
-
-        shortElapsedTimeFormatter = DateComponentsFormatter()
-        shortElapsedTimeFormatter.unitsStyle = .abbreviated
-        shortElapsedTimeFormatter.zeroFormattingBehavior = .dropAll
-        shortElapsedTimeFormatter.allowedUnits = [.hour, .minute, .second]
     }
 
     var body: some View {
@@ -59,15 +43,15 @@ struct EditTrackView: View {
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
 
-                        Text("**Created:** \(track.created != nil ? dateFormatter.string(from: track.created!) : "-")")
+                        Text("**Created:** \(track.created != nil ? TimeFormatter.dateStringFrom(date: track.created) : "-")")
 
                         HStack {
                             Text("**Difficulty:**")
                             DifficultyView(difficulty: $viewModel.difficulty)
                         }.padding(0)
 
-                        Text("**Length**: \(track.length)m")
-                        Text("**Time to create:** \(shortElapsedTimeFormatter.string(from: track.timeToCreate) ?? "-")")
+                        Text("**Length**: \(DistanceFormatter.distanceFor(meters:Double(track.length)))")
+                        Text("**Time to create:** \(TimeFormatter.shortTimeWithSecondsFor(seconds:track.timeToCreate))")
 
                     }.padding(.vertical, 4)
                     Group {
@@ -81,11 +65,11 @@ struct EditTrackView: View {
                             Text("**Time since created**:\(getTimeSinceCreated())")
                         }
                         if track.started != nil {
-                            Text("**Tracking started:** \(dateFormatter.string(from: track.started!))")
+                            Text("**Tracking started:** \(TimeFormatter.dateStringFrom(date: track.started!))")
 
                             Text("""
                              **Time to finish:** \
-                             \(shortElapsedTimeFormatter.string(from: track.timeToFinish) ?? "**-**")
+                             \(TimeFormatter.shortTimeWithSecondsFor(seconds:track.timeToFinish))
                              """
                             )
                         }
@@ -111,8 +95,9 @@ struct EditTrackView: View {
                 }.sheet(isPresented: $showShareSheet, content: {
                     if let share = share {
                         CloudSharingView(
+                            share: share,
                             container: stack.ckContainer,
-                            share: share
+                            track: track
                         )
                     }
                 })
@@ -145,27 +130,25 @@ struct EditTrackView: View {
         .onDisappear() {
             save()
         }
-
     }
 
     private func getTimeBetween(date: Date?, and toDate: Date?) -> String {
         guard let fromDate = date, let toDate = toDate else {return "-"}
-        return elapsedTimeFormatter.string(from: fromDate.distance(to: toDate)) ?? "-"
+        return TimeFormatter.shortTimeWithMinutesFor(seconds: fromDate.distance(to: toDate))
     }
 
     private func getTimeSinceCreated() -> String {
         guard let timeDistance = track.created?.distance(to: Date()) else {return "-"}
-
-        return elapsedTimeFormatter.string(from: timeDistance) ?? "-"
+        return TimeFormatter.shortTimeWithMinutesFor(seconds: timeDistance)
     }
 
     private func save() {
-        managedObjectContext.performAndWait {
+//        managedObjectContext.performAndWait {
             track.name = viewModel.trackName
             track.comments = viewModel.comments
             track.difficulty = viewModel.difficulty
             stack.save()
-        }
+//        }
     }
 }
 
@@ -214,18 +197,19 @@ extension EditTrackView {
             fatalError("A new value added to CKShare.Participant.AcceptanceStatus")
         }
     }
+
     private func createShare(_ track: Track) async {
         if !stack.isShared(object: track) {
             do {
                 let (_, share, _) = try await stack.persistentContainer.share([track], to: nil)
                 share[CKShare.SystemFieldKey.title] = track.name
                 self.share = share
+                print("Created share with url:\(String(describing: share.url))")
             } catch {
                 print("Failed to create share")
             }
         }
 
-        print("URL to share:\(String(describing: share?.url))")
         showShareSheet = true
     }
 }
@@ -237,7 +221,7 @@ struct EditTrackView_Previews: PreviewProvider {
             EditTrackView(track)
                 .preferredColorScheme($0)
                 .environmentObject(CoreDataStack.preview)
-                .environment(\.managedObjectContext, CoreDataStack.preview.context)
+//                .environment(\.managedObjectContext, CoreDataStack.preview.context)
         }
     }
 }

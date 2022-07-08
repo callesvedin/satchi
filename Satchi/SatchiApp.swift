@@ -10,6 +10,7 @@ import os
 
 @main
 struct SatchiApp: App {
+    let syncMonitor = SyncMonitor()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     init() {
         #if DEBUG

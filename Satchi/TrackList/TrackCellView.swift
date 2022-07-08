@@ -12,8 +12,7 @@ typealias DeleteFunction = (Track) -> Void
 struct TrackCellView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var stack: CoreDataStack
-//    private let stack = CoreDataStack.shared
-//    @EnvironmentObject private var stack: CoreDataStack
+
     let deleteFunction: DeleteFunction
     var track: Track
     let columns = [
@@ -43,7 +42,7 @@ struct TrackCellView: View {
                     Text("\(track.created != nil ? itemFormatter.string(from: track.created!) : "--/--/--" )")
                     Spacer()
                 }
-                Label("\(track.length) m", systemImage: "arrow.left.and.right")
+                Label("\(DistanceFormatter.distanceFor(meters: Double(track.length)))", systemImage: "arrow.left.and.right")
 
                 HStack {
                     Image(systemName: "flag.fill").foregroundColor(.red)

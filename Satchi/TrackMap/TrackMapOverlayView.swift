@@ -35,9 +35,9 @@ struct TrackMapOverlayView: View {
 
         return VStack {
             HStack {
-                Text(String(format: "Distance: %.2f m", (mapModel.distance)))
+                Text("Distance: \(DistanceFormatter.distanceFor(meters:mapModel.distance))")
                 Spacer()
-                Text(String(format: "Time: %.1f sec", mapModel.timer.secondsElapsed))
+                Text("Time: \(TimeFormatter.shortTimeWithSecondsFor(seconds: mapModel.timer.secondsElapsed))")
             }
             .padding(.top, topPadding)
             .padding(.horizontal)
