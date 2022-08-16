@@ -17,11 +17,21 @@ struct EditTrackView: View {
     @State private var share: CKShare?
     @State private var showShareSheet = false
     @State private var comment = ""
-    @StateObject var viewModel = TrackViewModel()
+    @StateObject var viewModel:TrackViewModel
     
 
     init(_ track: Track) {
         self.track = track
+        _viewModel = StateObject(wrappedValue: {
+            let viewModel = TrackViewModel()
+            viewModel.trackName = track.name  ?? ""
+            viewModel.comments = track.comments ?? ""
+            viewModel.difficulty = max(1, track.difficulty)
+            viewModel.setState(pathLaid: !(track.laidPath?.isEmpty ?? true),
+                               tracked: !(track.trackPath?.isEmpty ?? true))
+            return viewModel
+
+        }())
     }
 
     var body: some View {
@@ -30,10 +40,10 @@ struct EditTrackView: View {
                 LazyVStack(alignment: .leading) {
                     HStack {
                         Spacer()
-                        TrackMapView(track: track, preview: true)
-                            .scaledToFit()
-                            .cornerRadius(10)
-                            .padding(.bottom, 30)
+//                        TrackMapView(track: track, preview: true)
+//                            .scaledToFit()
+//                            .cornerRadius(10)
+//                            .padding(.bottom, 30)
                         Spacer()
                     }
                     Group {
@@ -121,14 +131,6 @@ struct EditTrackView: View {
         .onAppear {
             self.share = stack.getShare(track)
             print("Share:\(String(describing: self.share))")
-            viewModel.trackName = track.name  ?? ""
-            viewModel.comments = track.comments ?? ""
-            viewModel.difficulty = max(1, track.difficulty)
-            viewModel.setState(pathLaid: !(track.laidPath?.isEmpty ?? true),
-                               tracked: !(track.trackPath?.isEmpty ?? true))
-        }
-        .onDisappear() {
-            save()
         }
     }
 
@@ -143,12 +145,12 @@ struct EditTrackView: View {
     }
 
     private func save() {
-//        managedObjectContext.performAndWait {
+        stack.context.performAndWait {
             track.name = viewModel.trackName
             track.comments = viewModel.comments
             track.difficulty = viewModel.difficulty
             stack.save()
-//        }
+        }
     }
 }
 

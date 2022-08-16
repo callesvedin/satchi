@@ -10,32 +10,46 @@ import CoreData
 
 struct TrackListView: View {
     @EnvironmentObject private var stack: CoreDataStack
-
+    @Environment(\.managedObjectContext) var mocc
+    @StateObject private var model = TrackListViewModel()
     @State var selectedTrack: Track?
     @State var showEdit = false
     @State private var showMapView = false
 
     var body: some View {
-        //        LazyVStack {
-        ScrollView {
-            VStack {
-                FilteredList(tracks: FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Track.created, ascending: true)],
-                                                 predicate: NSPredicate(format: "timeToCreate == 0")),
-                             header: "Created tracks",
-                             selection: $selectedTrack)
-                FilteredList(tracks: FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Track.created, ascending: true)],
-                                                 predicate: NSPredicate(format: "timeToCreate > 0 AND timeToFinish == 0")),
-                             header: "Started tracks",
-                             selection: $selectedTrack)
-                FilteredList(tracks: FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Track.created, ascending: true)],
-                                                 predicate: NSPredicate(format: "timeToCreate > 0 AND timeToFinish > 0")),
-                             header: "Finished tracks",
-                             selection: $selectedTrack)
-            }
+        Group {
+            if model.isEmpty() {
+                VStack {
+                    Spacer()
+                    Text("You have no tracks.")
+                    Button("Add track") {
+                        showMapView.toggle()
+                    }
+                    Spacer()
 
-            if selectedTrack != nil {
-                NavigationLink("", destination: EditTrackView(selectedTrack!), isActive: $showEdit)
-                    .opacity(0)
+                }
+            }else{
+                ScrollView {
+                    VStack {
+                        NewFilteredList(tracks:$model.newTracks,
+                                        header: "New tracks",
+                                        selection: $selectedTrack)
+
+                        NewFilteredList(tracks: $model.startedTracks,
+                                        header: "Created tracks",
+                                        selection: $selectedTrack)
+
+                        NewFilteredList(tracks: $model.finishedTracks,
+                                        header: "Finished tracks",
+                                        selection: $selectedTrack)
+                    }
+
+                    if selectedTrack != nil {
+                        NavigationLink("", destination: EditTrackView(selectedTrack!), isActive: $showEdit)
+                            .opacity(0)
+                    }
+
+                }
             }
         }
         .onChange(of: selectedTrack, perform: {track in
@@ -44,7 +58,10 @@ struct TrackListView: View {
                 showEdit = true
             }
         })
-        .onAppear() {
+        .onChange(of: mocc, perform: {_ in
+            print("CHANGED!")
+        })
+        .onAppear(){
             selectedTrack = nil
         }
         .navigationTitle("Tracks")

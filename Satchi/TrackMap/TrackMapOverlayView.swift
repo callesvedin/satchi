@@ -8,26 +8,23 @@
 import SwiftUI
 
 struct TrackMapOverlayView: View {
+//    @EnvironmentObject private var stack: CoreDataStack
     @ObservedObject var mapModel: TrackMapModel
-    @ObservedObject var timer: TrackTimer
     @Environment(\.colorScheme) var colorScheme
 
     init(mapModel: TrackMapModel) {
         self.mapModel = mapModel
-        self.timer = mapModel.timer
     }
 
     var body: some View {
         var actionText: String
-        switch mapModel.state {
-        case .layPathNotStarted, .trackingNotStarted:
+        switch mapModel.stateMachine.state {
+        case .notStarted, .paused:
             actionText = "Start"
-        case .layPathStarted, .trackingStarted:
-            actionText = "Stop"
-        case .layPathStopped, .trackingStopped:
-            actionText = "Save"
-        case .layPathDone, .trackingDone, .finishedTrack, .allDone, .cancelled:
-            actionText = "Close"
+        case .running:
+            actionText = "Pause"
+        default:
+            actionText = "What?"
         }
 
         let window = UIApplication.shared.currentKeyWindow
@@ -44,7 +41,7 @@ struct TrackMapOverlayView: View {
             .padding(.bottom)
             .background(Color(UIColor.systemBackground))
             .opacity(0.8)
-            if mapModel.state != .finishedTrack {
+            if !mapModel.previewing  {
                 HStack {
                     Spacer()
                     if mapModel.accuracy > 10 {
@@ -66,7 +63,7 @@ struct TrackMapOverlayView: View {
                                 .background(
                                     RoundedRectangle(cornerRadius: 6, style: .continuous).fill(Color(UIColor.systemBackground).opacity(0.8))
                                 )
-                            }
+                        }
                     ).buttonStyle(.plain)
                 }
                 .frame(height: 40)
@@ -74,68 +71,54 @@ struct TrackMapOverlayView: View {
             }
             Spacer()
             HStack {
-                if showCancel(state: mapModel.state) {
-                    Button("Cancel") {
-                        mapModel.state = .cancelled
-                    }
-                    .buttonStyle(OverlayButtonStyle(backgroundColor: .red))
-                    .padding(15)
-                }
                 Button(actionText) {
-                    switch mapModel.state {
-                    case .layPathNotStarted:
-                        mapModel.state = .layPathStarted
-                    case .layPathStarted:
-                        mapModel.state = .layPathStopped
-                    case .layPathStopped:
-                        mapModel.state = .layPathDone
-                    case .layPathDone:
-                        print("layPath done should never occur")
-                    case .trackingNotStarted:
-                        mapModel.state = .trackingStarted
-                    case .trackingStarted:
-                        mapModel.state = .trackingStopped
-                    case .trackingStopped:
-                        mapModel.state = .trackingDone
-                    case .trackingDone:
-                        print("trackPathDone should never occur")
-                    case .finishedTrack:
-                        mapModel.state = .allDone
-                    case .allDone:
-                        print("All done")
-                    case .cancelled:
-                        print("Cancelled should never occur")
+                    switch mapModel.stateMachine.state {
+                    case .notStarted:
+                        mapModel.start()
+                    default:
+                        print("Not a state to use in button")
                     }
                 }
-                .disabled((mapModel.state == .layPathNotStarted || mapModel.state == .trackingNotStarted) && mapModel.accuracy > 10)
-                .buttonStyle(OverlayButtonStyle(backgroundColor: mapModel.state == .layPathStarted ? .red : .green))
+                .disabled(mapModel.accuracy > 10)
+                .buttonStyle(OverlayButtonStyle(backgroundColor: mapModel.stateMachine.state == .running ? .red : .green))
                 .padding(15)
             }.padding(.bottom, 30)
 
         }
     }
-
-    private func showCancel(state: RunningState) -> Bool {
-        switch state {
-        case .layPathNotStarted, .layPathStarted, .trackingNotStarted, .trackingStarted:
-            return true
-        case .layPathStopped, .layPathDone, .trackingStopped, .trackingDone, .finishedTrack, .allDone, .cancelled:
-            return false
-
-        }
-
-    }
 }
+//    private func showResume(state: OldRunningState) -> Bool {
+//        switch state {
+//        case .layPathStopped, .trackingStopped:
+//            return true
+//        case .layPathStarted, .trackingStarted,.layPathNotStarted,
+//                .trackingNotStarted,.layPathDone, .trackingDone, .finishedTrack, .allDone, .cancelled:
+//            return false
+//        }
+//
+//    }
+//
+//
+//    private func showCancel(state: OldRunningState) -> Bool {
+//        switch state {
+//        case .layPathStarted, .trackingStarted:
+//            return true
+//        case .layPathNotStarted, .trackingNotStarted, .layPathStopped, .layPathDone, .trackingStopped, .trackingDone, .finishedTrack, .allDone, .cancelled:
+//            return false
+//        }
+//
+//    }
+//}
 
-struct TrackMapOverlayView_Previews: PreviewProvider {
-    static var previews: some View {
-        let model: TrackMapModel = TrackMapModel()
-        model.followUser = false
-        model.accuracy = 15
-
-        return Group {
-            TrackMapOverlayView(mapModel: model).ignoresSafeArea()
-            TrackMapOverlayView(mapModel: model).ignoresSafeArea().preferredColorScheme(.dark)
-        }
-    }
-}
+//struct TrackMapOverlayView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let model: TrackMapModel = TrackMapModel()
+//        model.followUser = false
+//        model.accuracy = 15
+//
+//        return Group {
+//            TrackMapOverlayView(mapModel: model).ignoresSafeArea()
+//            TrackMapOverlayView(mapModel: model).ignoresSafeArea().preferredColorScheme(.dark)
+//        }
+//    }
+//}

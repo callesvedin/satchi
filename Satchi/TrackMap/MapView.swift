@@ -25,7 +25,7 @@ struct MapView: UIViewRepresentable {
         let theView = MKMapView()
         theView.delegate = context.coordinator
 
-        theView.showsUserLocation = true
+        theView.showsUserLocation = !mapModel.previewing
         theView.mapType = .satellite
         theView.userTrackingMode = .follow
 
@@ -50,7 +50,7 @@ struct MapView: UIViewRepresentable {
     }
 
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        print("Map span\(mapView.region.span.longitudeDelta)")
+        print("Map span \(mapView.region.span.longitudeDelta)")
         if mapModel.followUser {
             mapView.userTrackingMode = .follow
         } else {
@@ -79,11 +79,15 @@ struct MapView: UIViewRepresentable {
             mapView.addOverlay(polyline)
         }
 
-        if (mapModel.state == .finishedTrack || mapModel.previewing), let first = mapView.overlays.first {
+        if (mapModel.previewing), let first = mapView.overlays.first {
+//            if (mapModel.state == .finishedTrack || mapModel.previewing), let first = mapView.overlays.first {
             let rect = mapView.overlays.reduce(first.boundingMapRect, {$0.union($1.boundingMapRect)})
+            mapView.showsUserLocation = false
             mapView.setVisibleMapRect(rect,
                                       edgePadding: UIEdgeInsets(top: 50.0, left: 50.0, bottom: 50.0, right: 50.0),
                                       animated: true)
+        }else if !mapModel.previewing {
+            mapView.showsUserLocation = true
         }
 
     }

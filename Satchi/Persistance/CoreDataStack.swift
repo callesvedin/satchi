@@ -11,7 +11,7 @@ import os.log
 
 let appTransactionAuthorName = "app"
 
-@MainActor
+
 final class CoreDataStack: ObservableObject {
     public static let shared = CoreDataStack()
     static let preview: CoreDataStack = {

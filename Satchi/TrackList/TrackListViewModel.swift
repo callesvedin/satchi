@@ -11,17 +11,22 @@ import CoreData
 
 @MainActor
 class TrackListViewModel: NSObject, ObservableObject {
-    @Published var tracks: [Track] = []
+    private var tracks: [Track] = []
 
     private let trackFetchController: NSFetchedResultsController<Track>
     public var stack: CoreDataStack
-//    @Published var finishedTracks: [Track] = []
-//    @Published var startedTracks: [Track] = []
-//    @Published var newTracks: [Track] = []
+
+    public func isEmpty() -> Bool {
+        return tracks.isEmpty
+    }
+
+    @Published var finishedTracks: [Track] = []
+    @Published var startedTracks: [Track] = []
+    @Published var newTracks: [Track] = []
 
     private var cancellable: AnyCancellable?
 
-    init(stack: CoreDataStack) {
+    init(stack: CoreDataStack = CoreDataStack.shared) {
         self.stack = stack
         let fetchRequest: NSFetchRequest = Track.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Track.created, ascending: true)]
@@ -37,24 +42,33 @@ class TrackListViewModel: NSObject, ObservableObject {
         do {
             try trackFetchController.performFetch()
             tracks = trackFetchController.fetchedObjects ?? []
-//            reload()
+            reload()
         } catch {
             NSLog("Error: could not fetch objects")
         }
     }
 
-//    public func reload() {
-//        self.finishedTracks = tracks.filter({track in track.getState() == .finished})
-//        self.startedTracks = tracks.filter({track in track.getState() == .started})
-//        self.newTracks = tracks.filter({track in track.getState() == .notStarted})
-//    }
+    public func reload() {
+        self.finishedTracks = tracks.filter({track in track.getState() == .finished})
+        self.startedTracks = tracks.filter({track in track.getState() == .started})
+        self.newTracks = tracks.filter({track in track.getState() == .notStarted})
+        self.objectWillChange.send()
+    }
+
 }
 
 extension TrackListViewModel: NSFetchedResultsControllerDelegate {
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let tracks = controller.fetchedObjects as? [Track] else {return}
-        NSLog("Context has changed, reloading courses")
+        print("Context has changed, reloading courses")
         self.tracks = tracks
-//        reload()
+        reload()
+    }
+
+    public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith diff: CollectionDifference<NSManagedObjectID>) {
+        print("Did change content. Diff:\(diff)")
+        guard let tracks = controller.fetchedObjects as? [Track] else {return}
+        self.tracks = tracks
+        reload()
     }
 }

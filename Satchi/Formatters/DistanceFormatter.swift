@@ -10,7 +10,7 @@ import Foundation
 struct DistanceFormatter {
     private static let measurementFormatter: MeasurementFormatter = {
         let theFormatter = MeasurementFormatter()
-        theFormatter.unitStyle = MeasurementFormatter.UnitStyle.medium
+        theFormatter.unitStyle = MeasurementFormatter.UnitStyle.short
         theFormatter.unitOptions = Locale.current.usesMetricSystem ? .providedUnit : .naturalScale
         
         let numberFormatter = NumberFormatter()

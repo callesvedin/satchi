@@ -22,6 +22,8 @@
 		EB59DE4428310BF60043DE33 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59DE4328310BF60043DE33 /* AppDelegate.swift */; };
 		EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE225261CBA3D00D56711 /* TrackMapView.swift */; };
 		EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */; };
+		EB64A3C6287CAD7C00E1BEA6 /* NewFilteredList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB64A3C5287CAD7C00E1BEA6 /* NewFilteredList.swift */; };
+		EB6DC7B32882BA3D009E788A /* SwiftState in Frameworks */ = {isa = PBXBuildFile; productRef = EB6DC7B22882BA3D009E788A /* SwiftState */; };
 		EB7D2145282C6181006CB703 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB7D2144282C6181006CB703 /* CloudKit.framework */; };
 		EB7D2147282C62BF006CB703 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D2146282C62BF006CB703 /* CoreDataStack.swift */; };
 		EB7D2149282C6553006CB703 /* UIApplicationExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D2148282C6553006CB703 /* UIApplicationExt.swift */; };
@@ -82,6 +84,7 @@
 		EB5BDF0F28181E61009DF497 /* Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Notes.md; sourceTree = "<group>"; };
 		EB5CE225261CBA3D00D56711 /* TrackMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapView.swift; sourceTree = "<group>"; };
 		EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapModel.swift; sourceTree = "<group>"; };
+		EB64A3C5287CAD7C00E1BEA6 /* NewFilteredList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFilteredList.swift; sourceTree = "<group>"; };
 		EB7D2142282C617E006CB703 /* Satchi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Satchi.entitlements; sourceTree = "<group>"; };
 		EB7D2144282C6181006CB703 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		EB7D2146282C62BF006CB703 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -120,6 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB6DC7B32882BA3D009E788A /* SwiftState in Frameworks */,
 				EB7D2145282C6181006CB703 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -210,11 +214,11 @@
 				EB87250B260CC0C5008AD8E7 /* Assets.xcassets */,
 				EB872515260CC0C5008AD8E7 /* Info.plist */,
 				EB87250D260CC0C5008AD8E7 /* Preview Content */,
-				EB5BDF0E28181E03009DF497 /* README.md */,
-				EB5BDF0F28181E61009DF497 /* Notes.md */,
 				EB59DE3D2830051F0043DE33 /* StringExt.swift */,
 				EBA842C428702F0C0061C338 /* SyncMonitor.swift */,
 				EBA842C6287033100061C338 /* CloudkitHelper.swift */,
+				EB5BDF0E28181E03009DF497 /* README.md */,
+				EB5BDF0F28181E61009DF497 /* Notes.md */,
 			);
 			path = Satchi;
 			sourceTree = "<group>";
@@ -252,6 +256,7 @@
 				EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */,
 				EB5688DF269C304000AF9AB1 /* TrackCellView.swift */,
 				EBC61202284BD33900B5C534 /* FilteredList.swift */,
+				EB64A3C5287CAD7C00E1BEA6 /* NewFilteredList.swift */,
 				EBA842E228756AA60061C338 /* TrackListView-New.swift */,
 				EBA842E428756AEF0061C338 /* FilteredListNew.swift */,
 			);
@@ -306,6 +311,7 @@
 			);
 			name = Satchi;
 			packageProductDependencies = (
+				EB6DC7B22882BA3D009E788A /* SwiftState */,
 			);
 			productName = Satchi;
 			productReference = EB872504260CC0C4008AD8E7 /* Satchi.app */;
@@ -379,6 +385,7 @@
 			);
 			mainGroup = EB8724FB260CC0C4008AD8E7;
 			packageReferences = (
+				EB6DC7B12882BA3D009E788A /* XCRemoteSwiftPackageReference "SwiftState" */,
 			);
 			productRefGroup = EB872505260CC0C4008AD8E7 /* Products */;
 			projectDirPath = "";
@@ -427,6 +434,7 @@
 				EB2F91262624B8DF0026773D /* OverlayButtonStyle.swift in Sources */,
 				EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */,
 				EBC61203284BD33900B5C534 /* FilteredList.swift in Sources */,
+				EB64A3C6287CAD7C00E1BEA6 /* NewFilteredList.swift in Sources */,
 				EB87250A260CC0C4008AD8E7 /* TrackListView.swift in Sources */,
 				EB352C8C278CEB310015AC5A /* Track+CoreDataClass.swift in Sources */,
 				EB7DFD2B261E0D6A0056D6B4 /* MapView.swift in Sources */,
@@ -782,6 +790,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EB6DC7B12882BA3D009E788A /* XCRemoteSwiftPackageReference "SwiftState" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactKit/SwiftState";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EB6DC7B22882BA3D009E788A /* SwiftState */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EB6DC7B12882BA3D009E788A /* XCRemoteSwiftPackageReference "SwiftState" */;
+			productName = SwiftState;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		EBCB4815266762F800E5631C /* Satchi.xcdatamodeld */ = {

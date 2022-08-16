@@ -12,11 +12,11 @@ import os.log
 struct TrackMapView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject private var stack: CoreDataStack
-    @StateObject public var mapModel = TrackMapModel()
+    @StateObject public var mapModel: TrackMapModel
     var track: Track
     @State private var name = ""
-    @State var showModal: Bool = false
-    @State var done: Bool = false
+//    @State var showModal: Bool = false
+//    @State var done: Bool = false
     var preview = false
 
     private static let logger = Logger(
@@ -24,9 +24,17 @@ struct TrackMapView: View {
         category: String(describing: TrackMapView.self)
     )
 
-    init(track: Track, preview: Bool = false) {
+    init(track: Track, preview: Bool = false, previewStack:Bool = false) {
         self.track = track
         self.preview = preview
+
+
+        _mapModel = StateObject(wrappedValue: {
+            let model = TrackMapModel(track: track, isPreview: preview, stack: previewStack ? CoreDataStack.preview:CoreDataStack.shared)
+            return model
+
+        }())
+
     }
 
     var body: some View {
@@ -38,42 +46,41 @@ struct TrackMapView: View {
         }
         .navigationBarHidden(true)
         .ignoresSafeArea()
-        .onChange(of: mapModel.state) { value in
-            print("Map model state changed to \(value)")
-            switch value {
-            case .layPathDone:
-                track.laidPath = mapModel.laidPath
-                track.trackPath = mapModel.trackPath
-                track.timeToCreate = mapModel.timer.secondsElapsed
-                track.length = Int32(mapModel.distance)
-                track.created = Date()
-//                trackModel.image = mapModel.image
-                stack.save()
-                presentationMode.wrappedValue.dismiss()
-            case .trackingDone:
-                track.trackPath = mapModel.trackPath
-                track.timeToFinish = mapModel.timer.secondsElapsed
-                track.started = mapModel.trackingStarted
-//                trackModel.image = mapModel.image
-                stack.save()
-                presentationMode.wrappedValue.dismiss()
-            case .allDone:
-                presentationMode.wrappedValue.dismiss()
-                mapModel.state = mapModel.previousState
-            case .cancelled:
-                presentationMode.wrappedValue.dismiss()
-                mapModel.state = mapModel.previousState
+        .onChange(of: mapModel.done) { value in
+            print("Map model done")
+            presentationMode.wrappedValue.dismiss()
+//            switch value {
+//            case .layPathDone:
+////                track.laidPath = mapModel.laidPath
+////                track.trackPath = mapModel.trackPath
+////                track.timeToCreate = mapModel.timer.secondsElapsed
+////                track.length = Int32(mapModel.distance)
+////                track.created = Date()
+//////                trackModel.image = mapModel.image
+////                stack.save()
+//                presentationMode.wrappedValue.dismiss()
+//            case .trackingDone:
+////                track.trackPath = mapModel.trackPath
+////                track.timeToFinish = mapModel.timer.secondsElapsed
+////                track.started = mapModel.trackingStarted
+//////                trackModel.image = mapModel.image
+////                stack.save()
+//                presentationMode.wrappedValue.dismiss()
+//            case .allDone:
+//                presentationMode.wrappedValue.dismiss()
+//                mapModel.state = mapModel.previousState
+//            case .cancelled:
+//                presentationMode.wrappedValue.dismiss()
+//                mapModel.state = mapModel.previousState
+//
+//            default:
+//                print("Unhandled state")
+//            }
+        }
+//        .onAppear {
+//            mapModel.setValues(track:track, isPreview:preview , stack:stack)
+//        }
 
-            default:
-                print("Unhandled state")
-            }
-        }
-        .onAppear {
-            mapModel.laidPath = track.laidPath ?? []
-            mapModel.trackPath = track.trackPath ?? []
-            mapModel.previewing = preview
-            mapModel.start()
-        }
     }
 }
 
