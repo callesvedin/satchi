@@ -9,10 +9,37 @@ import Foundation
 import MapKit
 
 enum PathAnnotationKind {
-    case layPathStart,
-         layPathStop,
-         trackPathStart,
-         trackPathStop
+    case trailStart,
+         trailEnd,
+         trackingStart,
+         trackingEnd
+
+    func getTitle() -> String {
+        switch self {
+        case .trailStart:
+            return "Start"
+        case .trailEnd:
+            return "Stop"
+        case .trackingStart:
+            return "Track Start"
+        case .trackingEnd:
+            return "Track Stop"
+        }
+    }
+
+    func getIdentifier() -> String {
+        switch self {
+        case .trailStart:
+            return "TrailStart"
+        case .trailEnd:
+            return "TrailEnd"
+        case .trackingStart:
+            return "TrackStart"
+        case .trackingEnd:
+            return "TrackEnd"
+        }
+    }
+    
 }
 
 class PathAnnotation: MKPointAnnotation {
@@ -25,23 +52,22 @@ class PathAnnotation: MKPointAnnotation {
         self.kind = kind
 
         switch kind {
-        case .layPathStart:
-            self.reuseIdentifier = "LayStart"
+        case .trailStart:
             self.imageIdentifier = "flag.circle"
             self.color = UIColor.systemGreen
-        case .layPathStop:
-            self.reuseIdentifier = "LayStop"
+        case .trailEnd:
             self.imageIdentifier = "flag.circle"
             self.color = UIColor.systemGreen
-        case .trackPathStart:
-            self.reuseIdentifier = "TrackStart"
+        case .trackingStart:
             self.imageIdentifier = "figure.walk.circle"
             self.color = UIColor.systemRed
-        case .trackPathStop:
-            self.reuseIdentifier = "TrackStop"
+        case .trackingEnd:
             self.imageIdentifier = "figure.walk.circle"
             self.color = UIColor.systemRed
         }
+        self.reuseIdentifier = kind.getIdentifier()
+        super.init()
+        self.title = kind.getTitle()
     }
 
 }

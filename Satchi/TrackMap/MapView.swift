@@ -38,19 +38,19 @@ struct MapView: UIViewRepresentable {
         theView.mapType = .satellite
         theView.userTrackingMode = .follow
 
-        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "LayStart")
-        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "LayStop")
-        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "TrackStart")
-        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "TrackStop")
+        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailStart.getIdentifier())
+        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailEnd.getIdentifier())
+        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trackingStart.getIdentifier())
+        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trackingEnd .getIdentifier())
 
         return theView
     }
 
 
     private func addTrackStartAnnotation(in view: MKMapView) {
-        guard getAnnotation(kind: .trackPathStart, in: view) == nil else {return}
+        guard getAnnotation(kind: .trackingStart, in: view) == nil else {return}
         if let location = mapModel.trackPath.first {
-            let annotation = PathAnnotation(kind: .trackPathStart)
+            let annotation = PathAnnotation(kind: .trackingStart)
             annotation.coordinate = location.coordinate
             annotation.title = AnnotationType.trackStart.rawValue
             view.addAnnotation(annotation)
@@ -59,9 +59,9 @@ struct MapView: UIViewRepresentable {
     }
 
     private func addTrackStopAnnotation(in view: MKMapView) {
-        guard getAnnotation(kind: .trackPathStop, in: view) == nil else {return}
+        guard getAnnotation(kind: .trackingEnd, in: view) == nil else {return}
         if let location = mapModel.trackPath.last {
-            let annotation = PathAnnotation(kind: .trackPathStop)
+            let annotation = PathAnnotation(kind: .trackingEnd)
             annotation.coordinate = location.coordinate
             annotation.title =  AnnotationType.trackStop.rawValue
             view.addAnnotation(annotation)
@@ -70,9 +70,9 @@ struct MapView: UIViewRepresentable {
     }
 
     private func addStartAnnotation(in view: MKMapView) {
-        guard getAnnotation(kind: .layPathStart, in: view) == nil else {return}
+        guard getAnnotation(kind: .trailStart, in: view) == nil else {return}
         if let location = mapModel.laidPath.first {
-            let annotation = PathAnnotation(kind: .layPathStart)
+            let annotation = PathAnnotation(kind: .trailStart)
             annotation.coordinate = location.coordinate
             annotation.title =  AnnotationType.laidStart.rawValue
             view.addAnnotation(annotation)
@@ -81,9 +81,9 @@ struct MapView: UIViewRepresentable {
     }
 
     private func addStopAnnotation(in view: MKMapView) {
-        guard getAnnotation(kind: .layPathStop, in: view) == nil else {return}
+        guard getAnnotation(kind: .trailEnd, in: view) == nil else {return}
         if let location = mapModel.laidPath.last {
-            let annotation = PathAnnotation(kind: .layPathStop)
+            let annotation = PathAnnotation(kind: .trailEnd)
             annotation.coordinate = location.coordinate
             annotation.title =  AnnotationType.laidStop.rawValue
             view.addAnnotation(annotation)            
@@ -92,14 +92,14 @@ struct MapView: UIViewRepresentable {
     }
 
     private func removeStopAnnotation(in view:MKMapView) {
-        if let annotation = getAnnotation(kind: .layPathStop, in: view)
+        if let annotation = getAnnotation(kind: .trailEnd, in: view)
         {
             view.removeAnnotation(annotation)
         }
     }
 
     private func removeStopTrackAnnotation(in view:MKMapView) {
-        if let annotation = getAnnotation(kind: .trackPathStop, in: view)
+        if let annotation = getAnnotation(kind: .trackingEnd, in: view)
         {
             view.removeAnnotation(annotation)
         }
@@ -133,16 +133,16 @@ struct MapView: UIViewRepresentable {
         let annotation:PathAnnotation
         switch type {
         case .trackStart:
-            annotation = PathAnnotation(kind: .trackPathStart)
+            annotation = PathAnnotation(kind: .trackingStart)
             annotation.title = AnnotationType.trackStart.rawValue
         case .trackStop:
-            annotation = PathAnnotation(kind: .trackPathStop)
+            annotation = PathAnnotation(kind: .trackingEnd)
             annotation.title = AnnotationType.trackStop.rawValue
         case .laidStart:
-            annotation = PathAnnotation(kind: .layPathStart)
+            annotation = PathAnnotation(kind: .trailStart)
             annotation.title = AnnotationType.laidStart.rawValue
         case .laidStop:
-            annotation = PathAnnotation(kind: .layPathStop)
+            annotation = PathAnnotation(kind: .trailEnd)
             annotation.title = AnnotationType.laidStop.rawValue
         }
         annotation.coordinate = location

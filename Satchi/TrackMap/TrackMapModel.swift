@@ -103,13 +103,13 @@ class TrackMapModel: NSObject, ObservableObject {
 
         locationManager.delegate = self
         locationManager.requestLocation()
-        if track.getState() == .finished
+        if track.getState() == .trailTracked
         {
             trackStartLocation = trackPath.first?.coordinate
             trackEndLocation = trackPath.last?.coordinate
         }
 
-        if track.getState() == .started || track.getState() == .finished {
+        if track.getState() == .trailAdded || track.getState() == .trailTracked {
             pathStartLocation = laidPath.first?.coordinate
             pathEndLocation = laidPath.last?.coordinate
         }
@@ -176,7 +176,7 @@ class TrackMapModel: NSObject, ObservableObject {
             track.length = Int32(distance)
             track.created = Date()
             stack?.save()
-        case .started:
+        case .trailAdded:
             track.trackPath = trackPath
             track.timeToFinish = timer.secondsElapsed
             track.started = trackingStarted
@@ -192,7 +192,7 @@ class TrackMapModel: NSObject, ObservableObject {
         switch track.getState() {
         case .notStarted:
             pathEndLocation = laidPath.last?.coordinate
-        case .started:
+        case .trailAdded:
             trackEndLocation = trackPath.last?.coordinate
         default:
             print("Can not start Running on track state \(track.getState()). Maybe view() instead")
@@ -206,7 +206,7 @@ class TrackMapModel: NSObject, ObservableObject {
             reset()
             pathStartLocation = currentLocation?.coordinate
             timer.start()
-        case .started:
+        case .trailAdded:
             pathStartLocation = laidPath.first?.coordinate
             pathEndLocation = laidPath.last?.coordinate
             trackingStarted = Date()
@@ -268,7 +268,7 @@ extension TrackMapModel: CLLocationManagerDelegate {
         print("locationManager:_:didUpdateLocations called")
         if stateMachine.state == .running && track.getState() == .notStarted { // If we want to continue updating while paused we have to add .paused state here but we then have to save the location where we paused...
             laidPath.append(contentsOf: locations)
-        } else if stateMachine.state == .running && track.getState() == .started { // If we want to continue updating while paused we have to add .paused state here but we then have to save the location where we paused...
+        } else if stateMachine.state == .running && track.getState() == .trailAdded { // If we want to continue updating while paused we have to add .paused state here but we then have to save the location where we paused...
             trackPath.append(contentsOf: locations)
         }
         accuracy = locations.first?.horizontalAccuracy ?? 0

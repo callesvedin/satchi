@@ -13,7 +13,7 @@ struct EditTrackView: View {
     @EnvironmentObject private var stack: CoreDataStack
 
     var track: Track
-    var mapView: TrackMapView
+
     @State private var showMapView = false
     @State private var share: CKShare?
     @State private var showShareSheet = false
@@ -31,12 +31,9 @@ struct EditTrackView: View {
             viewModel.trackName = track.name  ?? ""
             viewModel.comments = track.comments ?? ""
             viewModel.difficulty = max(1, track.difficulty)
-//            viewModel.setState(pathLaid: !(track.laidPath?.isEmpty ?? true),
-//                               tracked: !(track.trackPath?.isEmpty ?? true))
             return viewModel
 
         }())
-        mapView = TrackMapView(track: track, preview: true)
     }
 
     var body: some View {
@@ -45,7 +42,7 @@ struct EditTrackView: View {
                 LazyVStack(alignment: .leading) {
                     HStack {
                         Spacer()
-                        mapView
+                        TrackMapView(track: track, preview: true)
                             .scaledToFit()
                             .cornerRadius(10)
                             .padding(.bottom, 30)
@@ -134,7 +131,7 @@ struct EditTrackView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(destination: TrackMapView(track: track, preview: false )) {
-                    if track.getState() == .finished {
+                    if track.getState() == .trailTracked {
                         Text("Show Track")
                     } else if track.getState()  == .notStarted {
                         Text("Create track")

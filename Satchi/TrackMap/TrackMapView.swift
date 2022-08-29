@@ -27,7 +27,7 @@ struct TrackMapView: View {
 
 
         _mapModel = StateObject(wrappedValue: {
-            let model = TrackMapModel(track: track, onlyViewing: preview || track.getState() == .finished,
+            let model = TrackMapModel(track: track, onlyViewing: preview || track.getState() == .trailTracked,
                                       stack: previewStack ? CoreDataStack.preview:CoreDataStack.shared)
             return model
 

@@ -49,8 +49,8 @@ class TrackListViewModel: NSObject, ObservableObject {
     }
 
     public func reload() {
-        self.finishedTracks = tracks.filter({track in track.getState() == .finished})
-        self.startedTracks = tracks.filter({track in track.getState() == .started})
+        self.finishedTracks = tracks.filter({track in track.getState() == .trailTracked})
+        self.startedTracks = tracks.filter({track in track.getState() == .trailAdded})
         self.newTracks = tracks.filter({track in track.getState() == .notStarted})
         self.objectWillChange.send()
     }

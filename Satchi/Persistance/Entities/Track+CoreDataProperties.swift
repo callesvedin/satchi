@@ -38,9 +38,9 @@ extension Track: Identifiable {
 extension Track {
     public func getState() -> CurrentState {
         if timeToFinish > 0 {
-            return .finished
+            return .trailTracked
         } else if timeToCreate > 0 {
-            return .started
+            return .trailAdded
         } else {
             return .notStarted
         }
@@ -48,5 +48,5 @@ extension Track {
 }
 
 public enum CurrentState {
-    case notStarted, started, finished
+    case notStarted, trailAdded, trailTracked
 }
