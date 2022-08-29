@@ -256,7 +256,7 @@ extension CoreDataStack {
                 }
             }
         }
-        print("Managed object \(objectID.debugDescription) is shared: \(isShared)")
+//        print("Managed object \(objectID.debugDescription) is shared: \(isShared)")
         return isShared
     }
 

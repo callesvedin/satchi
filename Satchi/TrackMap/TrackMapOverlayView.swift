@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TrackMapOverlayView: View {
-//    @EnvironmentObject private var stack: CoreDataStack
+    //    @EnvironmentObject private var stack: CoreDataStack
     @ObservedObject var mapModel: TrackMapModel
     @Environment(\.colorScheme) var colorScheme
 
@@ -17,16 +17,6 @@ struct TrackMapOverlayView: View {
     }
 
     var body: some View {
-        var actionText: String
-        switch mapModel.stateMachine.state {
-        case .notStarted, .paused:
-            actionText = "Start"
-        case .running:
-            actionText = "Pause"
-        default:
-            actionText = "What?"
-        }
-
         let window = UIApplication.shared.currentKeyWindow
         let topPadding = window == nil ? 40 : window!.safeAreaInsets.top + 10
 
@@ -41,7 +31,7 @@ struct TrackMapOverlayView: View {
             .padding(.bottom)
             .background(Color(UIColor.systemBackground))
             .opacity(0.8)
-            if !mapModel.previewing  {
+            if mapModel.stateMachine.state != .viewing  {
                 HStack {
                     Spacer()
                     if mapModel.accuracy > 10 {
@@ -70,45 +60,13 @@ struct TrackMapOverlayView: View {
                 .padding(.horizontal, 10)
             }
             Spacer()
-            HStack {
-                Button(actionText) {
-                    switch mapModel.stateMachine.state {
-                    case .notStarted:
-                        mapModel.start()
-                    default:
-                        print("Not a state to use in button")
-                    }
-                }
-                .disabled(mapModel.accuracy > 10)
-                .buttonStyle(OverlayButtonStyle(backgroundColor: mapModel.stateMachine.state == .running ? .red : .green))
-                .padding(15)
-            }.padding(.bottom, 30)
+            StateButtonView(mapModel:mapModel)
+                .padding(.bottom, 30)
 
         }
     }
 }
-//    private func showResume(state: OldRunningState) -> Bool {
-//        switch state {
-//        case .layPathStopped, .trackingStopped:
-//            return true
-//        case .layPathStarted, .trackingStarted,.layPathNotStarted,
-//                .trackingNotStarted,.layPathDone, .trackingDone, .finishedTrack, .allDone, .cancelled:
-//            return false
-//        }
-//
-//    }
-//
-//
-//    private func showCancel(state: OldRunningState) -> Bool {
-//        switch state {
-//        case .layPathStarted, .trackingStarted:
-//            return true
-//        case .layPathNotStarted, .trackingNotStarted, .layPathStopped, .layPathDone, .trackingStopped, .trackingDone, .finishedTrack, .allDone, .cancelled:
-//            return false
-//        }
-//
-//    }
-//}
+
 
 //struct TrackMapOverlayView_Previews: PreviewProvider {
 //    static var previews: some View {

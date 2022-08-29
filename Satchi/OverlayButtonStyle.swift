@@ -19,7 +19,7 @@ struct OverlayButtonStyle: ButtonStyle {
             .padding(6)
             .frame(minWidth: 80)
             .background(backgroundColor)
-            .opacity(isEnabled ? 0.6:0.2)
+            .opacity(isEnabled ? 0.6:0.4)
             .cornerRadius(8)
     }
 }

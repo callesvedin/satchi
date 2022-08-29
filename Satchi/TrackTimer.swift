@@ -32,4 +32,12 @@ class TrackTimer: ObservableObject {
         timer.invalidate()
         mode = .stopped
     }
+
+    public func resume() {
+        print("Resuming timer")
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            self.secondsElapsed += 0.1
+        }
+    }
 }

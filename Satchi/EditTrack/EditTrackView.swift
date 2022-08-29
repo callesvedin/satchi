@@ -13,12 +13,16 @@ struct EditTrackView: View {
     @EnvironmentObject private var stack: CoreDataStack
 
     var track: Track
+    var mapView: TrackMapView
     @State private var showMapView = false
     @State private var share: CKShare?
     @State private var showShareSheet = false
     @State private var comment = ""
     @StateObject var viewModel:TrackViewModel
     
+    @FocusState private var nameFocused: Bool
+    @FocusState private var commentsFocused: Bool
+
 
     init(_ track: Track) {
         self.track = track
@@ -27,11 +31,12 @@ struct EditTrackView: View {
             viewModel.trackName = track.name  ?? ""
             viewModel.comments = track.comments ?? ""
             viewModel.difficulty = max(1, track.difficulty)
-            viewModel.setState(pathLaid: !(track.laidPath?.isEmpty ?? true),
-                               tracked: !(track.trackPath?.isEmpty ?? true))
+//            viewModel.setState(pathLaid: !(track.laidPath?.isEmpty ?? true),
+//                               tracked: !(track.trackPath?.isEmpty ?? true))
             return viewModel
 
         }())
+        mapView = TrackMapView(track: track, preview: true)
     }
 
     var body: some View {
@@ -40,16 +45,24 @@ struct EditTrackView: View {
                 LazyVStack(alignment: .leading) {
                     HStack {
                         Spacer()
-//                        TrackMapView(track: track, preview: true)
-//                            .scaledToFit()
-//                            .cornerRadius(10)
-//                            .padding(.bottom, 30)
+                        mapView
+                            .scaledToFit()
+                            .cornerRadius(10)
+                            .padding(.bottom, 30)
+
                         Spacer()
                     }
                     Group {
                         HStack {
                             Text("**Name:**")
                             TextField("Name", text: $viewModel.trackName)
+                                .focused($nameFocused)
+                                .onChange(of: nameFocused) { isFocused in
+                                    if !isFocused {
+                                        print("Name changed - Saving")
+                                        save()
+                                    }
+                                }
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
 
@@ -89,6 +102,13 @@ struct EditTrackView: View {
                             .font(.body)
                             .frame(minHeight: 80)
                             .border(Color.gray, width: 1)
+                            .focused($commentsFocused)
+                            .onChange(of: commentsFocused) { isFocused in
+                                if !isFocused {
+                                    print("Comments changed - Saving")
+                                    save()
+                                }
+                            }
                     }
                     .padding(.vertical, 4)
                 }
@@ -113,10 +133,10 @@ struct EditTrackView: View {
                 })
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: TrackMapView(track: track)) {
-                    if viewModel.runningState == .tracked {
+                NavigationLink(destination: TrackMapView(track: track, preview: false )) {
+                    if track.getState() == .finished {
                         Text("Show Track")
-                    } else if viewModel.runningState == .notCreated {
+                    } else if track.getState()  == .notStarted {
                         Text("Create track")
                     } else {
                         Text("Follow Track")
@@ -128,10 +148,17 @@ struct EditTrackView: View {
         .navigationBarTitle(viewModel.trackName)
         .navigationBarHidden(false)
         .navigationBarBackButtonHidden(false)
+
         .onAppear {
             self.share = stack.getShare(track)
             print("Share:\(String(describing: self.share))")
+            mapView.reload(track:self.track)
         }
+        .onChange(of: viewModel.difficulty, perform: {_ in
+            print("Difficulty changed - Saving")
+            save()
+        })
+
     }
 
     private func getTimeBetween(date: Date?, and toDate: Date?) -> String {

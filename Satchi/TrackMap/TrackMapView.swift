@@ -14,9 +14,6 @@ struct TrackMapView: View {
     @EnvironmentObject private var stack: CoreDataStack
     @StateObject public var mapModel: TrackMapModel
     var track: Track
-    @State private var name = ""
-//    @State var showModal: Bool = false
-//    @State var done: Bool = false
     var preview = false
 
     private static let logger = Logger(
@@ -30,7 +27,8 @@ struct TrackMapView: View {
 
 
         _mapModel = StateObject(wrappedValue: {
-            let model = TrackMapModel(track: track, isPreview: preview, stack: previewStack ? CoreDataStack.preview:CoreDataStack.shared)
+            let model = TrackMapModel(track: track, onlyViewing: preview || track.getState() == .finished,
+                                      stack: previewStack ? CoreDataStack.preview:CoreDataStack.shared)
             return model
 
         }())
@@ -49,39 +47,12 @@ struct TrackMapView: View {
         .onChange(of: mapModel.done) { value in
             print("Map model done")
             presentationMode.wrappedValue.dismiss()
-//            switch value {
-//            case .layPathDone:
-////                track.laidPath = mapModel.laidPath
-////                track.trackPath = mapModel.trackPath
-////                track.timeToCreate = mapModel.timer.secondsElapsed
-////                track.length = Int32(mapModel.distance)
-////                track.created = Date()
-//////                trackModel.image = mapModel.image
-////                stack.save()
-//                presentationMode.wrappedValue.dismiss()
-//            case .trackingDone:
-////                track.trackPath = mapModel.trackPath
-////                track.timeToFinish = mapModel.timer.secondsElapsed
-////                track.started = mapModel.trackingStarted
-//////                trackModel.image = mapModel.image
-////                stack.save()
-//                presentationMode.wrappedValue.dismiss()
-//            case .allDone:
-//                presentationMode.wrappedValue.dismiss()
-//                mapModel.state = mapModel.previousState
-//            case .cancelled:
-//                presentationMode.wrappedValue.dismiss()
-//                mapModel.state = mapModel.previousState
-//
-//            default:
-//                print("Unhandled state")
-//            }
         }
-//        .onAppear {
-//            mapModel.setValues(track:track, isPreview:preview , stack:stack)
-//        }
-
     }
+    func reload(track:Track) {
+        mapModel.track = track
+    }
+    
 }
 
 struct TrackMapView_Previews: PreviewProvider {
