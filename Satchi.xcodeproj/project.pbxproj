@@ -14,6 +14,8 @@
 		EB352C86278CEA170015AC5A /* TrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */; };
 		EB352C8C278CEB310015AC5A /* Track+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB352C8A278CEB310015AC5A /* Track+CoreDataClass.swift */; };
 		EB352C8E278EB6720015AC5A /* Satchi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EBCB4815266762F800E5631C /* Satchi.xcdatamodeld */; };
+		EB3DF31D28C65AFA00A45A8D /* PreviewTrackMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3DF31C28C65AFA00A45A8D /* PreviewTrackMapView.swift */; };
+		EB3DF31F28C65BEE00A45A8D /* PreviewMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3DF31E28C65BEE00A45A8D /* PreviewMapView.swift */; };
 		EB409F3628AD0EB700BA2C23 /* StateButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB409F3528AD0EB700BA2C23 /* StateButtonView.swift */; };
 		EB5688E0269C304000AF9AB1 /* TrackCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5688DF269C304000AF9AB1 /* TrackCellView.swift */; };
 		EB59DE3C283003830043DE33 /* AddTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59DE3B283003830043DE33 /* AddTrackView.swift */; };
@@ -75,6 +77,8 @@
 		EB2F91202624B6500026773D /* TrackMapOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapOverlayView.swift; sourceTree = "<group>"; };
 		EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayButtonStyle.swift; sourceTree = "<group>"; };
 		EB352C8A278CEB310015AC5A /* Track+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Track+CoreDataClass.swift"; sourceTree = "<group>"; };
+		EB3DF31C28C65AFA00A45A8D /* PreviewTrackMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewTrackMapView.swift; sourceTree = "<group>"; };
+		EB3DF31E28C65BEE00A45A8D /* PreviewMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewMapView.swift; sourceTree = "<group>"; };
 		EB409F3528AD0EB700BA2C23 /* StateButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateButtonView.swift; sourceTree = "<group>"; };
 		EB5688DF269C304000AF9AB1 /* TrackCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCellView.swift; sourceTree = "<group>"; };
 		EB59DE3B283003830043DE33 /* AddTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrackView.swift; sourceTree = "<group>"; };
@@ -160,8 +164,10 @@
 			isa = PBXGroup;
 			children = (
 				EB5CE225261CBA3D00D56711 /* TrackMapView.swift */,
+				EB3DF31C28C65AFA00A45A8D /* PreviewTrackMapView.swift */,
 				EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */,
 				EB7DFD2A261E0D6A0056D6B4 /* MapView.swift */,
+				EB3DF31E28C65BEE00A45A8D /* PreviewMapView.swift */,
 				EB2F91202624B6500026773D /* TrackMapOverlayView.swift */,
 				EB05E19426277868002941B6 /* PathAnnotation.swift */,
 				EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */,
@@ -438,6 +444,7 @@
 				EB2F91262624B8DF0026773D /* OverlayButtonStyle.swift in Sources */,
 				EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */,
 				EBC61203284BD33900B5C534 /* FilteredList.swift in Sources */,
+				EB3DF31D28C65AFA00A45A8D /* PreviewTrackMapView.swift in Sources */,
 				EB64A3C6287CAD7C00E1BEA6 /* NewFilteredList.swift in Sources */,
 				EB87250A260CC0C4008AD8E7 /* TrackListView.swift in Sources */,
 				EB352C8C278CEB310015AC5A /* Track+CoreDataClass.swift in Sources */,
@@ -453,6 +460,7 @@
 				EB5688E0269C304000AF9AB1 /* TrackCellView.swift in Sources */,
 				EBA842E528756AEF0061C338 /* FilteredListNew.swift in Sources */,
 				EB7D2147282C62BF006CB703 /* CoreDataStack.swift in Sources */,
+				EB3DF31F28C65BEE00A45A8D /* PreviewMapView.swift in Sources */,
 				EB0D4754260E930F006BCBB8 /* MainTabView.swift in Sources */,
 				EB59DE42283104050043DE33 /* CloudSharingController.swift in Sources */,
 				EB59DE4428310BF60043DE33 /* AppDelegate.swift in Sources */,

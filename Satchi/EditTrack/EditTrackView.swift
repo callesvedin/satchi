@@ -12,14 +12,12 @@ struct EditTrackView: View {
 //    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject private var stack: CoreDataStack
 
-    var track: Track
+    @ObservedObject var track: Track
 
-    @State private var showMapView = false
     @State private var share: CKShare?
     @State private var showShareSheet = false
     @State private var comment = ""
     @StateObject var viewModel:TrackViewModel
-    
     @FocusState private var nameFocused: Bool
     @FocusState private var commentsFocused: Bool
 
@@ -32,7 +30,6 @@ struct EditTrackView: View {
             viewModel.comments = track.comments ?? ""
             viewModel.difficulty = max(1, track.difficulty)
             return viewModel
-
         }())
     }
 
@@ -42,7 +39,7 @@ struct EditTrackView: View {
                 LazyVStack(alignment: .leading) {
                     HStack {
                         Spacer()
-                        TrackMapView(track: track, preview: true)
+                        PreviewTrackMapView(track:track)
                             .scaledToFit()
                             .cornerRadius(10)
                             .padding(.bottom, 30)
@@ -130,7 +127,7 @@ struct EditTrackView: View {
                 })
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: TrackMapView(track: track, preview: false )) {
+                NavigationLink(destination: TrackMapView(track:track, preview: false )) {
                     if track.getState() == .trailTracked {
                         Text("Show Track")
                     } else if track.getState()  == .notStarted {
@@ -149,7 +146,6 @@ struct EditTrackView: View {
         .onAppear {
             self.share = stack.getShare(track)
             print("Share:\(String(describing: self.share))")
-            mapView.reload(track:self.track)
         }
         .onChange(of: viewModel.difficulty, perform: {_ in
             print("Difficulty changed - Saving")

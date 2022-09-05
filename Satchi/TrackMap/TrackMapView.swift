@@ -13,7 +13,7 @@ struct TrackMapView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject private var stack: CoreDataStack
     @StateObject public var mapModel: TrackMapModel
-    var track: Track
+
     var preview = false
 
     private static let logger = Logger(
@@ -22,22 +22,20 @@ struct TrackMapView: View {
     )
 
     init(track: Track, preview: Bool = false, previewStack:Bool = false) {
-        self.track = track
-        self.preview = preview
-
 
         _mapModel = StateObject(wrappedValue: {
-            let model = TrackMapModel(track: track, onlyViewing: preview || track.getState() == .trailTracked,
-                                      stack: previewStack ? CoreDataStack.preview:CoreDataStack.shared)
+            let model = TrackMapModel(track: track,
+                                      stack: CoreDataStack.shared)
             return model
 
         }())
 
+        self.preview = preview
     }
 
     var body: some View {
         ZStack {
-            MapView(mapModel: mapModel)
+            MapView(mapModel: mapModel, isPreview: preview)
             if !preview {
                 TrackMapOverlayView(mapModel: mapModel)
             }
@@ -46,12 +44,12 @@ struct TrackMapView: View {
         .ignoresSafeArea()
         .onChange(of: mapModel.done) { value in
             print("Map model done")
-            presentationMode.wrappedValue.dismiss()
+            if preview == false {
+                presentationMode.wrappedValue.dismiss()
+            }
         }
     }
-    func reload(track:Track) {
-        mapModel.track = track
-    }
+
     
 }
 
@@ -59,9 +57,10 @@ struct TrackMapView_Previews: PreviewProvider {
 
     static var previews: some View {
         let stack = CoreDataStack.preview
+
         NavigationView {
-        TrackMapView(track: stack.getTracks()[0])
-            .environmentObject(CoreDataStack.preview)
+            TrackMapView(track: stack.getTracks()[0], preview: true)
+                .environmentObject(CoreDataStack.preview)
         }
     }
 }

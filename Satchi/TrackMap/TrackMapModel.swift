@@ -88,12 +88,13 @@ class TrackMapModel: NSObject, ObservableObject {
     //
     //    }
 
-    init(track:Track, onlyViewing isViewing:Bool, stack:CoreDataStack){
+    init(track:Track, stack:CoreDataStack){
         self.track = track
         self.laidPath = track.laidPath ?? []
         self.trackPath = track.trackPath ?? []        
         self.stack = stack
         self.locationManager = CLLocationManager()
+        let isViewing = track.getState() == .trailTracked
         if isViewing {followUser = false}
         stateMachine = Machine(state: isViewing ? .viewing : .notStarted)
         super.init()
@@ -203,7 +204,6 @@ class TrackMapModel: NSObject, ObservableObject {
     private func startRunning() {
         switch track.getState() {
         case .notStarted:
-            reset()
             pathStartLocation = currentLocation?.coordinate
             timer.start()
         case .trailAdded:
@@ -234,8 +234,6 @@ class TrackMapModel: NSObject, ObservableObject {
         stateMachine <-! .stop
     }
 
-
-
     private func getLength(from locations: [CLLocation]) -> Double {
         var length: Double = 0
         for (count, location) in locations.enumerated() {
@@ -245,10 +243,6 @@ class TrackMapModel: NSObject, ObservableObject {
         return length
     }
 
-    private func reset() {
-        laidPath = []
-        trackPath = []
-    }
 
     public func startTracking() {
         print("Start tracking.")
