@@ -11,9 +11,7 @@ import CoreData
 struct TrackListView: View {
     @EnvironmentObject private var stack: CoreDataStack
     @Environment(\.managedObjectContext) var mocc
-    @StateObject private var model = TrackListViewModel(stack:CoreDataStack.preview)
-//    @State var selectedTrack: Track?
-//    @State var showEdit = false
+    @StateObject private var model = TrackListViewModel()
     @State private var showMapView = false
 
     var body: some View {
@@ -29,27 +27,25 @@ struct TrackListView: View {
 
                 }
             }else{
-
                 List {
-
                     Section("Created tracks"){
                         FilteredList(tracks:$model.newTracks
 
-                                     ).listRowBackground(Color.clear)
+                                     ) //.listRowBackground(Color.clear)
                     }
                     Section("Started tracks") {
                         FilteredList(tracks: $model.startedTracks
 
-                                        ).listRowBackground(Color.clear)
+                                        )
+                        //.listRowBackground(Color.clear)
                     }
                     Section("Finished tracks") {
-                        FilteredList(tracks: $model.finishedTracks).listRowBackground(Color.clear)
+                        FilteredList(tracks: $model.finishedTracks)
+                            //.listRowBackground(Color.clear)
                     }
 
-
-                }
-                .background(.pink)
-                .listRowSeparator(.hidden)
+                }                
+//                .listRowSeparator(.automatic)
 
 //                if selectedTrack != nil {
 //                    NavigationLink("", destination: EditTrackView(selectedTrack!).environmentObject(stack), isActive: $showEdit)
