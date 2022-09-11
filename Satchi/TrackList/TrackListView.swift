@@ -31,15 +31,15 @@ struct TrackListView: View {
             }else{
                 ScrollView {
                     VStack {
-                        NewFilteredList(tracks:$model.newTracks,
+                        FilteredList(tracks:$model.newTracks,
                                         header: "New tracks",
                                         selection: $selectedTrack)
 
-                        NewFilteredList(tracks: $model.startedTracks,
+                        FilteredList(tracks: $model.startedTracks,
                                         header: "Created tracks",
                                         selection: $selectedTrack)
 
-                        NewFilteredList(tracks: $model.finishedTracks,
+                        FilteredList(tracks: $model.finishedTracks,
                                         header: "Finished tracks",
                                         selection: $selectedTrack)
                     }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NewFilteredList: View {
+struct FilteredList: View {
     @Environment(\.managedObjectContext) var mocc
 
     @Binding var tracks: [Track]
@@ -39,9 +39,9 @@ struct NewFilteredList: View {
 
 }
 
-struct NewFilteredList_Previews: PreviewProvider {
+struct FilteredList_Previews: PreviewProvider {
     static var previews: some View {
-        NewFilteredList(tracks: .constant( CoreDataStack.preview.getTracks()),
+        FilteredList(tracks: .constant( CoreDataStack.preview.getTracks()),
                      header: "Created tracks",
                      selection: .constant(nil))
     }
