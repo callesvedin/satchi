@@ -33,7 +33,7 @@ struct TrackCellView: View {
                     }
                 }, label: {
                     Image(systemName: "trash").font(.system(size: 16))
-                })
+                }).buttonStyle(BorderlessButtonStyle())
             }
 
             LazyVGrid(columns: columns, alignment: .leading, spacing: 0) {
@@ -64,14 +64,14 @@ struct TrackCellView: View {
             }
         }
         .padding(.vertical, 10)
-        .padding(.horizontal)
+       .padding(.horizontal)
         .font(.caption)
         .background(Color(.systemBackground))
         .clipped()
         .cornerRadius(5)
         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 60, maxHeight: UIScreen.main.bounds.height - 330)
         .shadow(color: Color.gray, radius: 5, x: 0, y: 4)
-        .padding(8)
+//        .padding(8)
     }
 
     private let itemFormatter: DateFormatter = {

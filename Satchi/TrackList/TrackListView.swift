@@ -11,9 +11,9 @@ import CoreData
 struct TrackListView: View {
     @EnvironmentObject private var stack: CoreDataStack
     @Environment(\.managedObjectContext) var mocc
-    @StateObject private var model = TrackListViewModel(stack: CoreDataStack.preview)
-    @State var selectedTrack: Track?
-    @State var showEdit = false
+    @StateObject private var model = TrackListViewModel(stack:CoreDataStack.preview)
+//    @State var selectedTrack: Track?
+//    @State var showEdit = false
     @State private var showMapView = false
 
     var body: some View {
@@ -29,41 +29,47 @@ struct TrackListView: View {
 
                 }
             }else{
-                ScrollView {
-                    VStack {
-                        NewFilteredList(tracks:$model.newTracks,
-                                        header: "New tracks",
-                                        selection: $selectedTrack)
 
-                        NewFilteredList(tracks: $model.startedTracks,
-                                        header: "Created tracks",
-                                        selection: $selectedTrack)
+                List {
 
-                        NewFilteredList(tracks: $model.finishedTracks,
-                                        header: "Finished tracks",
-                                        selection: $selectedTrack)
+                    Section("Created tracks"){
+                        FilteredList(tracks:$model.newTracks
+
+                                     ).listRowBackground(Color.clear)
+                    }
+                    Section("Started tracks") {
+                        FilteredList(tracks: $model.startedTracks
+
+                                        ).listRowBackground(Color.clear)
+                    }
+                    Section("Finished tracks") {
+                        FilteredList(tracks: $model.finishedTracks).listRowBackground(Color.clear)
                     }
 
-                    if selectedTrack != nil {
-                        NavigationLink("", destination: EditTrackView(selectedTrack!), isActive: $showEdit)
-                            .opacity(0)
-                    }
 
                 }
+                .background(.pink)
+                .listRowSeparator(.hidden)
+
+//                if selectedTrack != nil {
+//                    NavigationLink("", destination: EditTrackView(selectedTrack!).environmentObject(stack), isActive: $showEdit)
+//                        .opacity(0)
+//                }
+
             }
         }
-        .onChange(of: selectedTrack, perform: {track in
-            print("selected track \(track?.name ?? "-")")
-            if selectedTrack != nil {
-                showEdit = true
-            }
-        })
+//        .onChange(of: selectedTrack, perform: {track in
+//            print("selected track \(track?.name ?? "-")")
+//            if selectedTrack != nil {
+//                showEdit = true
+//            }
+//        })
         .onChange(of: mocc, perform: {_ in
             print("CHANGED!")
         })
-        .onAppear(){
-            selectedTrack = nil
-        }
+//        .onAppear(){
+//            selectedTrack = nil
+//        }
         .navigationTitle("Tracks")
         .toolbar {
             HStack {
