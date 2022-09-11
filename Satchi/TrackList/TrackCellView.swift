@@ -32,7 +32,7 @@ struct TrackCellView: View {
                         deleteFunction(track)
                     }
                 }, label: {
-                    Image(systemName: "trash")
+                    Image(systemName: "trash").font(.system(size: 16))
                 })
             }
 

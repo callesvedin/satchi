@@ -49,8 +49,6 @@ struct TrackMapView: View {
             }
         }
     }
-
-    
 }
 
 struct TrackMapView_Previews: PreviewProvider {

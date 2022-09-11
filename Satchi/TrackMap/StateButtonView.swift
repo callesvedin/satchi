@@ -19,6 +19,18 @@ struct StateButtonView: View {
                 .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
                 .disabled(mapModel.accuracy > 10)
                 .padding(15)
+/*
+ Button(action: {mapModel.start()},
+ label:  {
+ Image(systemName: "play.circle.fill")
+ .symbolRenderingMode(.palette)
+ .foregroundStyle(.white, .green)
+ .font(.system(size: 50))
+ })
+ .opacity(mapModel.accuracy > 10 ? 0.4:0.8)
+ .disabled(mapModel.accuracy > 10)
+ .padding(15)
+ */
             }
             if mapModel.stateMachine.state == .running {
                 Button("Pause") {
@@ -48,8 +60,7 @@ struct StateButtonView: View {
                 Button("Close") {
                     mapModel.stop()
                 }
-                .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
-                .disabled(mapModel.accuracy > 10)
+                .buttonStyle(OverlayButtonStyle(backgroundColor: .green))            
                 .padding(15)
             }
         }
@@ -58,6 +69,14 @@ struct StateButtonView: View {
 
 //struct StateButtonView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        StateButtonView(TrackMapModel())
+//        let track = CoreDataStack.preview.getTracks()[0]
+//        let model = TrackMapModel(track: track, stack: CoreDataStack.preview)
+//        model.followUser = false
+//        model.accuracy = 15
+//
+//        return StateButtonView(mapModel:model)
 //    }
 //}
+
+
+

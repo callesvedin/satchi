@@ -11,7 +11,7 @@ import CoreData
 struct TrackListView: View {
     @EnvironmentObject private var stack: CoreDataStack
     @Environment(\.managedObjectContext) var mocc
-    @StateObject private var model = TrackListViewModel()
+    @StateObject private var model = TrackListViewModel(stack: CoreDataStack.preview)
     @State var selectedTrack: Track?
     @State var showEdit = false
     @State private var showMapView = false

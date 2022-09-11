@@ -38,7 +38,7 @@ struct MapView: UIViewRepresentable {
         theView.showsUserLocation = true
         theView.mapType = .satellite
         theView.userTrackingMode = .follow
-
+        theView.layoutMargins.top = 100.0 // This is for the maps compass that shows up when rotating the view
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailStart.getIdentifier())
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailEnd.getIdentifier())
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trackingStart.getIdentifier())

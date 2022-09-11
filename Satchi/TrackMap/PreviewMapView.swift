@@ -32,7 +32,8 @@ struct PreviewMapView: UIViewRepresentable {
         theView.showsUserLocation = false
         theView.mapType = .satellite
         theView.userTrackingMode = .none
-
+        theView.showsUserLocation = false
+        theView.isUserInteractionEnabled = false
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailStart.getIdentifier())
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailEnd.getIdentifier())
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trackingStart.getIdentifier())
