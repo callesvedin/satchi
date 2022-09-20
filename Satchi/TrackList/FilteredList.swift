@@ -9,29 +9,37 @@ import SwiftUI
 
 struct FilteredList: View {
     @EnvironmentObject private var stack: CoreDataStack
-
+    @Environment(\.preferredColorPalette) private var palette
     @Binding var tracks: [Track]
 
-    //    let header: String
-    //    @Binding var selection: Track?
-
     var body: some View {
-        //        if !tracks.isEmpty {
-        //            TrackSectionView(sectionName: header)
-        //            Divider().frame(height: 2)
-        //        }
         ForEach(tracks) { (track)  in
-            //            TrackCellView(deleteFunction: deleteTrackFunction, track: track)
             NavigationLink(
                 destination:{ EditTrackView(track).environmentObject(stack)},
                 label:{
                     TrackCellView(deleteFunction: deleteTrackFunction, track: track)
                 }
             )
+            .swipeActions(allowsFullSwipe: false) {
+                Button {
+                    print("Share!!")
+                } label: {
+                    Label("Share", systemImage: "square.and.arrow.up")
+                }
+                .tint(.green)
+                Button(role: .destructive) {
+                    deleteTrackFunction(track:track)
+                } label: {
+                    Label("Delete", systemImage: "trash.fill")
+                }
 
-        }.onDelete{offset in
+            }
+        }
+        .onDelete{offset in
             deleteTrackFunction(track:tracks[offset.first!])
         }
+        .listRowBackground(palette.midBackground)
+
     }
 
     func deleteTrackFunction(track: Track) {
@@ -47,3 +55,4 @@ struct FilteredList_Previews: PreviewProvider {
             ).environmentObject(CoreDataStack.preview)}
     }
 }
+
