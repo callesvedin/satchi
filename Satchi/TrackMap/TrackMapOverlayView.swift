@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TrackMapOverlayView: View {
     @EnvironmentObject private var stack: CoreDataStack
+    @Environment(\.preferredColorPalette) private var palette
     @ObservedObject var mapModel: TrackMapModel
     @Environment(\.colorScheme) var colorScheme
 
@@ -29,8 +30,8 @@ struct TrackMapOverlayView: View {
             .padding(.top, topPadding)
             .padding(.horizontal)
             .padding(.bottom)
-            .background(Color(UIColor.systemBackground))
-            .opacity(0.8)
+            .background(palette.mainBackground.opacity(0.8))
+
             if mapModel.stateMachine.state != .viewing  {
                 HStack {
                     Spacer()
@@ -40,7 +41,7 @@ struct TrackMapOverlayView: View {
                             .padding(8)
                             .foregroundColor(Color.red)
                             .background(
-                                RoundedRectangle(cornerRadius: 6, style: .continuous).fill(Color(UIColor.systemBackground).opacity(0.8))
+                                RoundedRectangle(cornerRadius: 6, style: .continuous).fill(palette.mainBackground).opacity(0.8)
                             )
                     }
                     Button(
@@ -51,7 +52,7 @@ struct TrackMapOverlayView: View {
                                 .imageScale(.large)
                                 .padding(8)
                                 .background(
-                                    RoundedRectangle(cornerRadius: 6, style: .continuous).fill(Color(UIColor.systemBackground).opacity(0.8))
+                                    RoundedRectangle(cornerRadius: 6, style: .continuous).fill(palette.mainBackground).opacity(0.8)
                                 )
                         }
                     ).buttonStyle(.plain)

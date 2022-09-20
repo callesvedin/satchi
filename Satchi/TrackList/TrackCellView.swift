@@ -12,6 +12,8 @@ typealias DeleteFunction = (Track) -> Void
 struct TrackCellView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var stack: CoreDataStack
+    @Environment(\.preferredColorPalette) private var palette
+
 
     let deleteFunction: DeleteFunction
     var track: Track
@@ -24,16 +26,9 @@ struct TrackCellView: View {
         VStack {
             HStack {
                 Text("\(track.name ?? "")")
-                    .font(.subheadline)
+                    .font(.headline)
                     .bold()
                 Spacer()
-//                Button(action: {
-//                    withAnimation {
-//                        deleteFunction(track)
-//                    }
-//                }, label: {
-//                    Image(systemName: "trash").font(.system(size: 16))
-//                }).buttonStyle(BorderlessButtonStyle())
             }
 
             LazyVGrid(columns: columns, alignment: .leading, spacing: 0) {
@@ -61,17 +56,11 @@ struct TrackCellView: View {
                         .frame(width: 20)
                         .padding(.vertical, 4)
                 }
-            }
+            }.font(.body)
         }
-//        .padding(.vertical, 10)
-//       .padding(.horizontal)
+        .padding(.vertical, 10)
         .font(.caption)
-//        .background(Color(.systemBackground))
-//        .clipped()
-//        .cornerRadius(5)
-        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 60, maxHeight: UIScreen.main.bounds.height - 330)
-//        .shadow(color: Color.gray, radius: 5, x: 0, y: 4)
-//        .padding(8)
+        .background(palette.midBackground)
     }
 
     private let itemFormatter: DateFormatter = {

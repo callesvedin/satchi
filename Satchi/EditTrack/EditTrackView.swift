@@ -9,7 +9,7 @@ import SwiftUI
 import CloudKit
 
 struct EditTrackView: View {
-//    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.preferredColorPalette) private var palette
     @EnvironmentObject private var stack: CoreDataStack
 
     @ObservedObject var track: Track
@@ -50,6 +50,7 @@ struct EditTrackView: View {
                         HStack {
                             Text("**Name:**")
                             TextField("Name", text: $viewModel.trackName)
+                                .background(RoundedRectangle(cornerRadius: 4).fill(palette.midBackground))
                                 .focused($nameFocused)
                                 .onChange(of: nameFocused) { isFocused in
                                     if !isFocused {
@@ -57,7 +58,7 @@ struct EditTrackView: View {
                                         save()
                                     }
                                 }
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                //.textFieldStyle(RoundedBorderTextFieldStyle())
                         }
 
                         Text("**Created:** \(track.created != nil ? TimeFormatter.dateStringFrom(date: track.created) : "-")")
@@ -109,6 +110,7 @@ struct EditTrackView: View {
             }            
         }
         .font(Font.system(size: 22))
+        .foregroundColor(palette.primaryText)
         .padding()
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -116,7 +118,9 @@ struct EditTrackView: View {
                     Task {await createShare(track)}
                 } label: {
                     Image(systemName: "square.and.arrow.up")
-                }.sheet(isPresented: $showShareSheet, content: {
+                }
+                .accentColor(palette.link)
+                .sheet(isPresented: $showShareSheet, content: {
                     if let share = share {
                         CloudSharingView(
                             share: share,
@@ -137,8 +141,10 @@ struct EditTrackView: View {
                     }
                 }
                 .isDetailLink(false)
+                .accentColor(palette.link)
             }
         }
+        .background(palette.mainBackground)
         .navigationBarTitle(viewModel.trackName)
         .navigationBarHidden(false)
         .navigationBarBackButtonHidden(false)
