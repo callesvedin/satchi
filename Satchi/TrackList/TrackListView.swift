@@ -17,96 +17,97 @@ struct TrackListView: View {
     @StateObject private var model = TrackListViewModel()
     @State private var showMapView = false
 
-    
+
     var body: some View {
         UITableView.appearance().backgroundColor = .clear
         UITableViewCell.appearance().backgroundColor = .clear
         return
-            ZStack {
-                palette.mainBackground.ignoresSafeArea(.all)
-                if model.isEmpty() {
-                    NoTracksView(addTrack: $showMapView)
-                }else{
-                        List {
-                            Section(header:Text("Created tracks")) {
-                                FilteredList(tracks:$model.newTracks)
-                            }.headerProminence(.increased)
-                            Section(header:Text("Started tracks")) {
-                                FilteredList(tracks: $model.startedTracks)
-                            }.headerProminence(.increased)
-                            Section(header:Text("Finished tracks")) {
-                                FilteredList(tracks: $model.finishedTracks)
-                            }.headerProminence(.increased)
-                        }
-                        .hideScroll()
-                        .listStyle(.insetGrouped)
-                    }
-            }
-            .foregroundColor(palette.primaryText)
-            .navigationTitle("Tracks")
-            .toolbar {
-                HStack {
-                    #if DEBUG
-                    HStack {
-                        Button(action: {
-                            environment.palette = Color.Palette.satchi
-                        }, label: {
-                            RoundedRectangle(cornerRadius: 3)
-                                .foregroundColor(Color.Palette.satchi.mainBackground)
-                                .frame(width: 15, height: 15)
-                                .border(.black)
-
-                        })
-                        Button(action: {
-                            environment.palette = Color.Palette.darkNature
-                        }, label: {
-                            RoundedRectangle(cornerRadius: 3)
-                                .foregroundColor(Color.Palette.darkNature.mainBackground)
-                                .frame(width: 15, height: 15)
-                                .border(.black)
-
-                        })
-                        Button(action: {
-                            environment.palette = Color.Palette.cold
-                        }, label: {
-                            RoundedRectangle(cornerRadius: 3)
-                                .foregroundColor(Color.Palette.cold.mainBackground)
-                                .frame(width: 15, height: 15)
-                                .border(.black)
-
-                        })
-                        Button(action: {
-                            environment.palette = Color.Palette.icyGrey
-                        }, label: {
-                            RoundedRectangle(cornerRadius: 3)
-                                .foregroundColor(Color.Palette.icyGrey.mainBackground)
-                                .frame(width: 15, height: 15)
-                                .border(.black)
-
-                        })
-                        Button(action: {
-                            environment.palette = Color.Palette.warm
-                        }, label: {
-                            RoundedRectangle(cornerRadius: 3)
-                                .foregroundColor(Color.Palette.warm.mainBackground)
-                                .frame(width: 15, height: 15)
-                                .border(.black)
-
-                        })
-
-                    }
-                    #endif
-
-                    Button("Add Track") {
-                        showMapView.toggle()
-                    }
-                    .foregroundColor(palette.link)
-                    .padding(0)
+        ZStack {
+            palette.mainBackground.ignoresSafeArea(.all)
+            if model.isEmpty() {
+                NoTracksView(addTrack: $showMapView)
+            }else{
+                List {
+                    Section(header:Text("Created tracks")) {
+                        FilteredList(tracks:$model.newTracks)
+                    }.headerProminence(.increased)
+                    Section(header:Text("Started tracks")) {
+                        FilteredList(tracks: $model.startedTracks)
+                    }.headerProminence(.increased)
+                    Section(header:Text("Finished tracks")) {
+                        FilteredList(tracks: $model.finishedTracks)
+                    }.headerProminence(.increased)
                 }
+                .hideScroll()
+                .listStyle(.insetGrouped)
             }
-            .sheet(isPresented: $showMapView, content: {
-                AddTrackView()
-            })
+        }
+        .foregroundColor(palette.primaryText)
+        .navigationTitle("Tracks")
+        .toolbar {
+            HStack {
+
+#if DEBUG
+                HStack {
+                    Button(action: {
+                        environment.palette = Color.Palette.satchi
+                    }, label: {
+                        RoundedRectangle(cornerRadius: 3)
+                            .foregroundColor(Color.Palette.satchi.mainBackground)
+                            .frame(width: 15, height: 15)
+                            .border(.black)
+
+                    })
+                    Button(action: {
+                        environment.palette = Color.Palette.darkNature
+                    }, label: {
+                        RoundedRectangle(cornerRadius: 3)
+                            .foregroundColor(Color.Palette.darkNature.mainBackground)
+                            .frame(width: 15, height: 15)
+                            .border(.black)
+
+                    })
+                    Button(action: {
+                        environment.palette = Color.Palette.cold
+                    }, label: {
+                        RoundedRectangle(cornerRadius: 3)
+                            .foregroundColor(Color.Palette.cold.mainBackground)
+                            .frame(width: 15, height: 15)
+                            .border(.black)
+
+                    })
+                    Button(action: {
+                        environment.palette = Color.Palette.icyGrey
+                    }, label: {
+                        RoundedRectangle(cornerRadius: 3)
+                            .foregroundColor(Color.Palette.icyGrey.mainBackground)
+                            .frame(width: 15, height: 15)
+                            .border(.black)
+
+                    })
+                    Button(action: {
+                        environment.palette = Color.Palette.warm
+                    }, label: {
+                        RoundedRectangle(cornerRadius: 3)
+                            .foregroundColor(Color.Palette.warm.mainBackground)
+                            .frame(width: 15, height: 15)
+                            .border(.black)
+
+                    })
+
+                }
+#endif
+
+                Button("Add Track") {
+                    showMapView.toggle()
+                }
+                .foregroundColor(palette.link)
+                .padding(0)
+            }
+        }
+        .sheet(isPresented: $showMapView, content: {
+            AddTrackView()
+        })
     }
 }
 
@@ -173,3 +174,4 @@ struct TrackListView_Previews: PreviewProvider {
         .environment(\.preferredColorPalette, Color.Palette.warm)
     }
 }
+
