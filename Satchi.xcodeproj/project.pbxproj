@@ -10,6 +10,7 @@
 		EB02A5B628C694E9004720DA /* ButtonTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB02A5B528C694E9004720DA /* ButtonTest.swift */; };
 		EB05E19526277868002941B6 /* PathAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05E19426277868002941B6 /* PathAnnotation.swift */; };
 		EB0D4754260E930F006BCBB8 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0D4753260E930F006BCBB8 /* MainTabView.swift */; };
+		EB2409C928D1A5000027671D /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB2409C828D1A5000027671D /* Colors.xcassets */; };
 		EB2F91212624B6500026773D /* TrackMapOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F91202624B6500026773D /* TrackMapOverlayView.swift */; };
 		EB2F91262624B8DF0026773D /* OverlayButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */; };
 		EB352C86278CEA170015AC5A /* TrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */; };
@@ -50,6 +51,9 @@
 		EBB05D772878C02500C9723F /* DistanceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB05D762878C02500C9723F /* DistanceFormatter.swift */; };
 		EBC69ACE2641B88F0094EAA3 /* TextInputDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */; };
 		EBD13A55261AF3760080C4FE /* EditTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A54261AF3760080C4FE /* EditTrackView.swift */; };
+		EBD542B528D7971400FAE7FA /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD542B428D7971400FAE7FA /* AppEnvironment.swift */; };
+		EBE9440328D25AE900C1C7A5 /* ColorPaletteExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE9440228D25AE900C1C7A5 /* ColorPaletteExt.swift */; };
+		EBE9440528D26D4A00C1C7A5 /* PaletteEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE9440428D26D4A00C1C7A5 /* PaletteEnvironment.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +77,7 @@
 		EB02A5B528C694E9004720DA /* ButtonTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTest.swift; sourceTree = "<group>"; };
 		EB05E19426277868002941B6 /* PathAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathAnnotation.swift; sourceTree = "<group>"; };
 		EB0D4753260E930F006BCBB8 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		EB2409C828D1A5000027671D /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		EB2F91202624B6500026773D /* TrackMapOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapOverlayView.swift; sourceTree = "<group>"; };
 		EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayButtonStyle.swift; sourceTree = "<group>"; };
 		EB352C8A278CEB310015AC5A /* Track+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Track+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -118,6 +123,9 @@
 		EBCB4816266762F800E5631C /* Satchi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Satchi.xcdatamodel; sourceTree = "<group>"; };
 		EBD13A54261AF3760080C4FE /* EditTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackView.swift; sourceTree = "<group>"; };
 		EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewModel.swift; sourceTree = "<group>"; };
+		EBD542B428D7971400FAE7FA /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		EBE9440228D25AE900C1C7A5 /* ColorPaletteExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteExt.swift; sourceTree = "<group>"; };
+		EBE9440428D26D4A00C1C7A5 /* PaletteEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteEnvironment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,12 +219,14 @@
 				EBD13A53261AF3520080C4FE /* EditTrack */,
 				EB87253D260CC132008AD8E7 /* TrackList */,
 				EB872507260CC0C4008AD8E7 /* SatchiApp.swift */,
+				EBD542B428D7971400FAE7FA /* AppEnvironment.swift */,
 				EB59DE4328310BF60043DE33 /* AppDelegate.swift */,
 				EB7D2148282C6553006CB703 /* UIApplicationExt.swift */,
 				EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */,
 				EB0D4753260E930F006BCBB8 /* MainTabView.swift */,
 				EB7D868E265438AE0088F13E /* TrackTimer.swift */,
 				EB87250B260CC0C5008AD8E7 /* Assets.xcassets */,
+				EB2409C828D1A5000027671D /* Colors.xcassets */,
 				EB872515260CC0C5008AD8E7 /* Info.plist */,
 				EB87250D260CC0C5008AD8E7 /* Preview Content */,
 				EB59DE3D2830051F0043DE33 /* StringExt.swift */,
@@ -224,6 +234,8 @@
 				EB5BDF0E28181E03009DF497 /* README.md */,
 				EB5BDF0F28181E61009DF497 /* Notes.md */,
 				EB02A5B528C694E9004720DA /* ButtonTest.swift */,
+				EBE9440228D25AE900C1C7A5 /* ColorPaletteExt.swift */,
+				EBE9440428D26D4A00C1C7A5 /* PaletteEnvironment.swift */,
 			);
 			path = Satchi;
 			sourceTree = "<group>";
@@ -406,6 +418,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB2409C928D1A5000027671D /* Colors.xcassets in Resources */,
 				EB87250F260CC0C5008AD8E7 /* Preview Assets.xcassets in Resources */,
 				EB87250C260CC0C5008AD8E7 /* Assets.xcassets in Resources */,
 			);
@@ -447,6 +460,7 @@
 				EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */,
 				EB7D2149282C6553006CB703 /* UIApplicationExt.swift in Sources */,
 				EB59DE3E2830051F0043DE33 /* StringExt.swift in Sources */,
+				EBE9440528D26D4A00C1C7A5 /* PaletteEnvironment.swift in Sources */,
 				EBA842E8287589CF0061C338 /* TimeFormatter.swift in Sources */,
 				EB59DE3C283003830043DE33 /* AddTrackView.swift in Sources */,
 				EB05E19526277868002941B6 /* PathAnnotation.swift in Sources */,
@@ -458,9 +472,11 @@
 				EB59DE4428310BF60043DE33 /* AppDelegate.swift in Sources */,
 				EBC69ACE2641B88F0094EAA3 /* TextInputDialog.swift in Sources */,
 				EB02A5B628C694E9004720DA /* ButtonTest.swift in Sources */,
+				EBD542B528D7971400FAE7FA /* AppEnvironment.swift in Sources */,
 				EBB05D772878C02500C9723F /* DistanceFormatter.swift in Sources */,
 				EB352C86278CEA170015AC5A /* TrackViewModel.swift in Sources */,
 				EB7D868F265438AE0088F13E /* TrackTimer.swift in Sources */,
+				EBE9440328D25AE900C1C7A5 /* ColorPaletteExt.swift in Sources */,
 				EB9726602843B0DD00583007 /* DifficultyView.swift in Sources */,
 				EB2F91212624B6500026773D /* TrackMapOverlayView.swift in Sources */,
 				EB87253F260CC158008AD8E7 /* TrackListViewModel.swift in Sources */,

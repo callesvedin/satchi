@@ -7,7 +7,7 @@
 
 import SwiftUI
 struct AddTrackView: View {
-
+    @Environment(\.preferredColorPalette) private var palette
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.managedObjectContext) var managedObjectContext
 
@@ -17,29 +17,33 @@ struct AddTrackView: View {
 
     var body: some View {
         NavigationView {
-            Form {
-                Section {
-                    TextField("Name", text: $name)
-                } footer: {
-                    Text("Name is required")
-                        .font(.caption)
-                        .foregroundColor(name.isBlank ? .red : .clear)
+            ZStack {
+                palette.mainBackground.ignoresSafeArea(.all)
+                Form {
+                    Section {
+                        TextField("Name", text: $name)
+                    }
+                    .listRowBackground(palette.midBackground)
+                    Button {
+                        createNewTrack()
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Text("Save")
+                    }
+                    .foregroundColor(palette.link)
+                    .disabled(name.isBlank)
+                    .listRowBackground(palette.midBackground)
                 }
-                Button {
+
+                .padding(.vertical, 20)
+                .hideScroll()
+                .submitLabel(.done)
+                .onSubmit {
                     createNewTrack()
                     presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Text("Save")
                 }
-                .disabled(name.isBlank)
-
+                .navigationTitle("Add Track")
             }
-            .submitLabel(.done)
-            .onSubmit {
-                createNewTrack()
-                presentationMode.wrappedValue.dismiss()
-            }
-            .navigationTitle("Add Track")
         }
     }
 }

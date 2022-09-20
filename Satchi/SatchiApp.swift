@@ -10,14 +10,19 @@ import os
 
 @main
 struct SatchiApp: App {
-//    let syncMonitor = SyncMonitor()
+    //    let syncMonitor = SyncMonitor()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    //    let colorPalette = Color.Palette.satchiPalette
+
+    @ObservedObject var environment = AppEnvironment.shared
+
     init() {
-        #if DEBUG
+#if DEBUG
         let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory,
                                                         FileManager.SearchPathDomainMask.userDomainMask, true)
         print("Path to device content \(paths[0])")
-        #endif
+#endif
+
     }
 
     var body: some Scene {
@@ -25,7 +30,8 @@ struct SatchiApp: App {
             MainTabView()
                 .environmentObject(CoreDataStack.shared)
                 .environment(\.managedObjectContext, CoreDataStack.shared.context)
-
+                .environment(\.preferredColorPalette,environment.palette)
+                .environmentObject(environment)
         }
     }
 }

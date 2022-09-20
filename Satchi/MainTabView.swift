@@ -8,31 +8,37 @@
 import SwiftUI
 
 struct MainTabView: View {
-
+    @Environment(\.preferredColorPalette) private var palette
     var body: some View {
+        setNavigationColors(background: palette.mainBackground, text: palette.primaryText)
+
+        return
         NavigationView {
             TrackListView()
         }
+        .id(palette.name)
+        .accentColor(palette.link)        
     }
 }
 
-struct MainTabView2: View {
-    var body: some View {
-        TabView {
-            NavigationView {
-                TrackListView()
-            }
-            .tabItem {
-                Image(systemName: "map")
-                Text("Tracks")
-            }
-            Text("Dogs view")
-                .tabItem {
-                    Image(systemName: "list.bullet.rectangle")
-                    Text("Dogs")
-                }
-        }
+fileprivate func setNavigationColors(background:Color, text:Color) {
+    let backgroundColor = UIColor(background)
+
+    let textColor = UIColor(text)
+    //      let textColor = UIColor.green
+    let coloredAppearance = UINavigationBarAppearance()
+    coloredAppearance.configureWithTransparentBackground()
+    coloredAppearance.backgroundColor = backgroundColor
+    coloredAppearance.titleTextAttributes = [.foregroundColor: textColor]
+    coloredAppearance.largeTitleTextAttributes = [.foregroundColor: textColor]
+    if #available(iOS 15.0, *) {
+        UINavigationBar.appearance().compactScrollEdgeAppearance = coloredAppearance
     }
+    UINavigationBar.appearance().standardAppearance = coloredAppearance
+    UINavigationBar.appearance().compactAppearance = coloredAppearance
+    UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
+    UINavigationBar.appearance().tintColor = textColor
+
 }
 
 struct MainTabView_Previews: PreviewProvider {

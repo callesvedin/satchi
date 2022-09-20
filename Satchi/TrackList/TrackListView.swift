@@ -11,71 +11,138 @@ import CoreData
 struct TrackListView: View {
     @EnvironmentObject private var stack: CoreDataStack
     @Environment(\.managedObjectContext) var mocc
-    @StateObject private var model = TrackListViewModel(stack: CoreDataStack.preview)
-    @State var selectedTrack: Track?
-    @State var showEdit = false
+    @EnvironmentObject var environment: AppEnvironment
+    @Environment(\.preferredColorPalette) private var palette
+
+    @StateObject private var model = TrackListViewModel()
     @State private var showMapView = false
 
+    
     var body: some View {
-        Group {
-            if model.isEmpty() {
-                VStack {
-                    Spacer()
-                    Text("You have no tracks.")
-                    Button("Add track") {
+        UITableView.appearance().backgroundColor = .clear
+        UITableViewCell.appearance().backgroundColor = .clear
+        return
+            ZStack {
+                palette.mainBackground.ignoresSafeArea(.all)
+                if model.isEmpty() {
+                    NoTracksView(addTrack: $showMapView)
+                }else{
+                        List {
+                            Section(header:Text("Created tracks")) {
+                                FilteredList(tracks:$model.newTracks)
+                            }.headerProminence(.increased)
+                            Section(header:Text("Started tracks")) {
+                                FilteredList(tracks: $model.startedTracks)
+                            }.headerProminence(.increased)
+                            Section(header:Text("Finished tracks")) {
+                                FilteredList(tracks: $model.finishedTracks)
+                            }.headerProminence(.increased)
+                        }
+                        .hideScroll()
+                        .listStyle(.insetGrouped)
+                    }
+            }
+            .foregroundColor(palette.primaryText)
+            .navigationTitle("Tracks")
+            .toolbar {
+                HStack {
+                    #if DEBUG
+                    HStack {
+                        Button(action: {
+                            environment.palette = Color.Palette.satchi
+                        }, label: {
+                            RoundedRectangle(cornerRadius: 3)
+                                .foregroundColor(Color.Palette.satchi.mainBackground)
+                                .frame(width: 15, height: 15)
+                                .border(.black)
+
+                        })
+                        Button(action: {
+                            environment.palette = Color.Palette.darkNature
+                        }, label: {
+                            RoundedRectangle(cornerRadius: 3)
+                                .foregroundColor(Color.Palette.darkNature.mainBackground)
+                                .frame(width: 15, height: 15)
+                                .border(.black)
+
+                        })
+                        Button(action: {
+                            environment.palette = Color.Palette.cold
+                        }, label: {
+                            RoundedRectangle(cornerRadius: 3)
+                                .foregroundColor(Color.Palette.cold.mainBackground)
+                                .frame(width: 15, height: 15)
+                                .border(.black)
+
+                        })
+                        Button(action: {
+                            environment.palette = Color.Palette.icyGrey
+                        }, label: {
+                            RoundedRectangle(cornerRadius: 3)
+                                .foregroundColor(Color.Palette.icyGrey.mainBackground)
+                                .frame(width: 15, height: 15)
+                                .border(.black)
+
+                        })
+                        Button(action: {
+                            environment.palette = Color.Palette.warm
+                        }, label: {
+                            RoundedRectangle(cornerRadius: 3)
+                                .foregroundColor(Color.Palette.warm.mainBackground)
+                                .frame(width: 15, height: 15)
+                                .border(.black)
+
+                        })
+
+                    }
+                    #endif
+
+                    Button("Add Track") {
                         showMapView.toggle()
                     }
-                    Spacer()
-
-                }
-            }else{
-                ScrollView {
-                    VStack {
-                        FilteredList(tracks:$model.newTracks,
-                                        header: "New tracks",
-                                        selection: $selectedTrack)
-
-                        FilteredList(tracks: $model.startedTracks,
-                                        header: "Created tracks",
-                                        selection: $selectedTrack)
-
-                        FilteredList(tracks: $model.finishedTracks,
-                                        header: "Finished tracks",
-                                        selection: $selectedTrack)
-                    }
-
-                    if selectedTrack != nil {
-                        NavigationLink("", destination: EditTrackView(selectedTrack!), isActive: $showEdit)
-                            .opacity(0)
-                    }
-
+                    .foregroundColor(palette.link)
+                    .padding(0)
                 }
             }
+            .sheet(isPresented: $showMapView, content: {
+                AddTrackView()
+            })
+    }
+}
+
+
+struct HideScrollModifier: ViewModifier {
+
+    func body(content: Content) -> some View {
+        if #available(iOS 16.0, *) {
+            content
+                .scrollContentBackground(Visibility.hidden)
+        } else {
+            content
         }
-        .onChange(of: selectedTrack, perform: {track in
-            print("selected track \(track?.name ?? "-")")
-            if selectedTrack != nil {
-                showEdit = true
+    }
+}
+
+extension View {
+    func hideScroll() -> some View {
+        modifier(HideScrollModifier())
+    }
+}
+
+struct NoTracksView: View {
+    @Environment(\.preferredColorPalette) private var palette
+    @Binding var addTrack:Bool
+
+    var body: some View {
+        VStack {
+            Spacer()
+            Text("You have no tracks.")
+            Button("Add track") {
+                addTrack.toggle()
             }
-        })
-        .onChange(of: mocc, perform: {_ in
-            print("CHANGED!")
-        })
-        .onAppear(){
-            selectedTrack = nil
+            .foregroundColor(palette.link)
+            Spacer()
         }
-        .navigationTitle("Tracks")
-        .toolbar {
-            HStack {
-                Button("Add Track") {
-                    showMapView.toggle()
-                }
-                .padding(0)
-            }
-        }
-        .sheet(isPresented: $showMapView, content: {
-            AddTrackView()
-        })
     }
 }
 
@@ -93,6 +160,7 @@ struct TrackSectionView: View {
     }
 }
 
+
 struct TrackListView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(ColorScheme.allCases, id: \.self) {
@@ -102,5 +170,6 @@ struct TrackListView_Previews: PreviewProvider {
         }
         .environmentObject(CoreDataStack.preview)
         .environment(\.managedObjectContext, CoreDataStack.preview.context)
+        .environment(\.preferredColorPalette, Color.Palette.warm)
     }
 }
