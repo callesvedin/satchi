@@ -198,12 +198,14 @@ final class CoreDataStack: ObservableObject {
 
 // MARK: Save or delete from Core Data
 extension CoreDataStack {
-    func save() {
+     func save() {
         if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                print("Could not save context \(error.localizedDescription)")
+            context.perform {
+                do {
+                    try self.context.save()
+                } catch {
+                    print("Could not save context \(error.localizedDescription)")
+                }
             }
         }
     }
@@ -295,7 +297,5 @@ extension CoreDataStack {
         share[CKShare.SystemFieldKey.title] = track.name
         return share
     }
-
-    
 
 }

@@ -150,8 +150,10 @@ struct EditTrackView: View {
         .navigationBarBackButtonHidden(false)
 
         .onAppear {
-            self.share = stack.getShare(track)
-            print("Share:\(String(describing: self.share))")
+            Task {
+                self.share = stack.getShare(track)
+                print("Share:\(String(describing: self.share))")
+            }
         }
         .onChange(of: viewModel.difficulty, perform: {_ in
             print("Difficulty changed - Saving")

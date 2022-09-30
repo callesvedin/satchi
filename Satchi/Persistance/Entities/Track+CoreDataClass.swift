@@ -8,8 +8,9 @@
 
 import Foundation
 import CoreData
+import CloudKit
 
 @objc(Track)
 public class Track: NSManagedObject {
-
+    var share:CKShare?
 }
