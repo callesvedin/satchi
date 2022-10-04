@@ -50,7 +50,12 @@ struct EditTrackView: View {
                         HStack {
                             Text("**Name:**")
                             TextField("Name", text: $viewModel.trackName)
-                                .background(RoundedRectangle(cornerRadius: 4).fill(palette.midBackground))
+                                .padding(.horizontal,8)
+//                                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+
+                                .background(RoundedRectangle(cornerRadius: 4)
+                                .fill(palette.midBackground))
                                 .focused($nameFocused)
                                 .onChange(of: nameFocused) { isFocused in
                                     if !isFocused {
@@ -58,7 +63,6 @@ struct EditTrackView: View {
                                         save()
                                     }
                                 }
-                                //.textFieldStyle(RoundedBorderTextFieldStyle())
                         }
 
                         Text("**Created:** \(track.created != nil ? TimeFormatter.dateStringFrom(date: track.created) : "-")")
@@ -68,11 +72,10 @@ struct EditTrackView: View {
                             DifficultyView(difficulty: $viewModel.difficulty)
                         }.padding(0)
 
-                        Text("**Length**: \(DistanceFormatter.distanceFor(meters:Double(track.length)))")
+                        Text("**Length:** \(DistanceFormatter.distanceFor(meters:Double(track.length)))")
                         Text("**Time to create:** \(TimeFormatter.shortTimeWithSecondsFor(seconds:track.timeToCreate))")
 
-                    }.padding(.vertical, 4)
-                    Group {
+
                         if track.started != nil {
                             Text("""
                             **Track rested:** \
@@ -80,7 +83,7 @@ struct EditTrackView: View {
                             """
                             )
                         } else {
-                            Text("**Time since created**:\(getTimeSinceCreated())")
+                            Text("**Time since created:** \(getTimeSinceCreated())")
                         }
                         if track.started != nil {
                             Text("**Tracking started:** \(TimeFormatter.dateStringFrom(date: track.started!))")
@@ -131,17 +134,31 @@ struct EditTrackView: View {
                 })
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: TrackMapView(track:track, preview: false )) {
-                    if track.getState() == .trailTracked {
-                        Text("Show Track")
-                    } else if track.getState()  == .notStarted {
-                        Text("Create track")
-                    } else {
-                        Text("Follow Track")
+                ZStack {
+                    NavigationLink(destination: TrackMapView(track:track, preview: false ), isActive:$showMap){}
+                    Button(action:{self.showMap = true}) {
+                        if track.getState() == .trailTracked {
+                            Text("Show Track")
+                        } else if track.getState()  == .notStarted {
+                            Text("Create track")
+                        } else {
+                            Text("Follow Track")
+                        }
+
                     }
+                    .accentColor(palette.link)
                 }
-                .isDetailLink(false)
-                .accentColor(palette.link)
+//                NavigationLink(destination: TrackMapView(track:track, preview: false )) {
+//                    if track.getState() == .trailTracked {
+//                        Text("Show Track")
+//                    } else if track.getState()  == .notStarted {
+//                        Text("Create track")
+//                    } else {
+//                        Text("Follow Track")
+//                    }
+//                }
+//                .isDetailLink(false)
+//                .accentColor(palette.link)
             }
         }
         .background(palette.mainBackground)

@@ -20,9 +20,9 @@ class TrackListViewModel: NSObject, ObservableObject {
         return tracks.isEmpty
     }
 
-    @Published var finishedTracks: [Track] = []
-    @Published var startedTracks: [Track] = []
-    @Published var newTracks: [Track] = []
+    var finishedTracks: [Track] = []
+    var startedTracks: [Track] = []
+    var newTracks: [Track] = []
 
     private var cancellable: AnyCancellable?
 
@@ -52,7 +52,7 @@ class TrackListViewModel: NSObject, ObservableObject {
         self.finishedTracks = tracks.filter({track in track.getState() == .trailTracked})
         self.startedTracks = tracks.filter({track in track.getState() == .trailAdded})
         self.newTracks = tracks.filter({track in track.getState() == .notStarted})
-        self.objectWillChange.send()
+        //        self.objectWillChange.send()
     }
 
 }

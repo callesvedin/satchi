@@ -183,7 +183,7 @@ struct MapView: UIViewRepresentable {
     }
 
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        print("updeateUIView called")
+        print("updateUIView called")
         if mapModel.followUser && !isPreview {
             mapView.userTrackingMode = .follow
         } else {

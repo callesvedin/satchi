@@ -30,7 +30,7 @@ struct TimeFormatter {
         let elapsedTimeFormatter = DateComponentsFormatter()
         elapsedTimeFormatter.unitsStyle = .abbreviated
         elapsedTimeFormatter.zeroFormattingBehavior = .dropAll
-        elapsedTimeFormatter.allowedUnits = [.hour, .minute]
+        elapsedTimeFormatter.allowedUnits = [.day,.hour, .minute]
         return elapsedTimeFormatter
     }()
 

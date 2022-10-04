@@ -12,10 +12,10 @@ struct MainTabView: View {
     var body: some View {
         setNavigationColors(background: palette.mainBackground, text: palette.primaryText)
 
-        return
-        NavigationView {
+        return NavigationView {
             TrackListView()
         }
+        .navigationViewStyle(.stack)
         .id(palette.name)
         .accentColor(palette.link)        
     }
