@@ -134,31 +134,17 @@ struct EditTrackView: View {
                 })
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                ZStack {
-                    NavigationLink(destination: TrackMapView(track:track, preview: false ), isActive:$showMap){}
-                    Button(action:{self.showMap = true}) {
-                        if track.getState() == .trailTracked {
-                            Text("Show Track")
-                        } else if track.getState()  == .notStarted {
-                            Text("Create track")
-                        } else {
-                            Text("Follow Track")
-                        }
-
+                NavigationLink(destination: TrackMapView(track:track, preview: false )) {
+                    if track.getState() == .trailTracked {
+                        Text("Show Track")
+                    } else if track.getState()  == .notStarted {
+                        Text("Create track")
+                    } else {
+                        Text("Follow Track")
                     }
-                    .accentColor(palette.link)
                 }
-//                NavigationLink(destination: TrackMapView(track:track, preview: false )) {
-//                    if track.getState() == .trailTracked {
-//                        Text("Show Track")
-//                    } else if track.getState()  == .notStarted {
-//                        Text("Create track")
-//                    } else {
-//                        Text("Follow Track")
-//                    }
-//                }
-//                .isDetailLink(false)
-//                .accentColor(palette.link)
+                .isDetailLink(false)
+                .accentColor(palette.link)
             }
         }
         .background(palette.mainBackground)
