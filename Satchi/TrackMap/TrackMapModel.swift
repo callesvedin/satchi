@@ -95,9 +95,13 @@ class TrackMapModel: NSObject, ObservableObject {
         self.stack = stack
         self.locationManager = CLLocationManager()
         let isViewing = track.getState() == .trailTracked
-        if isViewing {followUser = false}
         stateMachine = Machine(state: isViewing ? .viewing : .notStarted)
         super.init()
+        if isViewing {
+            followUser = false
+            distance = Double(track.length)
+            timer.secondsElapsed = track.timeToFinish
+        }
 
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation

@@ -21,22 +21,29 @@ struct TrackListView: View {
     var body: some View {
         UITableView.appearance().backgroundColor = .clear
         UITableViewCell.appearance().backgroundColor = .clear
-        return
-        ZStack {
+        return ZStack {
             palette.mainBackground.ignoresSafeArea(.all)
             if model.isEmpty() {
                 NoTracksView(addTrack: $showMapView)
             }else{
                 List {
-                    Section(header:Text("Created tracks")) {
-                        FilteredList(tracks:$model.newTracks)
-                    }.headerProminence(.increased)
-                    Section(header:Text("Started tracks")) {
-                        FilteredList(tracks: $model.startedTracks)
-                    }.headerProminence(.increased)
-                    Section(header:Text("Finished tracks")) {
-                        FilteredList(tracks: $model.finishedTracks)
-                    }.headerProminence(.increased)
+                    if !model.newTracks.isEmpty {
+                        Section(header:Text("Created tracks")) {
+                            FilteredList(tracks:$model.newTracks)
+
+                        }.headerProminence(.increased)
+                    }
+                    if !model.startedTracks.isEmpty {
+                        Section(header:Text("Started tracks")) {
+                            FilteredList(tracks: $model.startedTracks)
+                        }.headerProminence(.increased)
+
+                    }
+                    if !model.finishedTracks.isEmpty {
+                        Section(header:Text("Finished tracks")) {
+                            FilteredList(tracks: $model.finishedTracks)
+                        }.headerProminence(.increased)
+                    }
                 }
                 .hideScroll()
                 .listStyle(.insetGrouped)
