@@ -17,7 +17,6 @@ struct TrackListView: View {
     @StateObject private var model = TrackListViewModel()
     @State private var showMapView = false
 
-
     var body: some View {
         UITableView.appearance().backgroundColor = .clear
         UITableViewCell.appearance().backgroundColor = .clear

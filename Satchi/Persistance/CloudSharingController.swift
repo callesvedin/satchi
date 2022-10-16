@@ -26,9 +26,7 @@ struct CloudSharingView: UIViewControllerRepresentable {
     }
 
     func makeUIViewController(context: Context) -> UICloudSharingController {
-        // 1
         share[CKShare.SystemFieldKey.title] = track.name
-        // 2
         let controller = UICloudSharingController(share: share, container: container)
         controller.modalPresentationStyle = .none
         controller.delegate = context.coordinator

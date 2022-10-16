@@ -14,9 +14,10 @@ struct TrackCellView: View {
     @EnvironmentObject private var stack: CoreDataStack
     @Environment(\.preferredColorPalette) private var palette
 
-
     let deleteFunction: DeleteFunction
     var track: Track
+    var waitingForShare = false
+
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
@@ -61,24 +62,26 @@ struct TrackCellView: View {
         .padding(.vertical, 10)
         .font(.caption)
         .background(palette.midBackground)
+        .overlay {
+            ProgressView().opacity(waitingForShare ? 1:0)
+        }
     }
 
     private let itemFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
-        //    formatter.timeStyle = .medium
         return formatter
     }()
 }
 
- struct TrackCellView_Previews: PreviewProvider {
+struct TrackCellView_Previews: PreviewProvider {
     static var previews: some View {
         let track = CoreDataStack.preview.getTracks()[0]
-//        ForEach(ColorScheme.allCases, id: \.self) {
+        //        ForEach(ColorScheme.allCases, id: \.self) {
         TrackCellView(deleteFunction: {_ in }, track: track).frame(height: 90)
-//            .preferredColorScheme($0)
+        //            .preferredColorScheme($0)
             .environmentObject(CoreDataStack.preview)
-                .environment(\.managedObjectContext, CoreDataStack.preview.context)
-//        }
+            .environment(\.managedObjectContext, CoreDataStack.preview.context)
+        //        }
     }
- }
+}

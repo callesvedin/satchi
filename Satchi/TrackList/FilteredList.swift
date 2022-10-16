@@ -14,19 +14,26 @@ struct FilteredList: View {
 
     @Binding var tracks: [Track]
     @State var editingTrack: Track?
+    @State var sharingTrack: Track?
 
     var body: some View {
         ForEach(tracks) { (track)  in
             NavigationLink(
                 destination:{ EditTrackView(track).environmentObject(stack)},
                 label:{
-                    TrackCellView(deleteFunction: deleteTrackFunction, track: track)
+                    TrackCellView(deleteFunction: deleteTrackFunction, track: track, waitingForShare: track == sharingTrack)
                 }
             )
             .swipeActions(allowsFullSwipe: false) {
                 Button {
                     print("Share!!")
-                    Task{await shareTrack(track)}
+                    sharingTrack = track
+                    Task{
+                        await shareTrack(track)
+                        print("Done creating Share!!")
+                        sharingTrack = nil
+                    }
+                    print("Runnig by share!!")
                 } label: {
                     Label("Share", systemImage: "square.and.arrow.up")
                 }
@@ -58,23 +65,26 @@ struct FilteredList: View {
 
     // There is an almost identical function in EditTrackView. Should be merged and put in CoreDataStack.
     func shareTrack(_ track:Track) async {
-        do {
-            if track.share == nil {
-                track.share = stack.getShare(track)
+        let task = Task {
+            do {
                 if track.share == nil {
-                    let (_, share, _) = try await stack.persistentContainer.share([track], to: nil)
-                    share[CKShare.SystemFieldKey.title] = track.name
-                    print("Created share with url:\(String(describing: share.url))")
+                    track.share = stack.getShare(track)
+                    if track.share == nil {
+                        let (_, share, _) = try await stack.persistentContainer.share([track], to: nil)
+                        share[CKShare.SystemFieldKey.title] = track.name
+                        print("Created share with url:\(String(describing: share.url))")
 
-                    track.share = share
+                        track.share = share
+                    }
                 }
+                if track.share != nil {
+                    editingTrack = track
+                }
+            } catch {
+                print("Failed to create share")
             }
-            if track.share != nil {
-                editingTrack = track
-            }
-        } catch {
-            print("Failed to create share")
         }
+        return await task.value
     }
 
     func deleteTrackFunction(track: Track) {
