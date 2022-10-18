@@ -29,14 +29,12 @@ struct TrackListView: View {
                     if !model.newTracks.isEmpty {
                         Section(header:Text("Created tracks")) {
                             FilteredList(tracks:$model.newTracks)
-
                         }.headerProminence(.increased)
                     }
                     if !model.startedTracks.isEmpty {
                         Section(header:Text("Started tracks")) {
                             FilteredList(tracks: $model.startedTracks)
                         }.headerProminence(.increased)
-
                     }
                     if !model.finishedTracks.isEmpty {
                         Section(header:Text("Finished tracks")) {

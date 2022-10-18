@@ -26,11 +26,9 @@ struct FilteredList: View {
             )
             .swipeActions(allowsFullSwipe: false) {
                 Button {
-                    print("Share!!")
                     sharingTrack = track
                     Task{
                         await shareTrack(track)
-                        print("Done creating Share!!")
                         sharingTrack = nil
                     }
                     print("Runnig by share!!")
@@ -45,9 +43,6 @@ struct FilteredList: View {
                 }
 
             }
-        }
-        .onDelete{offset in
-            deleteTrackFunction(track:tracks[offset.first!])
         }
         .listRowBackground(palette.midBackground)
         .sheet(item: $editingTrack){
