@@ -12,7 +12,6 @@ import os
 struct SatchiApp: App {
     //    let syncMonitor = SyncMonitor()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    //    let colorPalette = Color.Palette.satchiPalette
 
     @ObservedObject var environment = AppEnvironment.shared
 

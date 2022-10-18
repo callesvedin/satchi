@@ -13,7 +13,9 @@ import CoreLocation
 extension Track {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Track> {
-        return NSFetchRequest<Track>(entityName: "Track")
+        let fetchRequest = NSFetchRequest<Track>(entityName: "Track")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Track.created, ascending: true)]
+        return fetchRequest
     }
 
     @NSManaged public var comments: String?
@@ -45,8 +47,25 @@ extension Track {
             return .notStarted
         }
     }
+
+    @objc var state:String {
+        get {
+            return getState().text()
+        }
+    }
 }
 
-public enum CurrentState {
+public enum CurrentState:String {
     case notStarted, trailAdded, trailTracked
+    func text() -> String {
+        switch self {
+        case .notStarted:
+            return "Created tracks"
+        case .trailAdded:
+            return "Started tracks"
+        case .trailTracked:
+            return "Finished tracks"
+        }
+
+    }
 }

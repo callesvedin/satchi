@@ -58,6 +58,7 @@ struct FilteredList: View {
         }
     }
 
+    
     // There is an almost identical function in EditTrackView. Should be merged and put in CoreDataStack.
     func shareTrack(_ track:Track) async {
         let task = Task {

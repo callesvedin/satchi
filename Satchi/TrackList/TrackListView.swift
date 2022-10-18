@@ -7,43 +7,81 @@
 
 import SwiftUI
 import CoreData
+import CloudKit
 
 struct TrackListView: View {
     @EnvironmentObject private var stack: CoreDataStack
     @Environment(\.managedObjectContext) var mocc
     @EnvironmentObject var environment: AppEnvironment
     @Environment(\.preferredColorPalette) private var palette
+    @SectionedFetchRequest(
+        sectionIdentifier: \.state,
+        sortDescriptors: [SortDescriptor(\.created, order: .reverse)],
+        animation: Animation.default
+    )
 
-    @StateObject private var model = TrackListViewModel()
+    private var tracks: SectionedFetchResults<String, Track>
     @State private var showMapView = false
+    @State var editingTrack: Track?
+    @State var sharingTrack: Track?
 
     var body: some View {
         UITableView.appearance().backgroundColor = .clear
         UITableViewCell.appearance().backgroundColor = .clear
         return ZStack {
             palette.mainBackground.ignoresSafeArea(.all)
-            if model.isEmpty() {
+            if tracks.isEmpty {
                 NoTracksView(addTrack: $showMapView)
             }else{
                 List {
-                    if !model.newTracks.isEmpty {
-                        Section(header:Text("Created tracks")) {
-                            FilteredList(tracks:$model.newTracks)
-                        }.headerProminence(.increased)
+                    ForEach(tracks) { state in
+                        Section(header: Text(state.id)) {
+                            ForEach(state,id: \.id) { track in
+                                NavigationLink(
+                                    destination:{ EditTrackView(track).environmentObject(stack)},
+                                    label:{
+                                        TrackCellView(deleteFunction: deleteTrackFunction, track: track, waitingForShare: track.id == sharingTrack?.id)
+                                    }
+                                )
+                                .swipeActions(allowsFullSwipe: false) {
+                                    Button {
+                                        sharingTrack = track
+                                        Task{
+                                            await shareTrack(track)
+                                            sharingTrack = nil
+                                        }
+                                        print("Runnig by share!!")
+                                    } label: {
+                                        Label("Share", systemImage: "square.and.arrow.up")
+                                    }
+                                    .tint(.green)
+                                    Button(role: .destructive) {
+                                        deleteTrackFunction(track:track)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash.fill")
+                                    }
+
+                                }
+
+                            }
+                        }
+                        .headerProminence(.increased)
                     }
-                    if !model.startedTracks.isEmpty {
-                        Section(header:Text("Started tracks")) {
-                            FilteredList(tracks: $model.startedTracks)
-                        }.headerProminence(.increased)
-                    }
-                    if !model.finishedTracks.isEmpty {
-                        Section(header:Text("Finished tracks")) {
-                            FilteredList(tracks: $model.finishedTracks)
-                        }.headerProminence(.increased)
-                    }
+                    .listRowBackground(palette.midBackground)
+                    .hideScroll()
+                    .listStyle(.insetGrouped)
                 }
-                .hideScroll()
-                .listStyle(.insetGrouped)
+            }
+        }
+        .sheet(item: $editingTrack){
+            editingTrack = nil
+        } content: { tr in
+            if let share = tr.share {
+                CloudSharingView(
+                    share: share,
+                    container: stack.ckContainer,
+                    track: tr
+                )
             }
         }
         .foregroundColor(palette.primaryText)
@@ -113,7 +151,37 @@ struct TrackListView: View {
             AddTrackView()
         })
     }
+
+    func deleteTrackFunction(track: Track) {
+        stack.delete(track)
+    }
+
+
+    // There is an almost identical function in EditTrackView. Should be merged and put in CoreDataStack.
+    func shareTrack(_ track:Track) async {
+        let task = Task {
+            do {
+                if track.share == nil {
+                    track.share = stack.getShare(track)
+                    if track.share == nil {
+                        let (_, share, _) = try await stack.persistentContainer.share([track], to: nil)
+                        share[CKShare.SystemFieldKey.title] = track.name
+                        print("Created share with url:\(String(describing: share.url))")
+
+                        track.share = share
+                    }
+                }
+                if track.share != nil {
+                    editingTrack = track
+                }
+            } catch {
+                print("Failed to create share")
+            }
+        }
+        return await task.value
+    }
 }
+
 
 
 struct HideScrollModifier: ViewModifier {
