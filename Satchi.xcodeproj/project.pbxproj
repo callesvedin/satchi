@@ -40,8 +40,6 @@
 		EB87250F260CC0C5008AD8E7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB87250E260CC0C5008AD8E7 /* Preview Assets.xcassets */; };
 		EB87251F260CC0C5008AD8E7 /* SatchiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87251E260CC0C5008AD8E7 /* SatchiTests.swift */; };
 		EB87252A260CC0C5008AD8E7 /* SatchiUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB872529260CC0C5008AD8E7 /* SatchiUITests.swift */; };
-		EB87253F260CC158008AD8E7 /* TrackListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */; };
-		EB872540260CC158008AD8E7 /* TrackListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */; };
 		EB8D3FD7284567B800D12C38 /* Track+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59DE3F283045A60043DE33 /* Track+CoreDataProperties.swift */; };
 		EB8D3FD8284567BE00D12C38 /* Track+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB352C8A278CEB310015AC5A /* Track+CoreDataClass.swift */; };
 		EB8D3FD9284567D700D12C38 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D2146282C62BF006CB703 /* CoreDataStack.swift */; };
@@ -113,10 +111,8 @@
 		EB872525260CC0C5008AD8E7 /* SatchiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SatchiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB872529260CC0C5008AD8E7 /* SatchiUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SatchiUITests.swift; sourceTree = "<group>"; };
 		EB87252B260CC0C5008AD8E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListViewModel.swift; sourceTree = "<group>"; };
 		EB97265F2843B0DD00583007 /* DifficultyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DifficultyView.swift; sourceTree = "<group>"; };
 		EBA842C428702F0C0061C338 /* SyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMonitor.swift; sourceTree = "<group>"; };
-		EBA842E228756AA60061C338 /* TrackListView-New.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrackListView-New.swift"; sourceTree = "<group>"; };
 		EBA842E7287589CF0061C338 /* TimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormatter.swift; sourceTree = "<group>"; };
 		EBB05D762878C02500C9723F /* DistanceFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceFormatter.swift; sourceTree = "<group>"; };
 		EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputDialog.swift; sourceTree = "<group>"; };
@@ -270,10 +266,8 @@
 			isa = PBXGroup;
 			children = (
 				EB872509260CC0C4008AD8E7 /* TrackListView.swift */,
-				EB87253E260CC158008AD8E7 /* TrackListViewModel.swift */,
 				EB5688DF269C304000AF9AB1 /* TrackCellView.swift */,
 				EB64A3C5287CAD7C00E1BEA6 /* FilteredList.swift */,
-				EBA842E228756AA60061C338 /* TrackListView-New.swift */,
 			);
 			path = TrackList;
 			sourceTree = "<group>";
@@ -479,7 +473,6 @@
 				EBE9440328D25AE900C1C7A5 /* ColorPaletteExt.swift in Sources */,
 				EB9726602843B0DD00583007 /* DifficultyView.swift in Sources */,
 				EB2F91212624B6500026773D /* TrackMapOverlayView.swift in Sources */,
-				EB87253F260CC158008AD8E7 /* TrackListViewModel.swift in Sources */,
 				EBA842C528702F0C0061C338 /* SyncMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -489,7 +482,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB8D3FD9284567D700D12C38 /* CoreDataStack.swift in Sources */,
-				EB872540260CC158008AD8E7 /* TrackListViewModel.swift in Sources */,
 				EB8D3FD8284567BE00D12C38 /* Track+CoreDataClass.swift in Sources */,
 				EB87251F260CC0C5008AD8E7 /* SatchiTests.swift in Sources */,
 				EB8D3FD7284567B800D12C38 /* Track+CoreDataProperties.swift in Sources */,

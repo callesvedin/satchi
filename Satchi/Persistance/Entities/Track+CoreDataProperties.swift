@@ -37,6 +37,7 @@ extension Track: Identifiable {
 
 }
 
+// MARK: State
 extension Track {
     public func getState() -> CurrentState {
         if timeToFinish > 0 {
@@ -47,25 +48,44 @@ extension Track {
             return .notStarted
         }
     }
-
-    @objc var state:String {
-        get {
-            return getState().text()
-        }
-    }
 }
 
 public enum CurrentState:String {
     case notStarted, trailAdded, trailTracked
-    func text() -> String {
-        switch self {
-        case .notStarted:
-            return "Created tracks"
-        case .trailAdded:
-            return "Started tracks"
-        case .trailTracked:
-            return "Finished tracks"
-        }
+}
 
+
+// MARK: State to section
+extension Track {
+    // This is for use in the TrackListView. Has to get a sort order and be @objc compatible :-/
+    @objc var stateSection:StateSection {
+        get {
+            switch getState() {
+            case .notStarted:
+                return StateSection.createdState
+            case .trailAdded:
+                return StateSection.startedState
+            case .trailTracked:
+                return StateSection.finishedState
+            }
+        }
     }
 }
+
+
+public class StateSection:NSObject
+{
+    static let createdState = StateSection(text: "Created tracks", sortOrder: 0)
+    static let startedState = StateSection(text: "Started tracks", sortOrder: 1)
+    static let finishedState = StateSection(text: "Finished tracks", sortOrder: 2)
+
+    let text:String
+    let sortOrder:Int
+    init(text:String, sortOrder:Int) {
+        self.text=text
+        self.sortOrder=sortOrder
+    }
+}
+
+
+

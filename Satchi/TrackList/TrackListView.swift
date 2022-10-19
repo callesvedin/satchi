@@ -15,17 +15,20 @@ struct TrackListView: View {
     @EnvironmentObject var environment: AppEnvironment
     @Environment(\.preferredColorPalette) private var palette
     @SectionedFetchRequest(
-        sectionIdentifier: \.state,
+        sectionIdentifier: \.stateSection,
         sortDescriptors: [SortDescriptor(\.created, order: .reverse)],
         animation: Animation.default
     )
 
-    private var tracks: SectionedFetchResults<String, Track>
+    private var tracks: SectionedFetchResults<StateSection, Track>
     @State private var showMapView = false
     @State var editingTrack: Track?
     @State var sharingTrack: Track?
 
     var body: some View {
+        let sortedSections = tracks.sorted(by: {s1, s2 in
+            return s1.id.sortOrder < s2.id.sortOrder
+        })
         UITableView.appearance().backgroundColor = .clear
         UITableViewCell.appearance().backgroundColor = .clear
         return ZStack {
@@ -34,9 +37,9 @@ struct TrackListView: View {
                 NoTracksView(addTrack: $showMapView)
             }else{
                 List {
-                    ForEach(tracks) { state in
-                        Section(header: Text(state.id)) {
-                            ForEach(state,id: \.id) { track in
+                    ForEach(sortedSections) { section in
+                        Section(header: Text(section.id.text)) {
+                            ForEach(section,id: \.id) { track in
                                 NavigationLink(
                                     destination:{ EditTrackView(track).environmentObject(stack)},
                                     label:{
