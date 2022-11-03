@@ -180,12 +180,14 @@ class TrackMapModel: NSObject, ObservableObject {
             track.timeToCreate = timer.secondsElapsed
             track.length = Int32(distance)
             track.created = Date()
-            stack?.save()
+            track.state = track.getState().rawValue
+//            stack?.save()
         case .trailAdded:
             track.trackPath = trackPath
             track.timeToFinish = timer.secondsElapsed
             track.started = trackingStarted
-            stack?.save()
+            track.state = track.getState().rawValue
+//            stack?.save()
         default:
             print("Unknown state when stopRunning is called \(track.getState())")
         }

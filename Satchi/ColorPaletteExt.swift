@@ -72,7 +72,7 @@ private extension Color {
 
 
 private struct ColorPaletteKey: EnvironmentKey {
-    static let defaultValue = Color.Palette.satchi
+    static let defaultValue = Color.Palette.cold
 }
 
 extension EnvironmentValues {

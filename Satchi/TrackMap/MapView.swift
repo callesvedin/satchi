@@ -11,7 +11,7 @@ struct MapView: UIViewRepresentable {
     typealias UIViewType = MKMapView
 
     @ObservedObject var mapModel: TrackMapModel
-    private var isPreview: Bool
+
     private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: MapView.self)
@@ -22,9 +22,8 @@ struct MapView: UIViewRepresentable {
     private var trackStartAnnotation:MKAnnotation?
     private var trackStopAnnotation:MKAnnotation?
 
-    init(mapModel: TrackMapModel, isPreview:Bool) {
+    init(mapModel: TrackMapModel) {
         self.mapModel = mapModel
-        self.isPreview = isPreview
     }
 
     func makeCoordinator() -> MapViewCoordinator {
@@ -184,7 +183,7 @@ struct MapView: UIViewRepresentable {
 
     func updateUIView(_ mapView: MKMapView, context: Context) {
         print("updateUIView called")
-        if mapModel.followUser && !isPreview {
+        if mapModel.followUser {
             mapView.userTrackingMode = .follow
         } else {
             mapView.userTrackingMode = .none
@@ -206,7 +205,7 @@ struct MapView: UIViewRepresentable {
             mapView.addOverlay(polyline)
         }
 
-        if (mapModel.stateMachine.state == .viewing || isPreview), let first = mapView.overlays.first {
+        if mapModel.stateMachine.state == .viewing, let first = mapView.overlays.first {
             let rect = mapView.overlays.reduce(first.boundingMapRect, {$0.union($1.boundingMapRect)})
             mapView.showsUserLocation = true
             mapView.setVisibleMapRect(rect,

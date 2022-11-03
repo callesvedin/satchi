@@ -14,14 +14,12 @@ struct TrackMapView: View {
     @EnvironmentObject private var stack: CoreDataStack
     @StateObject public var mapModel: TrackMapModel
 
-    var preview = false
-
     private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: TrackMapView.self)
     )
 
-    init(track: Track, preview: Bool = false, previewStack:Bool = false) {
+    init(track: Track, preview: Bool = false) {
 
         _mapModel = StateObject(wrappedValue: {
             let model = TrackMapModel(track: track,
@@ -29,24 +27,19 @@ struct TrackMapView: View {
             return model
 
         }())
-
-        self.preview = preview
+        
     }
 
     var body: some View {
         ZStack {
-            MapView(mapModel: mapModel, isPreview: preview)
-            if !preview {
-                TrackMapOverlayView(mapModel: mapModel)
-            }
+            MapView(mapModel: mapModel)
+            TrackMapOverlayView(mapModel: mapModel)
         }
         .navigationBarHidden(true)
         .ignoresSafeArea()
         .onChange(of: mapModel.done) { value in
             print("Map model done")
-            if preview == false {
-                presentationMode.wrappedValue.dismiss()
-            }
+            presentationMode.wrappedValue.dismiss()
         }
     }
 }
@@ -57,7 +50,7 @@ struct TrackMapView_Previews: PreviewProvider {
         let stack = CoreDataStack.preview
 
         NavigationView {
-            TrackMapView(track: stack.getTracks()[0], preview: true)
+            TrackMapView(track: stack.getTracks()[0])
                 .environmentObject(CoreDataStack.preview)
         }
     }

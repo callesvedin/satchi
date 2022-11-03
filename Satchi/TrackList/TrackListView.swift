@@ -15,20 +15,20 @@ struct TrackListView: View {
     @EnvironmentObject var environment: AppEnvironment
     @Environment(\.preferredColorPalette) private var palette
     @SectionedFetchRequest(
-        sectionIdentifier: \.stateSection,
-        sortDescriptors: [SortDescriptor(\.created, order: .reverse)],
+        sectionIdentifier: \Track.state,
+        sortDescriptors: [
+            SortDescriptor(\Track.state, order: .forward),
+            SortDescriptor(\Track.name, order: .forward)
+        ],
         animation: Animation.default
     )
 
-    private var tracks: SectionedFetchResults<StateSection, Track>
+    private var tracks: SectionedFetchResults<Int16, Track>
     @State private var showMapView = false
     @State var editingTrack: Track?
     @State var sharingTrack: Track?
 
     var body: some View {
-        let sortedSections = tracks.sorted(by: {s1, s2 in
-            return s1.id.sortOrder < s2.id.sortOrder
-        })
         UITableView.appearance().backgroundColor = .clear
         UITableViewCell.appearance().backgroundColor = .clear
         return ZStack {
@@ -37,8 +37,8 @@ struct TrackListView: View {
                 NoTracksView(addTrack: $showMapView)
             }else{
                 List {
-                    ForEach(sortedSections) { section in
-                        Section(header: Text(section.id.text)) {
+                    ForEach(tracks) { section in
+                        Section(header: Text(TrackState(rawValue: section.id)!.text())) {
                             ForEach(section,id: \.id) { track in
                                 NavigationLink(
                                     destination:{ EditTrackView(track).environmentObject(stack)},
@@ -72,8 +72,9 @@ struct TrackListView: View {
                     }
                     .listRowBackground(palette.midBackground)
                     .hideScroll()
-                    .listStyle(.insetGrouped)
+
                 }
+                .listStyle(.automatic)
             }
         }
         .sheet(item: $editingTrack){
@@ -96,6 +97,7 @@ struct TrackListView: View {
                 HStack {
                     Button(action: {
                         environment.palette = Color.Palette.satchi
+                        print("Changed color palette to \(environment.palette)")
                     }, label: {
                         RoundedRectangle(cornerRadius: 3)
                             .foregroundColor(Color.Palette.satchi.mainBackground)
@@ -105,6 +107,7 @@ struct TrackListView: View {
                     })
                     Button(action: {
                         environment.palette = Color.Palette.darkNature
+                        print("Changed color palette to \(environment.palette)")
                     }, label: {
                         RoundedRectangle(cornerRadius: 3)
                             .foregroundColor(Color.Palette.darkNature.mainBackground)
@@ -114,6 +117,7 @@ struct TrackListView: View {
                     })
                     Button(action: {
                         environment.palette = Color.Palette.cold
+                        print("Changed color palette to \(environment.palette)")
                     }, label: {
                         RoundedRectangle(cornerRadius: 3)
                             .foregroundColor(Color.Palette.cold.mainBackground)
@@ -123,6 +127,7 @@ struct TrackListView: View {
                     })
                     Button(action: {
                         environment.palette = Color.Palette.icyGrey
+                        print("Changed color palette to \(environment.palette)")
                     }, label: {
                         RoundedRectangle(cornerRadius: 3)
                             .foregroundColor(Color.Palette.icyGrey.mainBackground)
@@ -132,6 +137,7 @@ struct TrackListView: View {
                     })
                     Button(action: {
                         environment.palette = Color.Palette.warm
+                        print("Changed color palette to \(environment.palette)")
                     }, label: {
                         RoundedRectangle(cornerRadius: 3)
                             .foregroundColor(Color.Palette.warm.mainBackground)
@@ -149,6 +155,9 @@ struct TrackListView: View {
                 .foregroundColor(palette.link)
                 .padding(0)
             }
+        }
+        .onAppear() {
+            stack.save()
         }
         .sheet(isPresented: $showMapView, content: {
             AddTrackView()
@@ -238,15 +247,22 @@ struct TrackSectionView: View {
 
 
 struct TrackListView_Previews: PreviewProvider {
+    
     static var previews: some View {
-        ForEach(ColorScheme.allCases, id: \.self) {
+        var environment = AppEnvironment.shared
+        return
+//        ForEach(ColorScheme.allCases, id: \.self) {
             NavigationView {
                 TrackListView()
-            }.preferredColorScheme($0)
-        }
+            }
+//            .preferredColorScheme($0)
+//        }
         .environmentObject(CoreDataStack.preview)
         .environment(\.managedObjectContext, CoreDataStack.preview.context)
-        .environment(\.preferredColorPalette, Color.Palette.warm)
+        .environment(\.preferredColorPalette,environment.palette)
+        .environmentObject(environment)
+
+
     }
 }
 

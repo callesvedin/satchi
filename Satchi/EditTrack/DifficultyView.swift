@@ -16,7 +16,7 @@ struct DifficultyView: View {
     }
 
     private var difficultyView: some View {
-        HStack(spacing: 5) {
+        HStack(spacing: 2) {
             ForEach(1..<6) { index in
                 Image(systemName: "pawprint.fill")
                     .foregroundColor(difficulty >= index ? .red : .gray)

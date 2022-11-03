@@ -120,6 +120,7 @@ final class CoreDataStack: ObservableObject {
             newTrack.created = Date(timeIntervalSinceNow: TimeInterval(-60*60*24+365))
             newTrack.difficulty = 4
             newTrack.image = testImage
+            newTrack.state = newTrack.getState().rawValue
             newTrack.laidPath = [
                 CLLocation(latitude: 56.65418, longitude: 16.32639),
                 CLLocation(latitude: 58.41190, longitude: 15.61221)
@@ -146,6 +147,7 @@ final class CoreDataStack: ObservableObject {
                 CLLocation(latitude: 56.65418, longitude: 16.32639),
                 CLLocation(latitude: 58.20236, longitude: 15.99773)
             ]
+            newTrack.state = newTrack.getState().rawValue
 
         }
 
@@ -168,6 +170,7 @@ final class CoreDataStack: ObservableObject {
             CLLocation(latitude: 56.65418, longitude: 16.32639),
             CLLocation(latitude: 58.20236, longitude: 15.99773)
         ]
+        newTrack.state = newTrack.getState().rawValue
 
         let newTrack2 = Track(context: context)
         newTrack2.id = UUID()
@@ -186,6 +189,7 @@ final class CoreDataStack: ObservableObject {
             CLLocation(latitude: 56.65418, longitude: 16.32639),
             CLLocation(latitude: 58.20236, longitude: 15.99773)
         ]
+        newTrack2.state = newTrack.getState().rawValue
     }
 
     private var inMemory = false

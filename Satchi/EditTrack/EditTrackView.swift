@@ -180,7 +180,8 @@ struct EditTrackView: View {
             track.name = viewModel.trackName
             track.comments = viewModel.comments
             track.difficulty = viewModel.difficulty
-            stack.save()
+            track.state = track.getState().rawValue
+//            stack.save()
         }
     }
 }

@@ -13,7 +13,7 @@ final class AppEnvironment: ObservableObject {
 
     @Published var palette: Color.Palette
 
-    init(palette: Color.Palette = Color.Palette.satchi) {
+    init(palette: Color.Palette = Color.Palette.cold) {
         self.palette = palette
     }
 }

@@ -19,7 +19,7 @@ struct TrackCellView: View {
     var waitingForShare = false
 
     let columns = [
-        GridItem(.flexible()),
+        GridItem(.flexible(maximum:140)),
         GridItem(.flexible())
     ]
 
@@ -36,7 +36,6 @@ struct TrackCellView: View {
                 HStack {
                     Image(systemName: "flag.fill").foregroundColor(.green)
                     Text("\(track.created != nil ? itemFormatter.string(from: track.created!) : "--/--/--" )")
-                    Spacer()
                 }
                 Label("\(DistanceFormatter.distanceFor(meters: Double(track.length)))", systemImage: "arrow.left.and.right")
 
@@ -47,9 +46,12 @@ struct TrackCellView: View {
                     } else {
                         Text("--/--/--")
                     }
-                    Spacer()
                 }
                 Text("Difficulty:\(track.difficulty)")
+//                HStack {
+////                    Text("Difficulty:")
+//                    DifficultyView(difficulty: .constant(track.difficulty))
+//                }
                 if stack.isShared(object: track) {
                     Image(systemName: "person.3.fill")
                         .resizable()
@@ -78,10 +80,14 @@ struct TrackCellView_Previews: PreviewProvider {
     static var previews: some View {
         let track = CoreDataStack.preview.getTracks()[0]
         //        ForEach(ColorScheme.allCases, id: \.self) {
-        TrackCellView(deleteFunction: {_ in }, track: track).frame(height: 90)
+        TrackCellView(deleteFunction: {_ in }, track: track)
+            .frame(height: 90)
+            .previewDevice(PreviewDevice(rawValue: "iPhone 9"))
+            .previewDisplayName("iPhone 9")
         //            .preferredColorScheme($0)
             .environmentObject(CoreDataStack.preview)
             .environment(\.managedObjectContext, CoreDataStack.preview.context)
         //        }
+
     }
 }

@@ -19,6 +19,6 @@ class TrackViewModel: ObservableObject {
     init() {}
 }
 
-enum TrackState {
+enum ModelTrackState {
     case notCreated, created, tracked
 }

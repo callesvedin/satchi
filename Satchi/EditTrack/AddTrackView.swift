@@ -55,8 +55,6 @@ extension AddTrackView {
         let track = Track(context: managedObjectContext)
         track.id = UUID()
         track.name = name
-
-        stack.save()
     }
 }
 

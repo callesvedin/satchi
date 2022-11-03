@@ -14,7 +14,6 @@ extension Track {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Track> {
         let fetchRequest = NSFetchRequest<Track>(entityName: "Track")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Track.created, ascending: true)]
         return fetchRequest
     }
 
@@ -30,6 +29,7 @@ extension Track {
     @NSManaged public var timeToCreate: Double
     @NSManaged public var timeToFinish: Double
     @NSManaged public var trackPath: [CLLocation]?
+    @NSManaged public var state: Int16
 
 }
 
@@ -39,7 +39,7 @@ extension Track: Identifiable {
 
 // MARK: State
 extension Track {
-    public func getState() -> CurrentState {
+    public func getState() -> TrackState {
         if timeToFinish > 0 {
             return .trailTracked
         } else if timeToCreate > 0 {
@@ -50,42 +50,52 @@ extension Track {
     }
 }
 
-public enum CurrentState:String {
+
+@objc
+public enum TrackState:Int16 {
     case notStarted, trailAdded, trailTracked
-}
 
-
-// MARK: State to section
-extension Track {
-    // This is for use in the TrackListView. Has to get a sort order and be @objc compatible :-/
-    @objc var stateSection:StateSection {
-        get {
-            switch getState() {
-            case .notStarted:
-                return StateSection.createdState
-            case .trailAdded:
-                return StateSection.startedState
-            case .trailTracked:
-                return StateSection.finishedState
-            }
+    func text() -> String {
+        switch self {
+        case .notStarted:
+            return "Created tracks"
+        case .trailAdded:
+            return "Started tracks"
+        case .trailTracked:
+            return "Finished tracks"
         }
+
     }
 }
 
-
-public class StateSection:NSObject
-{
-    static let createdState = StateSection(text: "Created tracks", sortOrder: 0)
-    static let startedState = StateSection(text: "Started tracks", sortOrder: 1)
-    static let finishedState = StateSection(text: "Finished tracks", sortOrder: 2)
-
-    let text:String
-    let sortOrder:Int
-    init(text:String, sortOrder:Int) {
-        self.text=text
-        self.sortOrder=sortOrder
-    }
-}
+//
+//
+//public class StateSection:NSObject
+//{
+//    static let createdState = StateSection(text: "Created tracks", sortOrder: 0)
+//    static let startedState = StateSection(text: "Started tracks", sortOrder: 1)
+//    static let finishedState = StateSection(text: "Finished tracks", sortOrder: 2)
+//
+//    let text:String
+//    let sortOrder:Int
+//    init(text:String, sortOrder:Int) {
+//        self.text=text
+//        self.sortOrder=sortOrder
+//    }
+//
+//    static func sectionNameFor(order : Int) -> String {
+//        switch order {
+//        case 0:
+//            return createdState.text
+//        case 1:
+//            return startedState.text
+//        case 2:
+//            return finishedState.text
+//        default:
+//            return ""
+//        }
+//    }
+//}
 
 
 
