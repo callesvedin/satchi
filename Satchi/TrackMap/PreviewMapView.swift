@@ -178,7 +178,6 @@ struct PreviewMapView: UIViewRepresentable {
     }
 
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        print("Preview updateUIView called")
 
         updateAnnotations(mapView: mapView)
 

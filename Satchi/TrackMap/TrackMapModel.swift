@@ -180,17 +180,18 @@ class TrackMapModel: NSObject, ObservableObject {
             track.timeToCreate = timer.secondsElapsed
             track.length = Int32(distance)
             track.created = Date()
-            track.state = track.getState().rawValue
+            track.state = track.getState().rawValue // TODO: Clean up
 //            stack?.save()
         case .trailAdded:
             track.trackPath = trackPath
             track.timeToFinish = timer.secondsElapsed
             track.started = trackingStarted
-            track.state = track.getState().rawValue
+            track.state = track.getState().rawValue // TODO: Clean up
 //            stack?.save()
         default:
             print("Unknown state when stopRunning is called \(track.getState())")
         }
+        self.stopTracking()
         self.done = true
     }
 
@@ -265,7 +266,6 @@ class TrackMapModel: NSObject, ObservableObject {
 
 extension TrackMapModel: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("locationManager:_:didUpdateLocations called")
         if stateMachine.state == .running && track.getState() == .notStarted { // If we want to continue updating while paused we have to add .paused state here but we then have to save the location where we paused...
             laidPath.append(contentsOf: locations)
         } else if stateMachine.state == .running && track.getState() == .trailAdded { // If we want to continue updating while paused we have to add .paused state here but we then have to save the location where we paused...

@@ -6,19 +6,64 @@
 //
 
 import Foundation
+import CoreLocation
+import CoreData
+import CloudKit
 
-@MainActor
-class TrackViewModel: ObservableObject {
-
-    @Published var difficulty: Int16 = 1
+//@MainActor
+class TrackViewModel: ObservableObject, Identifiable {
+    var objectID: NSManagedObjectID
+    var share: CKShare?
+    var id: UUID?
     @Published var showTrackView = false
     @Published var editName = false
+
+    @Published var difficulty: Int16 = 1
     @Published var trackName: String = ""
     @Published var comments = ""
+    @Published var created: Date?
+    @Published var laidPath: [CLLocation]?
+    @Published var trackPath: [CLLocation]?
+    @Published var length: Int32
+    @Published var started: Date?
+    @Published var timeToCreate: Double
+    @Published var timeToFinish: Double
+    var state: Int16 {
+        get {
+            return getState().rawValue
+        }
+    }
 
-    init() {}
+
+    init(_ track:Track) {
+        id = track.id
+        objectID = track.objectID
+        trackName = track.name  ?? ""
+        comments = track.comments ?? ""
+        difficulty = max(1, track.difficulty)
+        created = track.created
+        laidPath = track.laidPath
+        trackPath = track.trackPath
+        length = track.length
+        started = track.started
+        timeToCreate = track.timeToCreate
+        timeToFinish = track.timeToFinish
+    }
 }
 
-enum ModelTrackState {
-    case notCreated, created, tracked
+extension TrackViewModel {
+    public func getState() -> TrackState {
+        if timeToFinish > 0 {
+            return .trailTracked
+        } else if timeToCreate > 0 {
+            return .trailAdded
+        } else {
+            return .notStarted
+        }
+    }
+
 }
+
+//enum ModelTrackState {
+//    case notCreated, created, tracked
+//}

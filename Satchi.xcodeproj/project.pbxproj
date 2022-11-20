@@ -27,7 +27,6 @@
 		EB59DE4428310BF60043DE33 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59DE4328310BF60043DE33 /* AppDelegate.swift */; };
 		EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE225261CBA3D00D56711 /* TrackMapView.swift */; };
 		EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */; };
-		EB64A3C6287CAD7C00E1BEA6 /* FilteredList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB64A3C5287CAD7C00E1BEA6 /* FilteredList.swift */; };
 		EB6DC7B32882BA3D009E788A /* SwiftState in Frameworks */ = {isa = PBXBuildFile; productRef = EB6DC7B22882BA3D009E788A /* SwiftState */; };
 		EB7D2145282C6181006CB703 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB7D2144282C6181006CB703 /* CloudKit.framework */; };
 		EB7D2147282C62BF006CB703 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D2146282C62BF006CB703 /* CoreDataStack.swift */; };
@@ -48,6 +47,8 @@
 		EBA842E8287589CF0061C338 /* TimeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA842E7287589CF0061C338 /* TimeFormatter.swift */; };
 		EBB05D772878C02500C9723F /* DistanceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB05D762878C02500C9723F /* DistanceFormatter.swift */; };
 		EBC69ACE2641B88F0094EAA3 /* TextInputDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */; };
+		EBCB056D2926185700C27588 /* CoreDataStack+Sharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCB056C2926185700C27588 /* CoreDataStack+Sharing.swift */; };
+		EBD117BA2919AEA50067402E /* View+Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD117B92919AEA50067402E /* View+Navigation.swift */; };
 		EBD13A55261AF3760080C4FE /* EditTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A54261AF3760080C4FE /* EditTrackView.swift */; };
 		EBD542B528D7971400FAE7FA /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD542B428D7971400FAE7FA /* AppEnvironment.swift */; };
 		EBE9440328D25AE900C1C7A5 /* ColorPaletteExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE9440228D25AE900C1C7A5 /* ColorPaletteExt.swift */; };
@@ -92,7 +93,6 @@
 		EB5BDF0F28181E61009DF497 /* Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Notes.md; sourceTree = "<group>"; };
 		EB5CE225261CBA3D00D56711 /* TrackMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapView.swift; sourceTree = "<group>"; };
 		EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapModel.swift; sourceTree = "<group>"; };
-		EB64A3C5287CAD7C00E1BEA6 /* FilteredList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredList.swift; sourceTree = "<group>"; };
 		EB7D2142282C617E006CB703 /* Satchi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Satchi.entitlements; sourceTree = "<group>"; };
 		EB7D2144282C6181006CB703 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		EB7D2146282C62BF006CB703 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -116,7 +116,9 @@
 		EBA842E7287589CF0061C338 /* TimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormatter.swift; sourceTree = "<group>"; };
 		EBB05D762878C02500C9723F /* DistanceFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceFormatter.swift; sourceTree = "<group>"; };
 		EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputDialog.swift; sourceTree = "<group>"; };
+		EBCB056C2926185700C27588 /* CoreDataStack+Sharing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataStack+Sharing.swift"; sourceTree = "<group>"; };
 		EBCB4816266762F800E5631C /* Satchi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Satchi.xcdatamodel; sourceTree = "<group>"; };
+		EBD117B92919AEA50067402E /* View+Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Navigation.swift"; sourceTree = "<group>"; };
 		EBD13A54261AF3760080C4FE /* EditTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackView.swift; sourceTree = "<group>"; };
 		EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewModel.swift; sourceTree = "<group>"; };
 		EBD542B428D7971400FAE7FA /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				EB02A5B528C694E9004720DA /* ButtonTest.swift */,
 				EBE9440228D25AE900C1C7A5 /* ColorPaletteExt.swift */,
 				EBE9440428D26D4A00C1C7A5 /* PaletteEnvironment.swift */,
+				EBD117B92919AEA50067402E /* View+Navigation.swift */,
 			);
 			path = Satchi;
 			sourceTree = "<group>";
@@ -267,7 +270,6 @@
 			children = (
 				EB872509260CC0C4008AD8E7 /* TrackListView.swift */,
 				EB5688DF269C304000AF9AB1 /* TrackCellView.swift */,
-				EB64A3C5287CAD7C00E1BEA6 /* FilteredList.swift */,
 			);
 			path = TrackList;
 			sourceTree = "<group>";
@@ -288,6 +290,7 @@
 				EBCB4815266762F800E5631C /* Satchi.xcdatamodeld */,
 				EB7D2146282C62BF006CB703 /* CoreDataStack.swift */,
 				EB59DE41283104050043DE33 /* CloudSharingController.swift */,
+				EBCB056C2926185700C27588 /* CoreDataStack+Sharing.swift */,
 			);
 			path = Persistance;
 			sourceTree = "<group>";
@@ -440,12 +443,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB352C8E278EB6720015AC5A /* Satchi.xcdatamodeld in Sources */,
+				EBD117BA2919AEA50067402E /* View+Navigation.swift in Sources */,
 				EB409F3628AD0EB700BA2C23 /* StateButtonView.swift in Sources */,
 				EB59DE40283045A60043DE33 /* Track+CoreDataProperties.swift in Sources */,
 				EB2F91262624B8DF0026773D /* OverlayButtonStyle.swift in Sources */,
 				EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */,
 				EB3DF31D28C65AFA00A45A8D /* PreviewTrackMapView.swift in Sources */,
-				EB64A3C6287CAD7C00E1BEA6 /* FilteredList.swift in Sources */,
 				EB87250A260CC0C4008AD8E7 /* TrackListView.swift in Sources */,
 				EB352C8C278CEB310015AC5A /* Track+CoreDataClass.swift in Sources */,
 				EB7DFD2B261E0D6A0056D6B4 /* MapView.swift in Sources */,
@@ -469,6 +472,7 @@
 				EBD542B528D7971400FAE7FA /* AppEnvironment.swift in Sources */,
 				EBB05D772878C02500C9723F /* DistanceFormatter.swift in Sources */,
 				EB352C86278CEA170015AC5A /* TrackViewModel.swift in Sources */,
+				EBCB056D2926185700C27588 /* CoreDataStack+Sharing.swift in Sources */,
 				EB7D868F265438AE0088F13E /* TrackTimer.swift in Sources */,
 				EBE9440328D25AE900C1C7A5 /* ColorPaletteExt.swift in Sources */,
 				EB9726602843B0DD00583007 /* DifficultyView.swift in Sources */,

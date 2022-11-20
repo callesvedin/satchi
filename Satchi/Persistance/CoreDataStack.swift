@@ -221,7 +221,19 @@ extension CoreDataStack {
             self.save()
         }
     }
-    
+
+    func delete( id: NSManagedObjectID) {
+        print("Deleting track")
+        context.perform {
+            self.context.delete(self.getTrack(id: id))
+            self.save()
+        }
+    }
+
+
+    func getTrack(id:NSManagedObjectID) -> Track {
+        return context.object(with: id) as! Track
+    }
 
     func getTracks() -> [Track] {
         let fetchRequest: NSFetchRequest = Track.fetchRequest()
@@ -248,7 +260,7 @@ extension CoreDataStack {
         isShared(objectID: object.objectID)
     }
 
-    private func isShared(objectID: NSManagedObjectID) -> Bool {
+    func isShared(objectID: NSManagedObjectID) -> Bool {
         var isShared = false
         if let persistentStore = objectID.persistentStore {
             if persistentStore == sharedPersistentStore {
@@ -281,8 +293,12 @@ extension CoreDataStack {
     }
 
     func isOwner(object: NSManagedObject) -> Bool {
-        guard isShared(object: object) else { return false }
-        guard let share = try? persistentContainer.fetchShares(matching: [object.objectID])[object.objectID] else {
+        return isOwner(objectID: object.objectID)
+    }
+
+    func isOwner(objectID: NSManagedObjectID) -> Bool {
+        guard isShared(objectID: objectID) else { return false }
+        guard let share = try? persistentContainer.fetchShares(matching: [objectID])[objectID] else {
             print("Get ckshare error")
             return false
         }
@@ -292,15 +308,17 @@ extension CoreDataStack {
         return false
     }
 
+
     func getShare(_ track: Track) -> CKShare? {
         guard isShared(object: track) else { return nil }
         guard let shareDictionary = try? persistentContainer.fetchShares(matching: [track.objectID]),
               let share = shareDictionary[track.objectID] else {
-            print("Failed to get share")
+            print("No share found for track \(track.name ?? "-")")
             return nil
         }
         share[CKShare.SystemFieldKey.title] = track.name
         return share
     }
+
 
 }

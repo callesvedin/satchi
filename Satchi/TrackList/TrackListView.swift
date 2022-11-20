@@ -25,8 +25,9 @@ struct TrackListView: View {
 
     private var tracks: SectionedFetchResults<Int16, Track>
     @State private var showMapView = false
-    @State var editingTrack: Track?
+    @State private var waitingForShareId : UUID?
     @State var sharingTrack: Track?
+    @State var selectedTrack: Track?
 
     var body: some View {
         UITableView.appearance().backgroundColor = .clear
@@ -40,20 +41,20 @@ struct TrackListView: View {
                     ForEach(tracks) { section in
                         Section(header: Text(TrackState(rawValue: section.id)!.text())) {
                             ForEach(section,id: \.id) { track in
-                                NavigationLink(
-                                    destination:{ EditTrackView(track).environmentObject(stack)},
-                                    label:{
-                                        TrackCellView(deleteFunction: deleteTrackFunction, track: track, waitingForShare: track.id == sharingTrack?.id)
+                                Button(
+                                    action:{selectedTrack = track},
+                                    label: {
+                                        TrackCellView(deleteFunction: deleteTrackFunction, track: track, waitingForShare:track.id == waitingForShareId)
                                     }
                                 )
                                 .swipeActions(allowsFullSwipe: false) {
                                     Button {
-                                        sharingTrack = track
-                                        Task{
-                                            await shareTrack(track)
-                                            sharingTrack = nil
+                                        do {
+                                            try createShare(track)
+                                            print("Runnig by share!!")
+                                        }catch{
+                                            print("Could not create Share")
                                         }
-                                        print("Runnig by share!!")
                                     } label: {
                                         Label("Share", systemImage: "square.and.arrow.up")
                                     }
@@ -65,7 +66,6 @@ struct TrackListView: View {
                                     }
 
                                 }
-
                             }
                         }
                         .headerProminence(.increased)
@@ -75,80 +75,27 @@ struct TrackListView: View {
 
                 }
                 .listStyle(.automatic)
+                .navigationDestination(for: $selectedTrack) { tr in
+                    EditTrackView(tr).environmentObject(stack)
+                }
             }
         }
-        .sheet(item: $editingTrack){
-            editingTrack = nil
+        .sheet(item: $sharingTrack){
+            sharingTrack = nil
+            waitingForShareId = nil
         } content: { tr in
-            if let share = tr.share {
-                CloudSharingView(
-                    share: share,
-                    container: stack.ckContainer,
-                    track: tr
-                )
-            }
+            CloudSharingView(
+                container: stack.ckContainer,
+                share: tr.share!,
+                title: tr.name!
+            )
         }
         .foregroundColor(palette.primaryText)
-        .navigationTitle("Tracks")
+        .navigationTitle("Tracks")        
         .toolbar {
             HStack {
 
-#if DEBUG
-                HStack {
-                    Button(action: {
-                        environment.palette = Color.Palette.satchi
-                        print("Changed color palette to \(environment.palette)")
-                    }, label: {
-                        RoundedRectangle(cornerRadius: 3)
-                            .foregroundColor(Color.Palette.satchi.mainBackground)
-                            .frame(width: 15, height: 15)
-                            .border(.black)
-
-                    })
-                    Button(action: {
-                        environment.palette = Color.Palette.darkNature
-                        print("Changed color palette to \(environment.palette)")
-                    }, label: {
-                        RoundedRectangle(cornerRadius: 3)
-                            .foregroundColor(Color.Palette.darkNature.mainBackground)
-                            .frame(width: 15, height: 15)
-                            .border(.black)
-
-                    })
-                    Button(action: {
-                        environment.palette = Color.Palette.cold
-                        print("Changed color palette to \(environment.palette)")
-                    }, label: {
-                        RoundedRectangle(cornerRadius: 3)
-                            .foregroundColor(Color.Palette.cold.mainBackground)
-                            .frame(width: 15, height: 15)
-                            .border(.black)
-
-                    })
-                    Button(action: {
-                        environment.palette = Color.Palette.icyGrey
-                        print("Changed color palette to \(environment.palette)")
-                    }, label: {
-                        RoundedRectangle(cornerRadius: 3)
-                            .foregroundColor(Color.Palette.icyGrey.mainBackground)
-                            .frame(width: 15, height: 15)
-                            .border(.black)
-
-                    })
-                    Button(action: {
-                        environment.palette = Color.Palette.warm
-                        print("Changed color palette to \(environment.palette)")
-                    }, label: {
-                        RoundedRectangle(cornerRadius: 3)
-                            .foregroundColor(Color.Palette.warm.mainBackground)
-                            .frame(width: 15, height: 15)
-                            .border(.black)
-
-                    })
-
-                }
-#endif
-
+                ColorSelectionView()
                 Button("Add Track") {
                     showMapView.toggle()
                 }
@@ -164,36 +111,29 @@ struct TrackListView: View {
         })
     }
 
+    func createShare(_ track:Track) throws {        
+        waitingForShareId = track.id
+
+        mocc.perform {
+            Task {
+                if track.share != nil {
+                    return
+                }
+
+                let (_, share, _) = try await stack.persistentContainer.share([track], to: nil)
+                share[CKShare.SystemFieldKey.title] = track.name
+                print("Created share with url:\(String(describing: share.url))")
+                sharingTrack = track
+                track.share = share
+            }
+        }
+
+    }
+
     func deleteTrackFunction(track: Track) {
         stack.delete(track)
     }
-
-
-    // There is an almost identical function in EditTrackView. Should be merged and put in CoreDataStack.
-    func shareTrack(_ track:Track) async {
-        let task = Task {
-            do {
-                if track.share == nil {
-                    track.share = stack.getShare(track)
-                    if track.share == nil {
-                        let (_, share, _) = try await stack.persistentContainer.share([track], to: nil)
-                        share[CKShare.SystemFieldKey.title] = track.name
-                        print("Created share with url:\(String(describing: share.url))")
-
-                        track.share = share
-                    }
-                }
-                if track.share != nil {
-                    editingTrack = track
-                }
-            } catch {
-                print("Failed to create share")
-            }
-        }
-        return await task.value
-    }
 }
-
 
 
 struct HideScrollModifier: ViewModifier {
@@ -249,7 +189,7 @@ struct TrackSectionView: View {
 struct TrackListView_Previews: PreviewProvider {
     
     static var previews: some View {
-        var environment = AppEnvironment.shared
+        let environment = AppEnvironment.shared
         return
 //        ForEach(ColorScheme.allCases, id: \.self) {
             NavigationView {
@@ -261,8 +201,66 @@ struct TrackListView_Previews: PreviewProvider {
         .environment(\.managedObjectContext, CoreDataStack.preview.context)
         .environment(\.preferredColorPalette,environment.palette)
         .environmentObject(environment)
-
-
     }
 }
 
+
+struct ColorSelectionView: View {
+    @EnvironmentObject var environment: AppEnvironment
+    var body: some View {
+#if DEBUG
+        HStack {
+            Button(action: {
+                environment.palette = Color.Palette.satchi
+                print("Changed color palette to \(environment.palette)")
+            }, label: {
+                RoundedRectangle(cornerRadius: 3)
+                    .foregroundColor(Color.Palette.satchi.mainBackground)
+                    .frame(width: 15, height: 15)
+                    .border(.black)
+
+            })
+            Button(action: {
+                environment.palette = Color.Palette.darkNature
+                print("Changed color palette to \(environment.palette)")
+            }, label: {
+                RoundedRectangle(cornerRadius: 3)
+                    .foregroundColor(Color.Palette.darkNature.mainBackground)
+                    .frame(width: 15, height: 15)
+                    .border(.black)
+
+            })
+            Button(action: {
+                environment.palette = Color.Palette.cold
+                print("Changed color palette to \(environment.palette)")
+            }, label: {
+                RoundedRectangle(cornerRadius: 3)
+                    .foregroundColor(Color.Palette.cold.mainBackground)
+                    .frame(width: 15, height: 15)
+                    .border(.black)
+
+            })
+            Button(action: {
+                environment.palette = Color.Palette.icyGrey
+                print("Changed color palette to \(environment.palette)")
+            }, label: {
+                RoundedRectangle(cornerRadius: 3)
+                    .foregroundColor(Color.Palette.icyGrey.mainBackground)
+                    .frame(width: 15, height: 15)
+                    .border(.black)
+
+            })
+            Button(action: {
+                environment.palette = Color.Palette.warm
+                print("Changed color palette to \(environment.palette)")
+            }, label: {
+                RoundedRectangle(cornerRadius: 3)
+                    .foregroundColor(Color.Palette.warm.mainBackground)
+                    .frame(width: 15, height: 15)
+                    .border(.black)
+
+            })
+        }
+#endif
+    }
+}

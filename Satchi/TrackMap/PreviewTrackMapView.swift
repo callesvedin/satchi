@@ -11,9 +11,8 @@ import os.log
 
 struct PreviewTrackMapView: View {
     @Environment(\.presentationMode) var presentationMode
-//    @EnvironmentObject private var stack: CoreDataStack
 
-    @ObservedObject var track:Track
+    var track:Track
 
     private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
@@ -29,12 +28,9 @@ struct PreviewTrackMapView: View {
         .navigationBarHidden(true)
         .ignoresSafeArea()        
     }
-
-    
 }
 
 struct PreviewTrackMapView_Previews: PreviewProvider {
-
     static var previews: some View {
         let stack = CoreDataStack.preview
 

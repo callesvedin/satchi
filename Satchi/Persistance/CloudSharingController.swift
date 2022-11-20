@@ -4,29 +4,28 @@ import SwiftUI
 import os.log
 
 struct CloudSharingView: UIViewControllerRepresentable {
-    let share: CKShare
-    let container: CKContainer
-    let track: Track
-
+    private let share: CKShare
+    private let container: CKContainer
+    private let title: String
 
     private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: CloudSharingView.self)
     )
 
-    init(share:CKShare, container: CKContainer, track:Track) {
+    init(container: CKContainer, share:CKShare, title:String) {
         print("Initializing share view")
-        self.share = share
         self.container = container
-        self.track = track
+        self.title = title
+        self.share = share
     }
 
     func makeCoordinator() -> CloudSharingCoordinator {
-        CloudSharingCoordinator(track: track)
+        CloudSharingCoordinator(title: self.title)
     }
 
     func makeUIViewController(context: Context) -> UICloudSharingController {
-        share[CKShare.SystemFieldKey.title] = track.name
+        share[CKShare.SystemFieldKey.title] = self.title
         let controller = UICloudSharingController(share: share, container: container)
         controller.modalPresentationStyle = .none
         controller.delegate = context.coordinator
@@ -45,12 +44,13 @@ final class CloudSharingCoordinator: NSObject, UICloudSharingControllerDelegate 
     )
 
     let stack = CoreDataStack.shared
-    let track: Track
-    init(track: Track) {
-        self.track = track
+    let title : String
+    init(title: String) {
+        self.title = title
+
     }
     func itemTitle(for csc: UICloudSharingController) -> String? {
-        return track.name
+        return title
     }
 
     func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
@@ -63,8 +63,5 @@ final class CloudSharingCoordinator: NSObject, UICloudSharingControllerDelegate 
 
     func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
         print("Stopped sharing track")
-        if !stack.isOwner(object: track) {
-            stack.delete(track)
-        }
     }
 }
