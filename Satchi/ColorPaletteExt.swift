@@ -56,11 +56,7 @@ extension Color {
 }
 
 extension Color.Palette {
-    static let darkNature = Color.Palette(name: "DarkNature")
     static let satchi = Color.Palette(name: "Satchi")
-    static let cold = Color.Palette(name: "Cold")
-    static let icyGrey = Color.Palette(name: "IcyGrey")
-    static let warm = Color.Palette(name: "Warm")
 }
 
 private extension Color {
@@ -72,7 +68,7 @@ private extension Color {
 
 
 private struct ColorPaletteKey: EnvironmentKey {
-    static let defaultValue = Color.Palette.cold
+    static let defaultValue = Color.Palette.satchi
 }
 
 extension EnvironmentValues {

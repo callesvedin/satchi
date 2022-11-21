@@ -95,7 +95,7 @@ struct TrackListView: View {
         .toolbar {
             HStack {
 
-                ColorSelectionView()
+//                ColorSelectionView()
                 Button("Add Track") {
                     showMapView.toggle()
                 }
@@ -220,46 +220,46 @@ struct ColorSelectionView: View {
                     .border(.black)
 
             })
-            Button(action: {
-                environment.palette = Color.Palette.darkNature
-                print("Changed color palette to \(environment.palette)")
-            }, label: {
-                RoundedRectangle(cornerRadius: 3)
-                    .foregroundColor(Color.Palette.darkNature.mainBackground)
-                    .frame(width: 15, height: 15)
-                    .border(.black)
-
-            })
-            Button(action: {
-                environment.palette = Color.Palette.cold
-                print("Changed color palette to \(environment.palette)")
-            }, label: {
-                RoundedRectangle(cornerRadius: 3)
-                    .foregroundColor(Color.Palette.cold.mainBackground)
-                    .frame(width: 15, height: 15)
-                    .border(.black)
-
-            })
-            Button(action: {
-                environment.palette = Color.Palette.icyGrey
-                print("Changed color palette to \(environment.palette)")
-            }, label: {
-                RoundedRectangle(cornerRadius: 3)
-                    .foregroundColor(Color.Palette.icyGrey.mainBackground)
-                    .frame(width: 15, height: 15)
-                    .border(.black)
-
-            })
-            Button(action: {
-                environment.palette = Color.Palette.warm
-                print("Changed color palette to \(environment.palette)")
-            }, label: {
-                RoundedRectangle(cornerRadius: 3)
-                    .foregroundColor(Color.Palette.warm.mainBackground)
-                    .frame(width: 15, height: 15)
-                    .border(.black)
-
-            })
+//            Button(action: {
+//                environment.palette = Color.Palette.darkNature
+//                print("Changed color palette to \(environment.palette)")
+//            }, label: {
+//                RoundedRectangle(cornerRadius: 3)
+//                    .foregroundColor(Color.Palette.darkNature.mainBackground)
+//                    .frame(width: 15, height: 15)
+//                    .border(.black)
+//
+//            })
+//            Button(action: {
+//                environment.palette = Color.Palette.cold
+//                print("Changed color palette to \(environment.palette)")
+//            }, label: {
+//                RoundedRectangle(cornerRadius: 3)
+//                    .foregroundColor(Color.Palette.cold.mainBackground)
+//                    .frame(width: 15, height: 15)
+//                    .border(.black)
+//
+//            })
+//            Button(action: {
+//                environment.palette = Color.Palette.icyGrey
+//                print("Changed color palette to \(environment.palette)")
+//            }, label: {
+//                RoundedRectangle(cornerRadius: 3)
+//                    .foregroundColor(Color.Palette.icyGrey.mainBackground)
+//                    .frame(width: 15, height: 15)
+//                    .border(.black)
+//
+//            })
+//            Button(action: {
+//                environment.palette = Color.Palette.warm
+//                print("Changed color palette to \(environment.palette)")
+//            }, label: {
+//                RoundedRectangle(cornerRadius: 3)
+//                    .foregroundColor(Color.Palette.warm.mainBackground)
+//                    .frame(width: 15, height: 15)
+//                    .border(.black)
+//
+//            })
         }
 #endif
     }

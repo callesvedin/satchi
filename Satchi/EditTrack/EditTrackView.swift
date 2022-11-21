@@ -35,52 +35,7 @@ struct EditTrackView: View {
 
                         Spacer()
                     }
-                    Group {
-                        HStack {
-                            Text("**Name:**")
-                            TextField("Name", text: $viewModel.trackName)
-                                .padding(.horizontal,8)
-                                .background(RoundedRectangle(cornerRadius: 4)
-                                .fill(palette.midBackground))
-                        }
-
-                        Text("**Created:** \(viewModel.created != nil ? TimeFormatter.dateStringFrom(date: viewModel.created) : "-")")
-
-                        HStack {
-                            Text("**Difficulty:**")
-                            DifficultyView(difficulty: $viewModel.difficulty)
-                        }.padding(0)
-
-                        Text("**Length:** \(DistanceFormatter.distanceFor(meters:Double(viewModel.length)))")
-                        Text("**Time to create:** \(TimeFormatter.shortTimeWithSecondsFor(seconds:viewModel.timeToCreate))")
-
-
-                        if viewModel.started != nil {
-                            Text("""
-                            **Track rested:** \
-                            \(getTimeBetween(date: viewModel.created, and: viewModel.started))
-                            """
-                            )
-                        } else {
-                            Text("**Time since created:** \(getTimeSinceCreated())")
-                        }
-                        if viewModel.started != nil {
-                            Text("**Tracking started:** \(TimeFormatter.dateStringFrom(date: viewModel.started!))")
-
-                            Text("""
-                             **Time to finish:** \
-                             \(TimeFormatter.shortTimeWithSecondsFor(seconds:viewModel.timeToFinish))
-                             """
-                            )
-                        }
-
-                        Text("**Comments:**")
-                        TextField("Comments", text: $viewModel.comments)
-                            .font(.body)
-                            .frame(minHeight: 80)
-                            .border(Color.gray, width: 1)
-                    }
-                    .padding(.vertical, 4)
+                    FieldsView(viewModel: viewModel)
                 }
             }            
         }
@@ -132,6 +87,9 @@ struct EditTrackView: View {
         .onChange(of: viewModel.trackName, perform: {_ in
             theTrack.name = viewModel.trackName
         })
+        .onDisappear {
+            stack.save()
+        }
     }
 
     func createShare()  {
@@ -154,15 +112,6 @@ struct EditTrackView: View {
         }
     }
 
-    private func getTimeBetween(date: Date?, and toDate: Date?) -> String {
-        guard let fromDate = date, let toDate = toDate else {return "-"}
-        return TimeFormatter.shortTimeWithMinutesFor(seconds: fromDate.distance(to: toDate))
-    }
-
-    private func getTimeSinceCreated() -> String {
-        guard let timeDistance = viewModel.created?.distance(to: Date()) else {return "-"}
-        return TimeFormatter.shortTimeWithMinutesFor(seconds: timeDistance)
-    }
 }
 //
 extension EditTrackView {
@@ -237,4 +186,69 @@ struct EditTrackView_Previews: PreviewProvider {
 //                .environment(\.managedObjectContext, CoreDataStack.preview.context)
         }
     }
+}
+
+struct FieldsView: View {
+    @Environment(\.preferredColorPalette) private var palette
+    @ObservedObject var viewModel:TrackViewModel
+
+    var body: some View {
+        Group {
+            HStack {
+                Text("**Name:**")
+                TextField("Name", text: $viewModel.trackName)
+                    .padding(.horizontal,8)
+                    .background(RoundedRectangle(cornerRadius: 4)
+                        .fill(palette.midBackground))
+            }
+
+            Text("**Created:** \(viewModel.created != nil ? TimeFormatter.dateStringFrom(date: viewModel.created) : "-")")
+
+            HStack {
+                Text("**Difficulty:**")
+                DifficultyView(difficulty: $viewModel.difficulty)
+            }.padding(0)
+
+            Text("**Length:** \(DistanceFormatter.distanceFor(meters:Double(viewModel.length)))")
+            Text("**Time to create:** \(TimeFormatter.shortTimeWithSecondsFor(seconds:viewModel.timeToCreate))")
+
+
+            if viewModel.started != nil {
+                Text("""
+**Track rested:** \
+\(getTimeBetween(date: viewModel.created, and: viewModel.started))
+"""
+                )
+            } else {
+                Text("**Time since created:** \(getTimeSinceCreated())")
+            }
+            if viewModel.started != nil {
+                Text("**Tracking started:** \(TimeFormatter.dateStringFrom(date: viewModel.started!))")
+
+                Text("""
+**Time to finish:** \
+\(TimeFormatter.shortTimeWithSecondsFor(seconds:viewModel.timeToFinish))
+"""
+                )
+            }
+
+            Text("**Comments:**")
+            TextField("Comments", text: $viewModel.comments)
+                .font(.body)
+                .frame(minHeight: 80)
+                .border(Color.gray, width: 1)
+        }
+        .padding(.vertical, 4)
+    }
+
+    private func getTimeBetween(date: Date?, and toDate: Date?) -> String {
+        guard let fromDate = date, let toDate = toDate else {return "-"}
+        return TimeFormatter.shortTimeWithMinutesFor(seconds: fromDate.distance(to: toDate))
+    }
+
+    private func getTimeSinceCreated() -> String {
+        guard let timeDistance = viewModel.created?.distance(to: Date()) else {return "-"}
+        return TimeFormatter.shortTimeWithMinutesFor(seconds: timeDistance)
+    }
+
 }
