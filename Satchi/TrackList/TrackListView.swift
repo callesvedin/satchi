@@ -44,7 +44,7 @@ struct TrackListView: View {
                                 Button(
                                     action:{selectedTrack = track},
                                     label: {
-                                        TrackCellView(deleteFunction: deleteTrackFunction, track: track, waitingForShare:track.id == waitingForShareId)
+                                        TrackCellView(deleteFunction: deleteTrack, track: track, waitingForShare:track.id == waitingForShareId)
                                     }
                                 )
                                 .swipeActions(allowsFullSwipe: false) {
@@ -60,7 +60,7 @@ struct TrackListView: View {
                                     }
                                     .tint(.green)
                                     Button(role: .destructive) {
-                                        deleteTrackFunction(track:track)
+                                        deleteTrack(track)
                                     } label: {
                                         Label("Delete", systemImage: "trash.fill")
                                     }
@@ -71,10 +71,9 @@ struct TrackListView: View {
                         .headerProminence(.increased)
                     }
                     .listRowBackground(palette.midBackground)
-                    .hideScroll()
-
                 }
                 .listStyle(.automatic)
+                .hideScroll()
                 .navigationDestination(for: $selectedTrack) { tr in
                     EditTrackView(tr).environmentObject(stack)
                 }
@@ -130,7 +129,7 @@ struct TrackListView: View {
 
     }
 
-    func deleteTrackFunction(track: Track) {
+    func deleteTrack(_ track: Track) {
         stack.delete(track)
     }
 }
@@ -191,12 +190,16 @@ struct TrackListView_Previews: PreviewProvider {
     static var previews: some View {
         let environment = AppEnvironment.shared
         return
-//        ForEach(ColorScheme.allCases, id: \.self) {
+        ForEach(ColorScheme.allCases, id: \.self) {
             NavigationView {
                 TrackListView()
-            }
-//            .preferredColorScheme($0)
-//        }
+            }.previewDevice(PreviewDevice(rawValue: "iPhone 14")).previewDisplayName("iPhone 14")
+            .preferredColorScheme($0)
+            NavigationView {
+                TrackListView()
+            }.previewDevice(PreviewDevice(rawValue: "iPhone 13 ios 15.5")).previewDisplayName("iPhone 13 ios15")
+            .preferredColorScheme($0)
+        }
         .environmentObject(CoreDataStack.preview)
         .environment(\.managedObjectContext, CoreDataStack.preview.context)
         .environment(\.preferredColorPalette,environment.palette)

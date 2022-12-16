@@ -13,13 +13,14 @@ struct EditTrackView: View {
     @Environment(\.preferredColorPalette) private var palette
     @EnvironmentObject private var stack: CoreDataStack
 
-    @ObservedObject var viewModel:TrackViewModel
+    @StateObject var viewModel:TrackViewModel
     var theTrack:Track
     @State var sharingTrack:Track?
 
     init(_ track: Track) {
         theTrack = track
-        viewModel = TrackViewModel(track)
+        theTrack.state = track.getState().rawValue
+        _viewModel = StateObject(wrappedValue: TrackViewModel(track))
     }
 
     var body: some View {
@@ -199,7 +200,8 @@ struct FieldsView: View {
                 TextField("Name", text: $viewModel.trackName)
                     .padding(.horizontal,8)
                     .background(RoundedRectangle(cornerRadius: 4)
-                        .fill(palette.midBackground))
+                        .fill(palette.midBackground)
+                    )
             }
 
             Text("**Created:** \(viewModel.created != nil ? TimeFormatter.dateStringFrom(date: viewModel.created) : "-")")
@@ -215,9 +217,9 @@ struct FieldsView: View {
 
             if viewModel.started != nil {
                 Text("""
-**Track rested:** \
-\(getTimeBetween(date: viewModel.created, and: viewModel.started))
-"""
+                     **Track rested:** \
+                     \(getTimeBetween(date: viewModel.created, and: viewModel.started))
+                     """
                 )
             } else {
                 Text("**Time since created:** \(getTimeSinceCreated())")
@@ -226,9 +228,9 @@ struct FieldsView: View {
                 Text("**Tracking started:** \(TimeFormatter.dateStringFrom(date: viewModel.started!))")
 
                 Text("""
-**Time to finish:** \
-\(TimeFormatter.shortTimeWithSecondsFor(seconds:viewModel.timeToFinish))
-"""
+                     **Time to finish:** \
+                     \(TimeFormatter.shortTimeWithSecondsFor(seconds:viewModel.timeToFinish))
+                     """
                 )
             }
 
