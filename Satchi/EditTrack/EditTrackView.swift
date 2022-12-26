@@ -66,7 +66,7 @@ struct EditTrackView: View {
                     if viewModel.getState() == .trailTracked {
                         Text("Show Track")
                     } else if viewModel.getState()  == .notStarted {
-                        Text("Create track")
+                        Text("Lay track")
                     } else {
                         Text("Follow Track")
                     }
@@ -183,6 +183,7 @@ struct EditTrackView_Previews: PreviewProvider {
         return ForEach(ColorScheme.allCases, id: \.self) {
             EditTrackView(track)
                 .preferredColorScheme($0)
+                .environment(\.locale, .init(identifier: "sv"))
                 .environmentObject(CoreDataStack.preview)
 //                .environment(\.managedObjectContext, CoreDataStack.preview.context)
         }

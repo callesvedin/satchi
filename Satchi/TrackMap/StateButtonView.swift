@@ -13,9 +13,7 @@ struct StateButtonView: View {
     var body: some View {
         HStack {
             if mapModel.stateMachine.state == .notStarted {
-                Button("Start") {
-                    mapModel.start()
-                }
+                Button(action: {mapModel.start()}, label: {Text("Start")})
                 .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
                 .disabled(mapModel.accuracy > 10)
                 .padding(15)
@@ -33,33 +31,21 @@ struct StateButtonView: View {
  */
             }
             if mapModel.stateMachine.state == .running {
-                Button("Pause") {
-                    print("Pause pressed\n")
-                    mapModel.pause()
-                }
+                Button(action: {mapModel.pause()}, label: {Text("Pause")})
                 .buttonStyle(OverlayButtonStyle(backgroundColor: .red))
                 .padding(15)
             }
             if mapModel.stateMachine.state == .paused {
-                Button("Continue") {
-                    print("Continue pressed\n")
-                    mapModel.resume()
-                }
+                Button(action: {mapModel.resume()}, label: {Text("Continue")})
                 .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
                 .padding(15)
-                Button("Stop") {
-                    print("Stop pressed\n")
-                    // TODO: Ask for confirmation!
-                    mapModel.stop()
-                }
+                Button(action: {mapModel.stop()}, label: {Text("Stop")})
                 .buttonStyle(OverlayButtonStyle(backgroundColor: .red))
                 .padding(15)
 
             }
-            if mapModel.stateMachine.state == .viewing {
-                Button("Close") {
-                    mapModel.stop()
-                }
+            if mapModel.stateMachine.state == .viewing {               
+                Button(action: {mapModel.stop()}, label: {Text("Close")})
                 .buttonStyle(OverlayButtonStyle(backgroundColor: .green))            
                 .padding(15)
             }

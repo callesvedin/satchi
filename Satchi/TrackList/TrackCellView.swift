@@ -47,7 +47,7 @@ struct TrackCellView: View {
                         Text("--/--/--")
                     }
                 }
-                Text("Difficulty:\(track.difficulty)")
+                Text("Difficulty: \(track.difficulty)")
 //                HStack {
 ////                    Text("Difficulty:")
 //                    DifficultyView(difficulty: .constant(track.difficulty))

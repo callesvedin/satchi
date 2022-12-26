@@ -39,7 +39,7 @@ struct TrackListView: View {
             }else{
                 List {
                     ForEach(tracks) { section in
-                        Section(header: Text(TrackState(rawValue: section.id)!.text())) {
+                        Section(header: Text(LocalizedStringKey(TrackState(rawValue: section.id)!.text()))) {
                             ForEach(section,id: \.id) { track in
                                 Button(
                                     action:{selectedTrack = track},
@@ -90,14 +90,12 @@ struct TrackListView: View {
             )
         }
         .foregroundColor(palette.primaryText)
-        .navigationTitle("Tracks")        
+        .navigationTitle(LocalizedStringKey("Tracks"))
         .toolbar {
             HStack {
 
 //                ColorSelectionView()
-                Button("Add Track") {
-                    showMapView.toggle()
-                }
+                Button(action:{showMapView.toggle()},label:{Text("Add Track")})
                 .foregroundColor(palette.link)
                 .padding(0)
             }
@@ -200,6 +198,7 @@ struct TrackListView_Previews: PreviewProvider {
             }.previewDevice(PreviewDevice(rawValue: "iPhone 13 ios 15.5")).previewDisplayName("iPhone 13 ios15")
             .preferredColorScheme($0)
         }
+        .environment(\.locale, .init(identifier: "sv"))
         .environmentObject(CoreDataStack.preview)
         .environment(\.managedObjectContext, CoreDataStack.preview.context)
         .environment(\.preferredColorPalette,environment.palette)

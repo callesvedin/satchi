@@ -1,0 +1,93 @@
+/* No comment provided by engineer. */
+"**Comments:**" = "**Kommentarer:**";
+
+/* No comment provided by engineer. */
+"**Created:** %@" = "**Skapat:** %@";
+
+/* No comment provided by engineer. */
+"**Difficulty:**" = "**Svårighetsgrad:**";
+
+/* No comment provided by engineer. */
+"**Length:** %@" = "**Längd:**";
+
+/* No comment provided by engineer. */
+"**Name:**" = "**Namn:**";
+
+/* No comment provided by engineer. */
+"**Time since created:** %@" = "**Tid sedan spåret lades:** %@";
+
+/* No comment provided by engineer. */
+"**Time to create:** %@" = "**Tid att skapa:** %@";
+
+/* No comment provided by engineer. */
+"**Time to finish:** %@" = "**Tid att spåra:** %@";
+
+/* No comment provided by engineer. */
+"**Track rested:** %@" = "**Tid spåret legat:** %@";
+
+/* No comment provided by engineer. */
+"**Tracking started:** %@" = "**Spårning startades:** %@";
+
+/* No comment provided by engineer. */
+"Comments" = "Kommentarer";
+
+/* No comment provided by engineer. */
+"Create track" = "Skapa spår";
+
+/* No comment provided by engineer. */
+"Lay track" = "Lägg spår";
+
+/* No comment provided by engineer. */
+"Follow Track" = "Följ spår";
+
+/* No comment provided by engineer. */
+"Name" = "Namn";
+
+/* No comment provided by engineer. */
+"Show Track" = "Visa Spår";
+
+/* No comment provided by engineer. */
+"Add Track" = "Skapa Spår";
+
+/* No comment provided by engineer. */
+"Created tracks" = "Skapade spår";
+
+/* No comment provided by engineer. */
+"Started tracks" = "Lagda spår";
+
+/* No comment provided by engineer. */
+"Finished tracks" = "Avslutade spår";
+
+/* No comment provided by engineer. */
+"Tracks" = "Spår";
+
+/* No comment provided by engineer. */
+"Save" = "Spara";
+
+/* No comment provided by engineer. */
+"Difficulty" = "Svårighetsgrad";
+
+/* No comment provided by engineer. */
+"Difficulty: %d" = "Svårighetsgrad: %d";
+
+/* No comment provided by engineer. */
+"Distance: %@" = "Längd: %@";
+
+/* No comment provided by engineer. */
+"Time: %@" = "Tid: %@";
+
+/* No comment provided by engineer. */
+"Close" = "Stäng";
+
+/* No comment provided by engineer. */
+"Stop" = "Avsluta";
+
+/* No comment provided by engineer. */
+"Continue" = "Fortsätt";
+
+/* No comment provided by engineer. */
+"Pause" = "Pausa";
+
+/* No comment provided by engineer. */
+"Start" = "Starta   ";
+
