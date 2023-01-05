@@ -13,10 +13,13 @@ struct StateButtonView: View {
     var body: some View {
         HStack {
             if mapModel.stateMachine.state == .notStarted {
-                Button(action: {mapModel.start()}, label: {Text("Start")})
-                .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
-                .disabled(mapModel.accuracy > 10)
+                Button(action: {mapModel.stop()}, label: {Text("Close")})
+                .buttonStyle(OverlayButtonStyle(backgroundColor: .red))
                 .padding(15)
+                Button(action: {mapModel.start()}, label: {Text("Start")})
+                    .buttonStyle(OverlayButtonStyle(backgroundColor: .green))
+                    .disabled(mapModel.accuracy > 10)
+                    .padding(15)
 /*
  Button(action: {mapModel.start()},
  label:  {

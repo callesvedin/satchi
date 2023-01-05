@@ -133,6 +133,8 @@ class TrackMapModel: NSObject, ObservableObject {
                 return .running
             case (.stop, .viewing):
                 return .done
+            case (.stop, .notStarted):
+                return .done
 
             default:
                 print("Unknown event \(event) from state \(fromState)")
@@ -150,9 +152,12 @@ class TrackMapModel: NSObject, ObservableObject {
         }
         stateMachine.addHandler(event: .stop) { context in
             print(".stop is triggered! Context:\(context)")
-            if context.fromState == .viewing {
-                self.done = true
-            }else{
+            if context.fromState == .viewing  {
+                self.stopRunning()
+            }else if context.fromState == .notStarted {
+                self.cancelRunning()
+
+            }else if context.fromState == .paused {
                 self.stopRunning()
             }
         }
@@ -181,13 +186,13 @@ class TrackMapModel: NSObject, ObservableObject {
             track.length = Int32(distance)
             track.created = Date()
             track.state = track.getState().rawValue // TODO: Clean up
-//            stack?.save()
+            stack?.save()
         case .trailAdded:
             track.trackPath = trackPath
             track.timeToFinish = timer.secondsElapsed
             track.started = trackingStarted
             track.state = track.getState().rawValue // TODO: Clean up
-//            stack?.save()
+            stack?.save()
         default:
             print("Unknown state when stopRunning is called \(track.getState())")
         }
@@ -224,6 +229,12 @@ class TrackMapModel: NSObject, ObservableObject {
             return
         }
     }
+
+    private func cancelRunning() {
+        self.stopTracking()
+        self.done = true
+    }
+
 
     public func start() {
         stateMachine <-! .start

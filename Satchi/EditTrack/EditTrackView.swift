@@ -22,6 +22,37 @@ struct EditTrackView: View {
         theTrack.state = track.getState().rawValue
         _viewModel = StateObject(wrappedValue: TrackViewModel(track))
     }
+    var shareButton: some View {
+        Button {
+            createShare()
+        } label: {
+            Image(systemName: "square.and.arrow.up")
+        }
+        .accentColor(palette.link)
+        .sheet(item: $sharingTrack){
+            sharingTrack = nil
+        } content: { tr in
+            CloudSharingView(
+                container: stack.ckContainer,
+                share: tr.share!,
+                title: tr.name!
+            )
+        }
+    }
+
+    var showMapViewButton : some View {
+        NavigationLink(destination: TrackMapView(track:theTrack, preview: false )) {
+            if viewModel.state == .trailTracked {
+                Text("Show Track")
+            } else if viewModel.state == .notStarted {
+                Text("Lay track")
+            } else {
+                Text("Follow Track")
+            }
+        }
+        .isDetailLink(false)
+        .accentColor(palette.link)
+    }
 
     var body: some View {
         VStack {
@@ -45,34 +76,10 @@ struct EditTrackView: View {
         .padding()
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    createShare()
-                } label: {
-                    Image(systemName: "square.and.arrow.up")
-                }
-                .accentColor(palette.link)
-                .sheet(item: $sharingTrack){
-                    sharingTrack = nil
-                } content: { tr in
-                    CloudSharingView(
-                        container: stack.ckContainer,
-                        share: tr.share!,
-                        title: tr.name!
-                    )
-                }
+                shareButton
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: TrackMapView(track:theTrack, preview: false )) {
-                    if viewModel.getState() == .trailTracked {
-                        Text("Show Track")
-                    } else if viewModel.getState()  == .notStarted {
-                        Text("Lay track")
-                    } else {
-                        Text("Follow Track")
-                    }
-                }
-                .isDetailLink(false)
-                .accentColor(palette.link)
+                showMapViewButton
             }
         }
         .background(palette.mainBackground)
@@ -88,6 +95,9 @@ struct EditTrackView: View {
         .onChange(of: viewModel.trackName, perform: {_ in
             theTrack.name = viewModel.trackName
         })
+        .onAppear {
+            viewModel.setValues(theTrack)
+        }
         .onDisappear {
             stack.save()
         }

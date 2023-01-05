@@ -27,14 +27,16 @@ class TrackViewModel: ObservableObject, Identifiable {
     @Published var length: Int32
     @Published var started: Date?
     @Published var timeToCreate: Double
-    @Published var timeToFinish: Double
-    var state: Int16 {
-        get {
-            return getState().rawValue
-        }
+    {
+        didSet {state = getState()}
     }
+    @Published var timeToFinish: Double
+    {
+        didSet {state = getState()}
+    }
+    @Published var state: TrackState
 
-
+    
     init(_ track:Track) {
         id = track.id
         objectID = track.objectID
@@ -48,10 +50,26 @@ class TrackViewModel: ObservableObject, Identifiable {
         started = track.started
         timeToCreate = track.timeToCreate
         timeToFinish = track.timeToFinish
+        state = track.getState()
     }
-}
 
-extension TrackViewModel {
+    public func setValues(_ track:Track) {
+        id = track.id
+        objectID = track.objectID
+        trackName = track.name  ?? ""
+        comments = track.comments ?? ""
+        difficulty = max(1, track.difficulty)
+        created = track.created
+        laidPath = track.laidPath
+        trackPath = track.trackPath
+        length = track.length
+        started = track.started
+        timeToCreate = track.timeToCreate
+        timeToFinish = track.timeToFinish
+        state = track.getState()
+
+    }
+    
     public func getState() -> TrackState {
         if timeToFinish > 0 {
             return .trailTracked
@@ -61,8 +79,8 @@ extension TrackViewModel {
             return .notStarted
         }
     }
-
 }
+
 
 //enum ModelTrackState {
 //    case notCreated, created, tracked
