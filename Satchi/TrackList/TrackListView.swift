@@ -95,7 +95,7 @@ struct TrackListView: View {
             HStack {
 
 //                ColorSelectionView()
-                Button(action:{showMapView.toggle()},label:{Text("Add Track")})
+                Button(action:{showMapView.toggle()},label:{Text("Add track")})
                 .foregroundColor(palette.link)
                 .padding(0)
             }

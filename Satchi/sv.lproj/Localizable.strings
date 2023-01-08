@@ -1,4 +1,7 @@
 /* No comment provided by engineer. */
+"You have no tracks." = "Du har inte några spår";
+
+/* No comment provided by engineer. */
 "**Comments:**" = "**Kommentarer:**";
 
 /* No comment provided by engineer. */
@@ -44,10 +47,10 @@
 "Name" = "Namn";
 
 /* No comment provided by engineer. */
-"Show Track" = "Visa Spår";
+"Show track" = "Visa spår";
 
 /* No comment provided by engineer. */
-"Add Track" = "Skapa Spår";
+"Add track" = "Skapa spår";
 
 /* No comment provided by engineer. */
 "Created tracks" = "Skapade spår";

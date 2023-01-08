@@ -43,7 +43,7 @@ struct EditTrackView: View {
     var showMapViewButton : some View {
         NavigationLink(destination: TrackMapView(track:theTrack, preview: false )) {
             if viewModel.state == .trailTracked {
-                Text("Show Track")
+                Text("Show track")
             } else if viewModel.state == .notStarted {
                 Text("Lay track")
             } else {

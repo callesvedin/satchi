@@ -42,7 +42,7 @@ struct AddTrackView: View {
                     createNewTrack()
                     presentationMode.wrappedValue.dismiss()
                 }
-                .navigationTitle("Add Track")
+                .navigationTitle("Add track")
             }
         }
     }
