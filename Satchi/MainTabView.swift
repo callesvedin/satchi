@@ -40,12 +40,12 @@ fileprivate func setNavigationColors(background:Color, text:Color) {
     UINavigationBar.appearance().tintColor = textColor
 
 }
-
-struct MainTabView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainTabView()
-            .environmentObject(CoreDataStack.preview)
-            .environment(\.managedObjectContext, CoreDataStack.preview.context)
-
-    }
-}
+//
+//struct MainTabView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MainTabView()
+//            .environmentObject(CoreDataStack.preview)
+//            .environment(\.managedObjectContext, CoreDataStack.preview.context)
+//
+//    }
+//}

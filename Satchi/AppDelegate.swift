@@ -15,17 +15,17 @@ final class SceneDelegate: NSObject, UIWindowSceneDelegate {
 
     func windowScene(_ windowScene: UIWindowScene, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata
     ) {
-        if let shareStore = CoreDataStack.shared.sharedPersistentStore {
-            let persistentContainer = CoreDataStack.shared.persistentContainer
-            persistentContainer.acceptShareInvitations(from: [cloudKitShareMetadata], into: shareStore) { _,error in                
-                if let error = error {
-                    print("acceptShareInvitation error :\(error)")
-                }else{
-                    print("Added share - cloudKitShareMetadata: \(cloudKitShareMetadata)\nInto shareStore:\(shareStore)")
-                }
-            }
-        }else{
-            print("Could not get shared persistentStore")
-        }
+//        if let shareStore = CoreDataStack.shared.sharedPersistentStore {
+//            let persistentContainer = CoreDataStack.shared.persistentContainer
+//            persistentContainer.acceptShareInvitations(from: [cloudKitShareMetadata], into: shareStore) { _,error in                
+//                if let error = error {
+//                    print("acceptShareInvitation error :\(error)")
+//                }else{
+//                    print("Added share - cloudKitShareMetadata: \(cloudKitShareMetadata)\nInto shareStore:\(shareStore)")
+//                }
+//            }
+//        }else{
+//            print("Could not get shared persistentStore")
+//        }
     }
 }

@@ -10,8 +10,8 @@ import CoreData
 import CloudKit
 
 struct TrackListView: View {
-    @EnvironmentObject private var stack: CoreDataStack
-    @Environment(\.managedObjectContext) var mocc
+//    @EnvironmentObject private var stack: CoreDataStack
+    @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var environment: AppEnvironment
     @Environment(\.preferredColorPalette) private var palette
     @SectionedFetchRequest(
@@ -22,8 +22,9 @@ struct TrackListView: View {
         ],
         animation: Animation.default
     )
-
     private var tracks: SectionedFetchResults<Int16, Track>
+    private let persistenceController = PersistenceController.shared
+
     @State private var showMapView = false
     @State private var waitingForShareId : UUID?
     @State var sharingTrack: Track?
@@ -75,7 +76,7 @@ struct TrackListView: View {
                 .listStyle(.automatic)
                 .hideScroll()
                 .navigationDestination(for: $selectedTrack) { tr in
-                    EditTrackView(tr).environmentObject(stack)
+                    EditTrackView(tr)
                 }
             }
         }
@@ -83,11 +84,11 @@ struct TrackListView: View {
             sharingTrack = nil
             waitingForShareId = nil
         } content: { tr in
-            CloudSharingView(
-                container: stack.ckContainer,
-                share: tr.share!,
-                title: tr.name!
-            )
+//            CloudSharingView(
+//                container: stack.ckContainer,
+//                share: tr.share!,
+//                title: tr.name!
+//            )
         }
         .foregroundColor(palette.primaryText)
         .navigationTitle(LocalizedStringKey("Tracks"))
@@ -100,35 +101,45 @@ struct TrackListView: View {
                 .padding(0)
             }
         }
-        .onAppear() {
-            stack.save()
-        }
+//        .onAppear() {
+//            stack.save()
+//        }
         .sheet(isPresented: $showMapView, content: {
             AddTrackView()
         })
+        .onReceive(NotificationCenter.default.storeDidChangePublisher) { notification in
+            processStoreChangeNotification(notification)
+        }
+    }
+
+    private func processStoreChangeNotification(_ notification: Notification) {
+        let transactions = persistenceController.trackTransactions(from: notification)
+        if !transactions.isEmpty {
+            persistenceController.mergeTransactions(transactions, to: viewContext)
+        }
     }
 
     func createShare(_ track:Track) throws {        
-        waitingForShareId = track.id
-
-        mocc.perform {
-            Task {
-                if track.share != nil {
-                    return
-                }
-
-                let (_, share, _) = try await stack.persistentContainer.share([track], to: nil)
-                share[CKShare.SystemFieldKey.title] = track.name
-                print("Created share with url:\(String(describing: share.url))")
-                sharingTrack = track
-                track.share = share
-            }
-        }
+//        waitingForShareId = track.id
+//
+//        mocc.perform {
+//            Task {
+//                if track.share != nil {
+//                    return
+//                }
+//
+//                let (_, share, _) = try await stack.persistentContainer.share([track], to: nil)
+//                share[CKShare.SystemFieldKey.title] = track.name
+//                print("Created share with url:\(String(describing: share.url))")
+//                sharingTrack = track
+//                track.share = share
+//            }
+//        }
 
     }
 
     func deleteTrack(_ track: Track) {
-        stack.delete(track)
+//        stack.delete(track)
     }
 }
 
@@ -181,30 +192,30 @@ struct TrackSectionView: View {
         }
     }
 }
-
-
-struct TrackListView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        let environment = AppEnvironment.shared
-        return
-        ForEach(ColorScheme.allCases, id: \.self) {
-            NavigationView {
-                TrackListView()
-            }.previewDevice(PreviewDevice(rawValue: "iPhone 14")).previewDisplayName("iPhone 14")
-            .preferredColorScheme($0)
-            NavigationView {
-                TrackListView()
-            }.previewDevice(PreviewDevice(rawValue: "iPhone 13 ios 15.5")).previewDisplayName("iPhone 13 ios15")
-            .preferredColorScheme($0)
-        }
-        .environment(\.locale, .init(identifier: "sv"))
-        .environmentObject(CoreDataStack.preview)
-        .environment(\.managedObjectContext, CoreDataStack.preview.context)
-        .environment(\.preferredColorPalette,environment.palette)
-        .environmentObject(environment)
-    }
-}
+//
+//
+//struct TrackListView_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//        let environment = AppEnvironment.shared
+//        return
+//        ForEach(ColorScheme.allCases, id: \.self) {
+//            NavigationView {
+//                TrackListView()
+//            }.previewDevice(PreviewDevice(rawValue: "iPhone 14")).previewDisplayName("iPhone 14")
+//            .preferredColorScheme($0)
+//            NavigationView {
+//                TrackListView()
+//            }.previewDevice(PreviewDevice(rawValue: "iPhone 13 ios 15.5")).previewDisplayName("iPhone 13 ios15")
+//            .preferredColorScheme($0)
+//        }
+//        .environment(\.locale, .init(identifier: "sv"))
+//        .environmentObject(CoreDataStack.preview)
+//        .environment(\.managedObjectContext, CoreDataStack.preview.context)
+//        .environment(\.preferredColorPalette,environment.palette)
+//        .environmentObject(environment)
+//    }
+//}
 
 
 struct ColorSelectionView: View {

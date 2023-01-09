@@ -11,7 +11,6 @@ import CloudKit
 struct EditTrackView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.preferredColorPalette) private var palette
-    @EnvironmentObject private var stack: CoreDataStack
 
     @StateObject var viewModel:TrackViewModel
     var theTrack:Track
@@ -32,11 +31,11 @@ struct EditTrackView: View {
         .sheet(item: $sharingTrack){
             sharingTrack = nil
         } content: { tr in
-            CloudSharingView(
-                container: stack.ckContainer,
-                share: tr.share!,
-                title: tr.name!
-            )
+//            CloudSharingView(
+//                container: stack.ckContainer,
+//                share: tr.share!,
+//                title: tr.name!
+//            )
         }
     }
 
@@ -98,29 +97,29 @@ struct EditTrackView: View {
         .onAppear {
             viewModel.setValues(theTrack)
         }
-        .onDisappear {
-            stack.save()
-        }
+//        .onDisappear {
+//            stack.save()
+//        }
     }
 
     func createShare()  {
-        stack.context.perform {
-            Task {
-                if theTrack.share != nil {
-                    sharingTrack = theTrack
-                    return
-                }
-                do {
-                    let (_, share, _) = try await stack.persistentContainer.share([theTrack], to: nil)
-                    share[CKShare.SystemFieldKey.title] = theTrack.name
-                    print("Created share with url:\(String(describing: share.url))")
-                    theTrack.share = share
-                    sharingTrack = theTrack
-                }catch{
-                    print("Failed to create share")
-                }
-            }
-        }
+//        stack.context.perform {
+//            Task {
+//                if theTrack.share != nil {
+//                    sharingTrack = theTrack
+//                    return
+//                }
+//                do {
+//                    let (_, share, _) = try await stack.persistentContainer.share([theTrack], to: nil)
+//                    share[CKShare.SystemFieldKey.title] = theTrack.name
+//                    print("Created share with url:\(String(describing: share.url))")
+//                    theTrack.share = share
+//                    sharingTrack = theTrack
+//                }catch{
+//                    print("Failed to create share")
+//                }
+//            }
+//        }
     }
 
 }
@@ -187,18 +186,18 @@ extension EditTrackView {
 //    }
 }
 
-struct EditTrackView_Previews: PreviewProvider {
-    static var previews: some View {
-        let track = CoreDataStack.preview.getTracks()[3]
-        return ForEach(ColorScheme.allCases, id: \.self) {
-            EditTrackView(track)
-                .preferredColorScheme($0)
-                .environment(\.locale, .init(identifier: "sv"))
-                .environmentObject(CoreDataStack.preview)
-//                .environment(\.managedObjectContext, CoreDataStack.preview.context)
-        }
-    }
-}
+//struct EditTrackView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let track = CoreDataStack.preview.getTracks()[3]
+//        return ForEach(ColorScheme.allCases, id: \.self) {
+//            EditTrackView(track)
+//                .preferredColorScheme($0)
+//                .environment(\.locale, .init(identifier: "sv"))
+//                .environmentObject(CoreDataStack.preview)
+////                .environment(\.managedObjectContext, CoreDataStack.preview.context)
+//        }
+//    }
+//}
 
 struct FieldsView: View {
     @Environment(\.preferredColorPalette) private var palette

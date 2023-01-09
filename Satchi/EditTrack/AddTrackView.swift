@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
+import CoreData
+
 struct AddTrackView: View {
     @Environment(\.preferredColorPalette) private var palette
     @Environment(\.presentationMode) var presentationMode
-    @Environment(\.managedObjectContext) var managedObjectContext
-
+    @Environment(\.managedObjectContext) var viewContext
     @State private var name: String = ""
-
-    @EnvironmentObject private var stack: CoreDataStack
+    private let persistenceController = PersistenceController.shared
 
     var body: some View {
         NavigationView {
@@ -52,9 +52,13 @@ struct AddTrackView: View {
 extension AddTrackView {
 
     private func createNewTrack() {
-        let track = Track(context: managedObjectContext)
-        track.id = UUID()
-        track.name = name
+        let controller = persistenceController
+        let taskContext = controller.persistentContainer.newTaskContext()
+        taskContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        controller.addTrack(name:name, context: taskContext)
+//        let track = Track(context: managedObjectContext)
+//        track.id = UUID()
+//        track.name = name
     }
 }
 

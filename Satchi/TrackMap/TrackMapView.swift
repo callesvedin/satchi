@@ -11,7 +11,6 @@ import os.log
 
 struct TrackMapView: View {
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject private var stack: CoreDataStack
     @StateObject public var mapModel: TrackMapModel
 
     private static let logger = Logger(
@@ -21,8 +20,7 @@ struct TrackMapView: View {
 
     init(track: Track, preview: Bool = false) {
         _mapModel = StateObject(wrappedValue: {
-            let model = TrackMapModel(track: track,
-                                      stack: CoreDataStack.shared)
+            let model = TrackMapModel(track: track)
             return model
 
         }())
@@ -52,15 +50,15 @@ struct TrackMapView: View {
         }
     }
 }
-
-struct TrackMapView_Previews: PreviewProvider {
-
-    static var previews: some View {
-        let stack = CoreDataStack.preview
-
-        NavigationView {
-            TrackMapView(track: stack.getTracks()[0])
-                .environmentObject(CoreDataStack.preview)
-        }
-    }
-}
+//
+//struct TrackMapView_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//        let stack = CoreDataStack.preview
+//
+//        NavigationView {
+//            TrackMapView(track: stack.getTracks()[0])
+//                .environmentObject(CoreDataStack.preview)
+//        }
+//    }
+//}

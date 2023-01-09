@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct TrackMapOverlayView: View {
-    @EnvironmentObject private var stack: CoreDataStack
     @Environment(\.preferredColorPalette) private var palette
     @ObservedObject var mapModel: TrackMapModel
     @Environment(\.colorScheme) var colorScheme
@@ -67,17 +66,17 @@ struct TrackMapOverlayView: View {
         }
     }
 }
-
-
-struct TrackMapOverlayView_Previews: PreviewProvider {
-    static var previews: some View {
-        let model: TrackMapModel = TrackMapModel(track:CoreDataStack.preview.getTracks()[1], stack:CoreDataStack.preview)
-        model.followUser = false
-        model.accuracy = 15
-
-        return Group {
-            TrackMapOverlayView(mapModel: model).ignoresSafeArea().environmentObject(CoreDataStack.preview)
-            TrackMapOverlayView(mapModel: model).ignoresSafeArea().preferredColorScheme(.dark).environmentObject(CoreDataStack.preview)
-        }
-    }
-}
+//
+//
+//struct TrackMapOverlayView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let model: TrackMapModel = TrackMapModel(track:CoreDataStack.preview.getTracks()[1], stack:CoreDataStack.preview)
+//        model.followUser = false
+//        model.accuracy = 15
+//
+//        return Group {
+//            TrackMapOverlayView(mapModel: model).ignoresSafeArea().environmentObject(CoreDataStack.preview)
+//            TrackMapOverlayView(mapModel: model).ignoresSafeArea().preferredColorScheme(.dark).environmentObject(CoreDataStack.preview)
+//        }
+//    }
+//}

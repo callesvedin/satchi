@@ -29,14 +29,14 @@ struct PreviewTrackMapView: View {
         .ignoresSafeArea()        
     }
 }
-
-struct PreviewTrackMapView_Previews: PreviewProvider {
-    static var previews: some View {
-        let stack = CoreDataStack.preview
-
-        NavigationView {
-            PreviewTrackMapView(track: stack.getTracks()[0])
-                .environmentObject(CoreDataStack.preview)
-        }
-    }
-}
+//
+//struct PreviewTrackMapView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let stack = CoreDataStack.preview
+//
+//        NavigationView {
+//            PreviewTrackMapView(track: stack.getTracks()[0])
+//                .environmentObject(CoreDataStack.preview)
+//        }
+//    }
+//}

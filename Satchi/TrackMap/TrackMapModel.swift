@@ -22,7 +22,6 @@ enum RunningEvent: EventType {
 
 class TrackMapModel: NSObject, ObservableObject {
     private var locationManager: CLLocationManager
-    public var stack:CoreDataStack?
     //    public var image: UIImage?
 
     public var regionIsSet: Bool = false
@@ -88,11 +87,10 @@ class TrackMapModel: NSObject, ObservableObject {
     //
     //    }
 
-    init(track:Track, stack:CoreDataStack){
+    init(track:Track){
         self.track = track
         self.laidPath = track.laidPath ?? []
         self.trackPath = track.trackPath ?? []        
-        self.stack = stack
         self.locationManager = CLLocationManager()
         let isViewing = track.getState() == .trailTracked
         stateMachine = Machine(state: isViewing ? .viewing : .notStarted)
@@ -186,13 +184,13 @@ class TrackMapModel: NSObject, ObservableObject {
             track.length = Int32(distance)
             track.created = Date()
             track.state = track.getState().rawValue // TODO: Clean up
-            stack?.save()
+//            stack?.save()
         case .trailAdded:
             track.trackPath = trackPath
             track.timeToFinish = timer.secondsElapsed
             track.started = trackingStarted
             track.state = track.getState().rawValue // TODO: Clean up
-            stack?.save()
+//            stack?.save()
         default:
             print("Unknown state when stopRunning is called \(track.getState())")
         }
