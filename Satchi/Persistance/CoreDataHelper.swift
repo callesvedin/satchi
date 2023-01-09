@@ -39,8 +39,7 @@ extension NSManagedObjectContext {
      Contextual information for handling errors that occur when saving a managed object context.
      */
     enum ContextualInfoForSaving: String {
-        case addTrack, deleteTrack
-        case deduplicateAndWait
+        case addTrack, deleteTrack, updateTrack
     }
     /**
      Save a context and handle the save error. This sample simply prints the error message. Real apps can

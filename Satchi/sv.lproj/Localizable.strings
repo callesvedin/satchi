@@ -11,7 +11,7 @@
 "**Difficulty:**" = "**Svårighetsgrad:**";
 
 /* No comment provided by engineer. */
-"**Length:** %@" = "**Längd:**";
+"**Length:** %@" = "**Längd:** %@";
 
 /* No comment provided by engineer. */
 "**Name:**" = "**Namn:**";

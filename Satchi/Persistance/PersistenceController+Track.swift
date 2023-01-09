@@ -29,6 +29,14 @@ extension PersistenceController {
             }
         }
     }
+
+    func updateTrack(track:Track){
+        if let context = track.managedObjectContext {
+            context.perform {
+                context.save(with: .updateTrack)
+            }
+        }
+    }
     
     func trackTransactions(from notification: Notification) -> [NSPersistentHistoryTransaction] {
         var results = [NSPersistentHistoryTransaction]()

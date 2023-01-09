@@ -15,10 +15,10 @@ struct EditTrackView: View {
     @StateObject var viewModel:TrackViewModel
     var theTrack:Track
     @State var sharingTrack:Track?
+    private var persistanceController = PersistenceController.shared
 
     init(_ track: Track) {
         theTrack = track
-        theTrack.state = track.getState().rawValue
         _viewModel = StateObject(wrappedValue: TrackViewModel(track))
     }
     var shareButton: some View {
@@ -97,9 +97,9 @@ struct EditTrackView: View {
         .onAppear {
             viewModel.setValues(theTrack)
         }
-//        .onDisappear {
-//            stack.save()
-//        }
+        .onDisappear {
+            persistanceController.updateTrack(track: theTrack)
+        }
     }
 
     func createShare()  {
