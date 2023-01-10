@@ -5,9 +5,9 @@
 //  Created by carl-johan.svedin on 2021-03-25.
 //
 
-import SwiftUI
-import CoreData
 import CloudKit
+import CoreData
+import SwiftUI
 
 struct TrackListView: View {
 //    @EnvironmentObject private var stack: CoreDataStack
@@ -26,7 +26,7 @@ struct TrackListView: View {
     private let persistenceController = PersistenceController.shared
 
     @State private var showMapView = false
-    @State private var waitingForShareId : UUID?
+    @State private var waitingForShareId: UUID?
     @State var sharingTrack: Track?
     @State var selectedTrack: Track?
 
@@ -37,25 +37,21 @@ struct TrackListView: View {
             palette.mainBackground.ignoresSafeArea(.all)
             if tracks.isEmpty {
                 NoTracksView(addTrack: $showMapView)
-            }else{
+            } else {
                 List {
                     ForEach(tracks) { section in
                         Section(header: Text(LocalizedStringKey(TrackState(rawValue: section.id)!.text()))) {
-                            ForEach(section,id: \.id) { track in
+                            ForEach(section, id: \.id) { track in
                                 Button(
-                                    action:{selectedTrack = track},
+                                    action: { selectedTrack = track },
                                     label: {
-                                        TrackCellView(deleteFunction: deleteTrack, track: track, waitingForShare:track.id == waitingForShareId)
+                                        TrackCellView(deleteFunction: deleteTrack, track: track, waitingForShare: track.id == waitingForShareId)
                                     }
                                 )
                                 .swipeActions(allowsFullSwipe: false) {
                                     Button {
-                                        do {
-                                            try createShare(track)
-                                            print("Runnig by share!!")
-                                        }catch{
-                                            print("Could not create Share")
-                                        }
+                                        createNewShare(track: track)
+                                        print("Runnig by share!!")
                                     } label: {
                                         Label("Share", systemImage: "square.and.arrow.up")
                                     }
@@ -65,7 +61,6 @@ struct TrackListView: View {
                                     } label: {
                                         Label("Delete", systemImage: "trash.fill")
                                     }
-
                                 }
                             }
                         }
@@ -80,10 +75,10 @@ struct TrackListView: View {
                 }
             }
         }
-        .sheet(item: $sharingTrack){
+        .sheet(item: $sharingTrack) {
             sharingTrack = nil
             waitingForShareId = nil
-        } content: { tr in
+        } content: { _ in
 //            CloudSharingView(
 //                container: stack.ckContainer,
 //                share: tr.share!,
@@ -94,11 +89,10 @@ struct TrackListView: View {
         .navigationTitle(LocalizedStringKey("Tracks"))
         .toolbar {
             HStack {
-
 //                ColorSelectionView()
-                Button(action:{showMapView.toggle()},label:{Text("Add track")})
-                .foregroundColor(palette.link)
-                .padding(0)
+                Button(action: { showMapView.toggle() }, label: { Text("Add track") })
+                    .foregroundColor(palette.link)
+                    .padding(0)
             }
         }
 //        .onAppear() {
@@ -119,7 +113,15 @@ struct TrackListView: View {
         }
     }
 
-    func createShare(_ track:Track) throws {        
+    private func createNewShare(track: Track) {
+        PersistenceController.shared.presentCloudSharingController(track: track)
+    }
+
+    private func manageParticipation(track: Track) {
+        PersistenceController.shared.presentCloudSharingController(track: track)
+    }
+
+//    func createShare(_ track:Track) throws {
 //        waitingForShareId = track.id
 //
 //        mocc.perform {
@@ -136,16 +138,14 @@ struct TrackListView: View {
 //            }
 //        }
 
-    }
+//    }
 
     func deleteTrack(_ track: Track) {
 //        stack.delete(track)
     }
 }
 
-
 struct HideScrollModifier: ViewModifier {
-
     func body(content: Content) -> some View {
         if #available(iOS 16.0, *) {
             content
@@ -164,7 +164,7 @@ extension View {
 
 struct NoTracksView: View {
     @Environment(\.preferredColorPalette) private var palette
-    @Binding var addTrack:Bool
+    @Binding var addTrack: Bool
 
     var body: some View {
         VStack {
@@ -192,9 +192,10 @@ struct TrackSectionView: View {
         }
     }
 }
+
 //
 //
-//struct TrackListView_Previews: PreviewProvider {
+// struct TrackListView_Previews: PreviewProvider {
 //
 //    static var previews: some View {
 //        let environment = AppEnvironment.shared
@@ -215,8 +216,7 @@ struct TrackSectionView: View {
 //        .environment(\.preferredColorPalette,environment.palette)
 //        .environmentObject(environment)
 //    }
-//}
-
+// }
 
 struct ColorSelectionView: View {
     @EnvironmentObject var environment: AppEnvironment

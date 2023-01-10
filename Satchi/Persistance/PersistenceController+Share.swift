@@ -1,34 +1,37 @@
 /*
-See LICENSE folder for this sample’s licensing information.
+ See LICENSE folder for this sample’s licensing information.
 
-Abstract:
-Extensions that wrap the related methods for sharing.
-*/
+ Abstract:
+ Extensions that wrap the related methods for sharing.
+ */
 
-import Foundation
-import CoreData
-import UIKit
 import CloudKit
+import CoreData
+import Foundation
+import UIKit
 
 #if os(iOS) // UICloudSharingController is only available in iOS.
+
 // MARK: - Convenient methods for managing sharing.
+
 //
 extension PersistenceController {
     func presentCloudSharingController(track: Track) {
         /**
-         Grab the share if the photo is already shared.
+         Grab the share if the track is already shared.
          */
-        var photoShare: CKShare?
+        var trackShare: CKShare?
         if let shareSet = try? persistentContainer.fetchShares(matching: [track.objectID]),
-           let (_, share) = shareSet.first {
-            photoShare = share
+           let (_, share) = shareSet.first
+        {
+            trackShare = share
         }
 
         let sharingController: UICloudSharingController
-        if photoShare == nil {
+        if trackShare == nil {
             sharingController = newSharingController(unsharedTrack: track, persistenceController: self)
         } else {
-            sharingController = UICloudSharingController(share: photoShare!, container: cloudKitContainer)
+            sharingController = UICloudSharingController(share: trackShare!, container: cloudKitContainer)
         }
         sharingController.delegate = self
         /**
@@ -36,10 +39,11 @@ extension PersistenceController {
          */
         if let viewController = rootViewController {
             sharingController.modalPresentationStyle = .formSheet
+            sharingController.view.backgroundColor = .white
             viewController.present(sharingController, animated: true)
         }
     }
-    
+
     func presentCloudSharingController(share: CKShare) {
         let sharingController = UICloudSharingController(share: share, container: cloudKitContainer)
         sharingController.delegate = self
@@ -51,7 +55,7 @@ extension PersistenceController {
             viewController.present(sharingController, animated: true)
         }
     }
-    
+
     private func newSharingController(unsharedTrack: Track, persistenceController: PersistenceController) -> UICloudSharingController {
         return UICloudSharingController { (_, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
             /**
@@ -64,7 +68,7 @@ extension PersistenceController {
              or self-add themselves to it.
              The default value of publicPermission is CKShare.ParticipantPermission.none.
              */
-            self.persistentContainer.share([unsharedTrack], to: nil) { objectIDs, share, container, error in
+            self.persistentContainer.share([unsharedTrack], to: nil) { _, share, container, error in
                 if let share = share {
                     self.configure(share: share)
                 }
@@ -77,7 +81,8 @@ extension PersistenceController {
         for scene in UIApplication.shared.connectedScenes {
             if scene.activationState == .foregroundActive,
                let sceneDeleate = (scene as? UIWindowScene)?.delegate as? UIWindowSceneDelegate,
-               let window = sceneDeleate.window {
+               let window = sceneDeleate.window
+            {
                 return window?.rootViewController
             }
         }
@@ -91,16 +96,16 @@ extension PersistenceController: UICloudSharingControllerDelegate {
      CloudKit triggers the delegate method in two cases:
      - An owner stops sharing a share.
      - A participant removes themselves from a share by tapping the Remove Me button in UICloudSharingController.
-     
+
      After stopping the sharing,  purge the zone or just wait for an import to update the local store.
      This sample chooses to purge the zone to avoid stale UI. That triggers a "zone not found" error because UICloudSharingController
      deletes the zone, but the error doesn't really matter in this context.
-     
+
      Purging the zone has a caveat:
      - When sharing an object from the owner side, Core Data moves the object to the shared zone.
      - When calling purgeObjectsAndRecordsInZone, Core Data removes all the objects and records in the zone.
      To keep the objects, deep copy the object graph you want to keep and make sure no object in the new graph is associated with any share.
-     
+
      The purge API posts an NSPersistentStoreRemoteChange notification after finishing its job, so observe the notification to update
      the UI, if necessary.
      */
@@ -112,7 +117,7 @@ extension PersistenceController: UICloudSharingControllerDelegate {
 
     func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
         if let share = csc.share, let persistentStore = share.persistentStore {
-            persistentContainer.persistUpdatedShare(share, in: persistentStore) { (share, error) in
+            persistentContainer.persistUpdatedShare(share, in: persistentStore) { _, error in
                 if let error = error {
                     print("\(#function): Failed to persist updated share: \(error)")
                 }
@@ -123,9 +128,9 @@ extension PersistenceController: UICloudSharingControllerDelegate {
     func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
         print("\(#function): Failed to save a share: \(error)")
     }
-    
+
     func itemTitle(for csc: UICloudSharingController) -> String? {
-        return csc.share?.title ?? "A cool photo"
+        return csc.share?.title ?? "A cool track"
     }
 }
 #endif
@@ -139,18 +144,17 @@ extension PersistenceController {
 #endif
 
 extension PersistenceController {
-    
     func shareObject(_ unsharedObject: NSManagedObject, to existingShare: CKShare?,
                      completionHandler: ((_ share: CKShare?, _ error: Error?) -> Void)? = nil)
     {
-        persistentContainer.share([unsharedObject], to: existingShare) { (objectIDs, share, container, error) in
+        persistentContainer.share([unsharedObject], to: existingShare) { _, share, _, error in
             guard error == nil, let share = share else {
                 print("\(#function): Failed to share an object: \(error!))")
                 completionHandler?(share, error)
                 return
             }
             /**
-             Deduplicate tags, if necessary, because adding a photo to an existing share moves the whole object graph to the associated
+             Deduplicate tags, if necessary, because adding a track to an existing share moves the whole object graph to the associated
              record zone, which can lead to duplicated tags.
              */
             if existingShare == nil {
@@ -159,7 +163,7 @@ extension PersistenceController {
             /**
              Synchronize the changes on the share to the private persistent store.
              */
-            self.persistentContainer.persistUpdatedShare(share, in: self.privatePersistentStore) { (share, error) in
+            self.persistentContainer.persistUpdatedShare(share, in: self.privatePersistentStore) { share, error in
                 if let error = error {
                     print("\(#function): Failed to persist updated share: \(error)")
                 }
@@ -167,7 +171,7 @@ extension PersistenceController {
             }
         }
     }
-    
+
     /**
      Delete the Core Data objects and the records in the CloudKit record zone associated with the share.
      */
@@ -176,7 +180,7 @@ extension PersistenceController {
             print("\(#function): Failed to find the persistent store for share. \(share))")
             return
         }
-        persistentContainer.purgeObjectsAndRecordsInZone(with: share.recordID.zoneID, in: store) { (zoneID, error) in
+        persistentContainer.purgeObjectsAndRecordsInZone(with: share.recordID.zoneID, in: store) { _, error in
             if let error = error {
                 print("\(#function): Failed to purge objects and records: \(error)")
             }
@@ -185,25 +189,26 @@ extension PersistenceController {
 
     func existingShare(track: Track) -> CKShare? {
         if let shareSet = try? persistentContainer.fetchShares(matching: [track.objectID]),
-           let (_, share) = shareSet.first {
+           let (_, share) = shareSet.first
+        {
             return share
         }
         return nil
     }
-    
+
     func share(with title: String) -> CKShare? {
         let stores = [privatePersistentStore, sharedPersistentStore]
         let shares = try? persistentContainer.fetchShares(in: stores)
         let share = shares?.first(where: { $0.title == title })
         return share
     }
-    
+
     func shareTitles() -> [String] {
         let stores = [privatePersistentStore, sharedPersistentStore]
         let shares = try? persistentContainer.fetchShares(in: stores)
         return shares?.map { $0.title } ?? []
     }
-    
+
     private func configure(share: CKShare, with track: Track? = nil) {
         share[CKShare.SystemFieldKey.title] = "A cool track"
     }
@@ -211,25 +216,26 @@ extension PersistenceController {
 
 extension PersistenceController {
     func addParticipant(emailAddress: String, permission: CKShare.ParticipantPermission = .readWrite, share: CKShare,
-                        completionHandler: ((_ share: CKShare?, _ error: Error?) -> Void)?) {
+                        completionHandler: ((_ share: CKShare?, _ error: Error?) -> Void)?)
+    {
         /**
          Use the email address to look up the participant from the private store. Return if the participant doesn't exist.
          Use privatePersistentStore directly because only the owner may add participants to a share.
          */
         let lookupInfo = CKUserIdentity.LookupInfo(emailAddress: emailAddress)
-        let persistentStore = privatePersistentStore //share.persistentStore!
+        let persistentStore = privatePersistentStore // share.persistentStore!
 
-        persistentContainer.fetchParticipants(matching: [lookupInfo], into: persistentStore) { (results, error) in
+        persistentContainer.fetchParticipants(matching: [lookupInfo], into: persistentStore) { results, error in
             guard let participants = results, let participant = participants.first, error == nil else {
                 completionHandler?(share, error)
                 return
             }
-                  
+
             participant.permission = permission
             participant.role = .privateUser
             share.addParticipant(participant)
-            
-            self.persistentContainer.persistUpdatedShare(share, in: persistentStore) { (share, error) in
+
+            self.persistentContainer.persistUpdatedShare(share, in: persistentStore) { share, error in
                 if let error = error {
                     print("\(#function): Failed to persist updated share: \(error)")
                 }
@@ -237,16 +243,17 @@ extension PersistenceController {
             }
         }
     }
-    
+
     func deleteParticipant(_ participants: [CKShare.Participant], share: CKShare,
-                           completionHandler: ((_ share: CKShare?, _ error: Error?) -> Void)?) {
+                           completionHandler: ((_ share: CKShare?, _ error: Error?) -> Void)?)
+    {
         for participant in participants {
             share.removeParticipant(participant)
         }
         /**
          Use privatePersistentStore directly because only the owner may delete participants to a share.
          */
-        persistentContainer.persistUpdatedShare(share, in: privatePersistentStore) { (share, error) in
+        persistentContainer.persistUpdatedShare(share, in: privatePersistentStore) { share, error in
             if let error = error {
                 print("\(#function): Failed to persist updated share: \(error)")
             }
@@ -271,7 +278,7 @@ extension CKShare {
         formatter.timeStyle = .short
         return "Share-" + formatter.string(from: date)
     }
-    
+
     var persistentStore: NSPersistentStore? {
         let persistentContainer = PersistenceController.shared.persistentContainer
         let privatePersistentStore = PersistenceController.shared.privatePersistentStore

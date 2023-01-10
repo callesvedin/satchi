@@ -13,12 +13,13 @@ struct TrackCellView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.preferredColorPalette) private var palette
 
+    let persistenceController = PersistenceController.shared
     let deleteFunction: DeleteFunction
     var track: Track
     var waitingForShare = false
 
     let columns = [
-        GridItem(.flexible(maximum:140)),
+        GridItem(.flexible(maximum: 140)),
         GridItem(.flexible())
     ]
 
@@ -34,7 +35,7 @@ struct TrackCellView: View {
             LazyVGrid(columns: columns, alignment: .leading, spacing: 0) {
                 HStack {
                     Image(systemName: "flag.fill").foregroundColor(.green)
-                    Text("\(track.created != nil ? itemFormatter.string(from: track.created!) : "--/--/--" )")
+                    Text("\(track.created != nil ? itemFormatter.string(from: track.created!) : "--/--/--")")
                 }
                 Label("\(DistanceFormatter.distanceFor(meters: Double(track.length)))", systemImage: "arrow.left.and.right")
 
@@ -48,23 +49,23 @@ struct TrackCellView: View {
                 }
                 Text("Difficulty: \(track.difficulty)")
 //                HStack {
-////                    Text("Difficulty:")
+                ////                    Text("Difficulty:")
 //                    DifficultyView(difficulty: .constant(track.difficulty))
 //                }
-//                if stack.isShared(object: track) {
-//                    Image(systemName: "person.3.fill")
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 20)
-//                        .padding(.vertical, 4)
-//                }
+                if persistenceController.existingShare(track: track) != nil {
+                    Image(systemName: "person.3.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20)
+                        .padding(.vertical, 4)
+                }
             }.font(.body)
         }
         .padding(.vertical, 10)
         .font(.caption)
         .background(palette.midBackground)
         .overlay {
-            ProgressView().opacity(waitingForShare ? 1:0)
+            ProgressView().opacity(waitingForShare ? 1 : 0)
         }
     }
 
@@ -74,8 +75,9 @@ struct TrackCellView: View {
         return formatter
     }()
 }
+
 //
-//struct TrackCellView_Previews: PreviewProvider {
+// struct TrackCellView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        let track = CoreDataStack.preview.getTracks()[0]
 //        //        ForEach(ColorScheme.allCases, id: \.self) {
@@ -89,4 +91,4 @@ struct TrackCellView: View {
 //        //        }
 //
 //    }
-//}
+// }

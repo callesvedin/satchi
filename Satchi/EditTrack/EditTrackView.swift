@@ -23,20 +23,20 @@ struct EditTrackView: View {
     }
     var shareButton: some View {
         Button {
-            createShare()
+            createNewShare(track:theTrack)
         } label: {
             Image(systemName: "square.and.arrow.up")
         }
         .accentColor(palette.link)
-        .sheet(item: $sharingTrack){
-            sharingTrack = nil
-        } content: { tr in
-//            CloudSharingView(
-//                container: stack.ckContainer,
-//                share: tr.share!,
-//                title: tr.name!
-//            )
-        }
+//        .sheet(item: $sharingTrack){
+//            sharingTrack = nil
+//        } content: { tr in
+////            CloudSharingView(
+////                container: stack.ckContainer,
+////                share: tr.share!,
+////                title: tr.name!
+////            )
+//        }
     }
 
     var showMapViewButton : some View {
@@ -101,7 +101,13 @@ struct EditTrackView: View {
             persistanceController.updateTrack(track: theTrack)
         }
     }
+    private func createNewShare( track: Track) {
+        PersistenceController.shared.presentCloudSharingController(track: track)
+    }
 
+    private func manageParticipation(track: Track) {
+        PersistenceController.shared.presentCloudSharingController(track: track)
+    }
     func createShare()  {
 //        stack.context.perform {
 //            Task {
