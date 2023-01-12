@@ -27,16 +27,6 @@ struct TrackMapView: View {
 
     }
 
-//    init(track: TrackViewModel, preview: Bool = false) {
-//        _mapModel = StateObject(wrappedValue: {
-//            let model = TrackMapModel(track: track,
-//                                      stack: CoreDataStack.shared)
-//            return model
-//
-//        }())
-//
-//    }
-
     var body: some View {
         ZStack {
             MapView(mapModel: mapModel)

@@ -12,7 +12,8 @@ enum PathAnnotationKind {
     case trailStart,
          trailEnd,
          trackingStart,
-         trackingEnd
+         trackingEnd,
+         dummy
 
     func getTitle() -> String {
         switch self {
@@ -24,6 +25,8 @@ enum PathAnnotationKind {
             return "Track Start"
         case .trackingEnd:
             return "Track Stop"
+        case .dummy:
+            return "Dummy"
         }
     }
 
@@ -37,9 +40,10 @@ enum PathAnnotationKind {
             return "TrackStart"
         case .trackingEnd:
             return "TrackEnd"
+        case .dummy:
+            return "Dummy"
         }
     }
-    
 }
 
 class PathAnnotation: MKPointAnnotation {
@@ -56,18 +60,20 @@ class PathAnnotation: MKPointAnnotation {
             self.imageIdentifier = "flag.circle"
             self.color = UIColor.systemGreen
         case .trailEnd:
-            self.imageIdentifier = "flag.circle"
+            self.imageIdentifier = "flag.filled.and.flag.crossed"
             self.color = UIColor.systemGreen
         case .trackingStart:
             self.imageIdentifier = "figure.walk.circle"
             self.color = UIColor.systemRed
         case .trackingEnd:
-            self.imageIdentifier = "figure.walk.circle"
+            self.imageIdentifier = "flag.filled.and.flag.crossed"
             self.color = UIColor.systemRed
+        case .dummy:
+            self.imageIdentifier = "rosette"
+            self.color = UIColor.magenta
         }
         self.reuseIdentifier = kind.getIdentifier()
         super.init()
         self.title = kind.getTitle()
     }
-
 }

@@ -5,20 +5,19 @@
 //  Created by carl-johan.svedin on 2021-04-06.
 //
 
-import Foundation
 import CoreLocation
-import SwiftUI
+import Foundation
 import os.log
 import SwiftState
+import SwiftUI
 
-enum RunningState:StateType {
-    case  notStarted ,running, paused, done, viewing
+enum RunningState: StateType {
+    case notStarted, running, paused, done, viewing
 }
 
 enum RunningEvent: EventType {
     case start, pause, resume, stop
 }
-
 
 class TrackMapModel: NSObject, ObservableObject {
     private var locationManager: CLLocationManager
@@ -27,16 +26,16 @@ class TrackMapModel: NSObject, ObservableObject {
     public var regionIsSet: Bool = false
     public var trackingStarted: Date?
 
-    public var track:Track
-    public var stateMachine:Machine<RunningState, RunningEvent>!
+    public var track: Track
+    public var stateMachine: Machine<RunningState, RunningEvent>!
 
-    @Published var pathStartLocation:CLLocationCoordinate2D?
-    @Published var pathEndLocation:CLLocationCoordinate2D?
-    @Published var trackStartLocation:CLLocationCoordinate2D?
-    @Published var trackEndLocation:CLLocationCoordinate2D?
+    @Published var pathStartLocation: CLLocationCoordinate2D?
+    @Published var pathEndLocation: CLLocationCoordinate2D?
+    @Published var trackStartLocation: CLLocationCoordinate2D?
+    @Published var trackEndLocation: CLLocationCoordinate2D?
 
     var followUser: Bool = true
-    @Published var timer: TrackTimer = TrackTimer()
+    @Published var timer: TrackTimer = .init()
     @Published var distance: CLLocationDistance = 0
     @Published public var gotUserLocation = false
     public var currentLocation: CLLocation?
@@ -64,6 +63,8 @@ class TrackMapModel: NSObject, ObservableObject {
         }
     }
 
+    @Published public var dummies: [CLLocationCoordinate2D] = []
+
     //    private func createImage() {
     //        if region != nil {
     //            let snapShotOptions: MKMapSnapshotter.Options = MKMapSnapshotter.Options()
@@ -87,11 +88,12 @@ class TrackMapModel: NSObject, ObservableObject {
     //
     //    }
 
-    init(track:Track){
+    init(track: Track) {
         self.track = track
-        self.laidPath = track.laidPath ?? []
-        self.trackPath = track.trackPath ?? []        
-        self.locationManager = CLLocationManager()
+        laidPath = track.laidPath ?? []
+        trackPath = track.trackPath ?? []
+        dummies = track.dummies ?? []
+        locationManager = CLLocationManager()
         let isViewing = track.getState() == .trailTracked
         stateMachine = Machine(state: isViewing ? .viewing : .notStarted)
         super.init()
@@ -106,8 +108,7 @@ class TrackMapModel: NSObject, ObservableObject {
 
         locationManager.delegate = self
         locationManager.requestLocation()
-        if track.getState() == .trailTracked
-        {
+        if track.getState() == .trailTracked {
             trackStartLocation = trackPath.first?.coordinate
             trackEndLocation = trackPath.last?.coordinate
         }
@@ -116,7 +117,7 @@ class TrackMapModel: NSObject, ObservableObject {
             pathStartLocation = laidPath.first?.coordinate
             pathEndLocation = laidPath.last?.coordinate
         }
-        stateMachine.addRouteMapping { event, fromState, userInfo -> RunningState? in
+        stateMachine.addRouteMapping { event, fromState, _ -> RunningState? in
             // no route for no-event
             guard let event = event else { return nil }
 
@@ -140,7 +141,7 @@ class TrackMapModel: NSObject, ObservableObject {
             }
         }
 
-        stateMachine.addHandler(event: .start) {context in
+        stateMachine.addHandler(event: .start) { context in
             print(".start is triggered! Context:\(context)")
             self.startRunning()
         }
@@ -150,12 +151,12 @@ class TrackMapModel: NSObject, ObservableObject {
         }
         stateMachine.addHandler(event: .stop) { context in
             print(".stop is triggered! Context:\(context)")
-            if context.fromState == .viewing  {
+            if context.fromState == .viewing {
                 self.stopRunning()
-            }else if context.fromState == .notStarted {
+            } else if context.fromState == .notStarted {
                 self.cancelRunning()
 
-            }else if context.fromState == .paused {
+            } else if context.fromState == .paused {
                 self.stopRunning()
             }
         }
@@ -168,12 +169,11 @@ class TrackMapModel: NSObject, ObservableObject {
     private func resumeRunning() {
         timer.resume()
         if track.getState() == .notStarted {
-            self.pathEndLocation = nil
-        }else{
-            self.trackEndLocation = nil
+            pathEndLocation = nil
+        } else {
+            trackEndLocation = nil
         }
     }
-
 
     private func stopRunning() {
         switch track.getState() {
@@ -183,19 +183,20 @@ class TrackMapModel: NSObject, ObservableObject {
             track.timeToCreate = timer.secondsElapsed
             track.length = Int32(distance)
             track.created = Date()
-            track.state = track.getState().rawValue // TODO: Clean up
+            track.state = track.getState().rawValue
+            track.dummies = dummies
 //            stack?.save()
         case .trailAdded:
             track.trackPath = trackPath
             track.timeToFinish = timer.secondsElapsed
             track.started = trackingStarted
-            track.state = track.getState().rawValue // TODO: Clean up
+            track.state = track.getState().rawValue
 //            stack?.save()
         default:
             print("Unknown state when stopRunning is called \(track.getState())")
         }
-        self.stopTracking()
-        self.done = true
+        stopTracking()
+        done = true
     }
 
     private func pauseRunning() {
@@ -229,10 +230,9 @@ class TrackMapModel: NSObject, ObservableObject {
     }
 
     private func cancelRunning() {
-        self.stopTracking()
-        self.done = true
+        stopTracking()
+        done = true
     }
-
 
     public func start() {
         stateMachine <-! .start
@@ -250,15 +250,21 @@ class TrackMapModel: NSObject, ObservableObject {
         stateMachine <-! .stop
     }
 
+    public func addApport() {
+        print("Add dummy now!")
+        if let location = locationManager.location {
+            dummies.append(location.coordinate)
+        }
+    }
+
     private func getLength(from locations: [CLLocation]) -> Double {
         var length: Double = 0
         for (count, location) in locations.enumerated() {
-            if count == 0 {continue}
-            length +=  location.distance(from: locations[count-1])
+            if count == 0 { continue }
+            length += location.distance(from: locations[count - 1])
         }
         return length
     }
-
 
     public func startTracking() {
         print("Start tracking.")
@@ -282,7 +288,7 @@ extension TrackMapModel: CLLocationManagerDelegate {
         }
         accuracy = locations.first?.horizontalAccuracy ?? 0
         currentLocation = manager.location
-        self.gotUserLocation = true
+        gotUserLocation = true
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
@@ -290,12 +296,12 @@ extension TrackMapModel: CLLocationManagerDelegate {
         switch manager.authorizationStatus {
         case .notDetermined:
             print("Status not determined. Requesting authorization")
-            self.gotUserLocation = false
+            gotUserLocation = false
             manager.requestAlwaysAuthorization()
         case .authorizedWhenInUse, .authorizedAlways:
             startTracking()
         default:
-            self.gotUserLocation = false
+            gotUserLocation = false
         }
     }
 
@@ -306,5 +312,4 @@ extension TrackMapModel: CLLocationManagerDelegate {
     func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {
         print("Location manager paused location updates.")
     }
-
 }

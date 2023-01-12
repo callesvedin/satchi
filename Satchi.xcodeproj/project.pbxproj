@@ -16,6 +16,8 @@
 		EB352C86278CEA170015AC5A /* TrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A64261AF59A0080C4FE /* TrackViewModel.swift */; };
 		EB352C8C278CEB310015AC5A /* Track+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB352C8A278CEB310015AC5A /* Track+CoreDataClass.swift */; };
 		EB352C8E278EB6720015AC5A /* Satchi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EBCB4815266762F800E5631C /* Satchi.xcdatamodeld */; };
+		EB35885F2970BAEB00CCB235 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB35885E2970BAEB00CCB235 /* SceneDelegate.swift */; };
+		EB3588602970BAEB00CCB235 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB35885E2970BAEB00CCB235 /* SceneDelegate.swift */; };
 		EB3DF31D28C65AFA00A45A8D /* PreviewTrackMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3DF31C28C65AFA00A45A8D /* PreviewTrackMapView.swift */; };
 		EB3DF31F28C65BEE00A45A8D /* PreviewMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3DF31E28C65BEE00A45A8D /* PreviewMapView.swift */; };
 		EB409F3628AD0EB700BA2C23 /* StateButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB409F3528AD0EB700BA2C23 /* StateButtonView.swift */; };
@@ -130,6 +132,7 @@
 		EB2F91202624B6500026773D /* TrackMapOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapOverlayView.swift; sourceTree = "<group>"; };
 		EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayButtonStyle.swift; sourceTree = "<group>"; };
 		EB352C8A278CEB310015AC5A /* Track+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Track+CoreDataClass.swift"; sourceTree = "<group>"; };
+		EB35885E2970BAEB00CCB235 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		EB3DF31C28C65AFA00A45A8D /* PreviewTrackMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewTrackMapView.swift; sourceTree = "<group>"; };
 		EB3DF31E28C65BEE00A45A8D /* PreviewMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewMapView.swift; sourceTree = "<group>"; };
 		EB409F3528AD0EB700BA2C23 /* StateButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateButtonView.swift; sourceTree = "<group>"; };
@@ -288,6 +291,7 @@
 				EB87253D260CC132008AD8E7 /* TrackList */,
 				EB872507260CC0C4008AD8E7 /* SatchiApp.swift */,
 				EBD542B428D7971400FAE7FA /* AppEnvironment.swift */,
+				EB35885E2970BAEB00CCB235 /* SceneDelegate.swift */,
 				EB59DE4328310BF60043DE33 /* AppDelegate.swift */,
 				EB7D2148282C6553006CB703 /* UIApplicationExt.swift */,
 				EB2F91252624B8DF0026773D /* OverlayButtonStyle.swift */,
@@ -568,6 +572,7 @@
 				EBD13A55261AF3760080C4FE /* EditTrackView.swift in Sources */,
 				EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */,
 				EB7D2149282C6553006CB703 /* UIApplicationExt.swift in Sources */,
+				EB35885F2970BAEB00CCB235 /* SceneDelegate.swift in Sources */,
 				EB59DE3E2830051F0043DE33 /* StringExt.swift in Sources */,
 				EBE9440528D26D4A00C1C7A5 /* PaletteEnvironment.swift in Sources */,
 				EBA842E8287589CF0061C338 /* TimeFormatter.swift in Sources */,
@@ -632,6 +637,7 @@
 				EBA6D5CA296B6738000579FC /* EditTrackView.swift in Sources */,
 				EBA6D5CB296B6738000579FC /* TrackMapView.swift in Sources */,
 				EBA6D5CC296B6738000579FC /* UIApplicationExt.swift in Sources */,
+				EB3588602970BAEB00CCB235 /* SceneDelegate.swift in Sources */,
 				EBA6D5CD296B6738000579FC /* StringExt.swift in Sources */,
 				EBA6D5CE296B6738000579FC /* PaletteEnvironment.swift in Sources */,
 				EBA6D5CF296B6738000579FC /* TimeFormatter.swift in Sources */,

@@ -16,13 +16,19 @@ struct TrackMapOverlayView: View {
         self.mapModel = mapModel
     }
 
+    var addApportButton: some View {
+        Button(action: { mapModel.addApport() }, label: { Text("Add dummy") })
+            .buttonStyle(OverlayButtonStyle(backgroundColor: palette.mainBackground))
+            .padding(15)
+    }
+
     var body: some View {
         let window = UIApplication.shared.currentKeyWindow
         let topPadding = window == nil ? 40 : window!.safeAreaInsets.top + 10
 
         return VStack {
             HStack {
-                Text("Distance: \(DistanceFormatter.distanceFor(meters:mapModel.distance))")
+                Text("Distance: \(DistanceFormatter.distanceFor(meters: mapModel.distance))")
                 Spacer()
                 Text("Time: \(TimeFormatter.shortTimeWithSecondsFor(seconds: mapModel.timer.secondsElapsed))")
             }
@@ -31,8 +37,11 @@ struct TrackMapOverlayView: View {
             .padding(.bottom)
             .background(palette.mainBackground.opacity(0.8))
 
-            if mapModel.stateMachine.state != .viewing  {
+            if mapModel.stateMachine.state != .viewing {
                 HStack {
+                    if mapModel.stateMachine.state == .running {
+                        addApportButton
+                    }
                     Spacer()
                     if mapModel.accuracy > 10 {
                         Image(systemName: "antenna.radiowaves.left.and.right.slash")
@@ -44,10 +53,10 @@ struct TrackMapOverlayView: View {
                             )
                     }
                     Button(
-                        action: {mapModel.followUser.toggle()},
+                        action: { mapModel.followUser.toggle() },
                         label: {
-                            Image.init(systemName: "location")
-                                .symbolVariant(mapModel.followUser ? .fill: .none)
+                            Image(systemName: "location")
+                                .symbolVariant(mapModel.followUser ? .fill : .none)
                                 .imageScale(.large)
                                 .padding(8)
                                 .background(
@@ -60,15 +69,15 @@ struct TrackMapOverlayView: View {
                 .padding(.horizontal, 10)
             }
             Spacer()
-            StateButtonView(mapModel:mapModel)
+            StateButtonView(mapModel: mapModel)
                 .padding(.bottom, 30)
-
         }
     }
 }
+
 //
 //
-//struct TrackMapOverlayView_Previews: PreviewProvider {
+// struct TrackMapOverlayView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        let model: TrackMapModel = TrackMapModel(track:CoreDataStack.preview.getTracks()[1], stack:CoreDataStack.preview)
 //        model.followUser = false
@@ -79,4 +88,4 @@ struct TrackMapOverlayView: View {
 //            TrackMapOverlayView(mapModel: model).ignoresSafeArea().preferredColorScheme(.dark).environmentObject(CoreDataStack.preview)
 //        }
 //    }
-//}
+// }

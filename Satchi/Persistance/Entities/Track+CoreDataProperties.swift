@@ -6,40 +6,38 @@
 //
 //
 
-import Foundation
 import CoreData
 import CoreLocation
+import Foundation
 
-extension Track {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Track> {
+public extension Track {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<Track> {
         let fetchRequest = NSFetchRequest<Track>(entityName: "Track")
         return fetchRequest
     }
 
-    @NSManaged public var comments: String?
-    @NSManaged public var created: Date?
-    @NSManaged public var difficulty: Int16
-    @NSManaged public var id: UUID?
-    @NSManaged public var image: Data?
-    @NSManaged public var laidPath: [CLLocation]?
-    @NSManaged public var length: Int32
-    @NSManaged public var name: String?
-    @NSManaged public var started: Date?
-    @NSManaged public var timeToCreate: Double
-    @NSManaged public var timeToFinish: Double
-    @NSManaged public var trackPath: [CLLocation]?
-    @NSManaged public var state: Int16
-
+    @NSManaged var comments: String?
+    @NSManaged var created: Date?
+    @NSManaged var difficulty: Int16
+    @NSManaged var id: UUID?
+    @NSManaged var image: Data?
+    @NSManaged var laidPath: [CLLocation]?
+    @NSManaged var length: Int32
+    @NSManaged var name: String?
+    @NSManaged var started: Date?
+    @NSManaged var timeToCreate: Double
+    @NSManaged var timeToFinish: Double
+    @NSManaged var trackPath: [CLLocation]?
+    @NSManaged var state: Int16
+    @NSManaged var dummies: [CLLocationCoordinate2D]?
 }
 
-extension Track: Identifiable {
-
-}
+extension Track: Identifiable {}
 
 // MARK: State
-extension Track {
-    public func getState() -> TrackState {
+
+public extension Track {
+    func getState() -> TrackState {
         if timeToFinish > 0 {
             return .trailTracked
         } else if timeToCreate > 0 {
@@ -50,9 +48,8 @@ extension Track {
     }
 }
 
-
 @objc
-public enum TrackState:Int16 {
+public enum TrackState: Int16 {
     case notStarted, trailAdded, trailTracked
 
     func text() -> String {
@@ -64,38 +61,5 @@ public enum TrackState:Int16 {
         case .trailTracked:
             return "Finished tracks"
         }
-
     }
 }
-
-//
-//
-//public class StateSection:NSObject
-//{
-//    static let createdState = StateSection(text: "Created tracks", sortOrder: 0)
-//    static let startedState = StateSection(text: "Started tracks", sortOrder: 1)
-//    static let finishedState = StateSection(text: "Finished tracks", sortOrder: 2)
-//
-//    let text:String
-//    let sortOrder:Int
-//    init(text:String, sortOrder:Int) {
-//        self.text=text
-//        self.sortOrder=sortOrder
-//    }
-//
-//    static func sectionNameFor(order : Int) -> String {
-//        switch order {
-//        case 0:
-//            return createdState.text
-//        case 1:
-//            return startedState.text
-//        case 2:
-//            return finishedState.text
-//        default:
-//            return ""
-//        }
-//    }
-//}
-
-
-

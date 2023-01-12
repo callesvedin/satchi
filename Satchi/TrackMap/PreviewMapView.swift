@@ -132,6 +132,8 @@ struct PreviewMapView: UIViewRepresentable {
         case .laidStop:
             annotation = PathAnnotation(kind: .trailEnd)
             annotation.title = AnnotationType.laidStop.rawValue
+        case .dummy:
+            annotation = PathAnnotation(kind: .dummy)        
         }
         annotation.coordinate = location
         view.addAnnotation(annotation)

@@ -1,10 +1,10 @@
-import MapKit
-import SwiftUI
 import Combine
+import MapKit
 import os.log
+import SwiftUI
 
-enum AnnotationType:String {
-    case trackStart = "Track Start", trackStop = "Track Stop", laidStart = "Start ", laidStop = "Stop"
+enum AnnotationType: String {
+    case trackStart = "Track Start", trackStop = "Track Stop", laidStart = "Start ", laidStop = "Stop", dummy = "Dummy"
 }
 
 struct MapView: UIViewRepresentable {
@@ -17,10 +17,11 @@ struct MapView: UIViewRepresentable {
         category: String(describing: MapView.self)
     )
 
-    private var pathStartAnnotation:MKAnnotation?
-    private var pathStopAnnotation:MKAnnotation?
-    private var trackStartAnnotation:MKAnnotation?
-    private var trackStopAnnotation:MKAnnotation?
+    private var pathStartAnnotation: MKAnnotation?
+    private var pathStopAnnotation: MKAnnotation?
+    private var trackStartAnnotation: MKAnnotation?
+    private var trackStopAnnotation: MKAnnotation?
+    private var dummyAnnotation: MKAnnotation?
 
     init(mapModel: TrackMapModel) {
         self.mapModel = mapModel
@@ -42,87 +43,28 @@ struct MapView: UIViewRepresentable {
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailEnd.getIdentifier())
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trackingStart.getIdentifier())
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trackingEnd.getIdentifier())
+        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.dummy.getIdentifier())
         theView.tintColor = UIColor.systemBlue
         return theView
     }
 
-
-    private func addTrackStartAnnotation(in view: MKMapView) {
-        guard getAnnotation(kind: .trackingStart, in: view) == nil else {return}
-        if let location = mapModel.trackPath.first {
-            let annotation = PathAnnotation(kind: .trackingStart)
-            annotation.coordinate = location.coordinate
-            annotation.title = AnnotationType.trackStart.rawValue
-            view.addAnnotation(annotation)
-            print("Track path start annotation added")
-        }
-    }
-
-    private func addTrackStopAnnotation(in view: MKMapView) {
-        guard getAnnotation(kind: .trackingEnd, in: view) == nil else {return}
-        if let location = mapModel.trackPath.last {
-            let annotation = PathAnnotation(kind: .trackingEnd)
-            annotation.coordinate = location.coordinate
-            annotation.title =  AnnotationType.trackStop.rawValue
-            view.addAnnotation(annotation)
-        }
-        print("Track path stop annotation added")
-    }
-
-    private func addStartAnnotation(in view: MKMapView) {
-        guard getAnnotation(kind: .trailStart, in: view) == nil else {return}
-        if let location = mapModel.laidPath.first {
-            let annotation = PathAnnotation(kind: .trailStart)
-            annotation.coordinate = location.coordinate
-            annotation.title =  AnnotationType.laidStart.rawValue
-            view.addAnnotation(annotation)
-            print("Lay path start annotation added")
-        }
-    }
-
-    private func addStopAnnotation(in view: MKMapView) {
-        guard getAnnotation(kind: .trailEnd, in: view) == nil else {return}
-        if let location = mapModel.laidPath.last {
-            let annotation = PathAnnotation(kind: .trailEnd)
-            annotation.coordinate = location.coordinate
-            annotation.title =  AnnotationType.laidStop.rawValue
-            view.addAnnotation(annotation)            
-            print("Lay path stop annotation added")
-        }
-    }
-
-    private func removeStopAnnotation(in view:MKMapView) {
-        if let annotation = getAnnotation(kind: .trailEnd, in: view)
-        {
-            view.removeAnnotation(annotation)
-        }
-    }
-
-    private func removeStopTrackAnnotation(in view:MKMapView) {
-        if let annotation = getAnnotation(kind: .trackingEnd, in: view)
-        {
-            view.removeAnnotation(annotation)
-        }
-    }
-
-    private func getAnnotation(kind:PathAnnotationKind, in view:MKMapView) -> MKAnnotation? {
-        return view.annotations.first(where: {annotation in
-            guard let pathAnnotation = annotation as? PathAnnotation else {return false}
+    private func getAnnotation(kind: PathAnnotationKind, in view: MKMapView) -> MKAnnotation? {
+        return view.annotations.first(where: { annotation in
+            guard let pathAnnotation = annotation as? PathAnnotation else { return false }
             return pathAnnotation.kind == kind
         })
     }
 
-
-    private func upateAnnotation(_ type:AnnotationType, in view:MKMapView, to location:CLLocationCoordinate2D) {
-        if let annotation = view.annotations.first(where: {annotation in annotation.title == type.rawValue}) as? PathAnnotation {
+    private func upateAnnotation(_ type: AnnotationType, in view: MKMapView, to location: CLLocationCoordinate2D) {
+        if let annotation = view.annotations.first(where: { annotation in annotation.title == type.rawValue }) as? PathAnnotation {
             annotation.coordinate = location
-        }else{
-            addAnnotation(to:view, withType: type, at:location)
+        } else {
+            addAnnotation(to: view, withType: type, at: location)
         }
     }
 
-    private func addAnnotation(to view:MKMapView, withType type:AnnotationType, at location:CLLocationCoordinate2D) {
-        let annotation:PathAnnotation
+    private func addAnnotation(to view: MKMapView, withType type: AnnotationType, at location: CLLocationCoordinate2D) {
+        let annotation: PathAnnotation
         switch type {
         case .trackStart:
             annotation = PathAnnotation(kind: .trackingStart)
@@ -136,42 +78,48 @@ struct MapView: UIViewRepresentable {
         case .laidStop:
             annotation = PathAnnotation(kind: .trailEnd)
             annotation.title = AnnotationType.laidStop.rawValue
+        case .dummy:
+            annotation = PathAnnotation(kind: .dummy)
         }
         annotation.coordinate = location
         view.addAnnotation(annotation)
     }
 
-
-    private func removeAnnotation(from view:MKMapView, type:AnnotationType){
-        guard let annotation = view.annotations.first(where: {annotation in annotation.title==type.rawValue}) else {return}
+    private func removeAnnotation(from view: MKMapView, type: AnnotationType) {
+        guard let annotation = view.annotations.first(where: { annotation in annotation.title == type.rawValue }) else { return }
         view.removeAnnotation(annotation)
     }
 
     private func updateAnnotations(mapView: MKMapView) {
         if let location = mapModel.pathStartLocation {
-            upateAnnotation( AnnotationType.laidStart, in:mapView, to: location)
-        }else{
-            removeAnnotation(from:mapView, type:AnnotationType.laidStart)
+            upateAnnotation(AnnotationType.laidStart, in: mapView, to: location)
+        } else {
+            removeAnnotation(from: mapView, type: AnnotationType.laidStart)
         }
-        
+
         if let location = mapModel.pathEndLocation {
-            upateAnnotation( AnnotationType.laidStop, in:mapView, to: location)
-        }else{
-            removeAnnotation(from:mapView, type:AnnotationType.laidStop)
+            upateAnnotation(AnnotationType.laidStop, in: mapView, to: location)
+        } else {
+            removeAnnotation(from: mapView, type: AnnotationType.laidStop)
         }
 
         if let location = mapModel.trackStartLocation {
-            upateAnnotation( AnnotationType.trackStart, in:mapView, to: location)
-        }else{
-            removeAnnotation(from:mapView, type:AnnotationType.trackStart)
+            upateAnnotation(AnnotationType.trackStart, in: mapView, to: location)
+        } else {
+            removeAnnotation(from: mapView, type: AnnotationType.trackStart)
         }
 
         if let location = mapModel.trackEndLocation {
-            upateAnnotation( AnnotationType.trackStop, in:mapView, to: location)
-        }else{
-            removeAnnotation(from:mapView, type:AnnotationType.trackStop)
+            upateAnnotation(AnnotationType.trackStop, in: mapView, to: location)
+        } else {
+            removeAnnotation(from: mapView, type: AnnotationType.trackStop)
         }
 
+        if !mapModel.dummies.isEmpty {
+            for location in mapModel.dummies {
+                addAnnotation(to: mapView, withType: AnnotationType.dummy, at: location)
+            }
+        }
     }
 
     func removeAnnotations(mapView: MKMapView) {
@@ -191,29 +139,28 @@ struct MapView: UIViewRepresentable {
         updateAnnotations(mapView: mapView)
 
         if mapModel.laidPath.count > 0 {
-            var laidCoordinates = mapModel.laidPath.map({$0.coordinate})
+            var laidCoordinates = mapModel.laidPath.map { $0.coordinate }
             let polyline = TrackPolyline(coordinates: &laidCoordinates, count: laidCoordinates.count)
             polyline.color = .systemGreen
             mapView.addOverlay(polyline)
         }
 
         if mapModel.trackPath.count > 0 {
-            var trackCoordinates = mapModel.trackPath.map({$0.coordinate})
+            var trackCoordinates = mapModel.trackPath.map { $0.coordinate }
             let polyline = TrackPolyline(coordinates: &trackCoordinates, count: trackCoordinates.count)
             polyline.color = .systemRed
             mapView.addOverlay(polyline)
         }
 
         if mapModel.stateMachine.state == .viewing, let first = mapView.overlays.first {
-            let rect = mapView.overlays.reduce(first.boundingMapRect, {$0.union($1.boundingMapRect)})
+            let rect = mapView.overlays.reduce(first.boundingMapRect) { $0.union($1.boundingMapRect) }
             mapView.showsUserLocation = true
             mapView.setVisibleMapRect(rect,
                                       edgePadding: UIEdgeInsets(top: 50.0, left: 50.0, bottom: 50.0, right: 50.0),
                                       animated: true)
-        }else if mapModel.stateMachine.state != .viewing {
+        } else if mapModel.stateMachine.state != .viewing {
             mapView.showsUserLocation = true
         }
-
     }
 
     class MapViewCoordinator: NSObject, MKMapViewDelegate {
@@ -227,10 +174,6 @@ struct MapView: UIViewRepresentable {
         init(mapModel: TrackMapModel) {
             self.mapModel = mapModel
         }
-
-//        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-//
-//        }
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
             let renderer = MKPolylineRenderer(overlay: overlay)
@@ -246,7 +189,8 @@ struct MapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             if let annotation = annotation as? PathAnnotation {
                 if let view = mapView.dequeueReusableAnnotationView(withIdentifier: annotation.reuseIdentifier,
-                                                                    for: annotation)as? MKMarkerAnnotationView {
+                                                                    for: annotation) as? MKMarkerAnnotationView
+                {
                     view.glyphImage = UIImage(systemName: annotation.imageIdentifier)
                     view.markerTintColor = annotation.color
                     return view
@@ -280,10 +224,8 @@ struct MapView: UIViewRepresentable {
 //        func mapViewWillStartLocatingUser(_ mapView: MKMapView) {
 //            print("Will start locating user")
 //        }
-
     }
 }
-
 
 class TrackPolyline: MKPolyline {
     var color: UIColor?
@@ -297,7 +239,8 @@ private extension MKMapView {
         let coordinateRegion = MKCoordinateRegion(
             center: location.coordinate,
             latitudinalMeters: regionRadius,
-            longitudinalMeters: regionRadius)
+            longitudinalMeters: regionRadius
+        )
         setRegion(coordinateRegion, animated: true)
     }
 }
