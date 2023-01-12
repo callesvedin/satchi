@@ -1,0 +1,9 @@
+/* Privacy - Location Always and When In Use Usage Description */
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Tillåt att vi spårar dig medans du lägger spår för din hund";
+
+/* Privacy - Location Always Usage Description */
+"NSLocationAlwaysUsageDescription" = "Tillåt att vi spårar dig medans du lägger spår för din hund";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Tillåt att vi spårar dig medans du lägger spår för din hund";
+
