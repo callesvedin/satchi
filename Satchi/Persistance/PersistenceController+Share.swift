@@ -17,6 +17,7 @@ import UIKit
 //
 extension PersistenceController {
     func presentCloudSharingController(track: Track) {
+        self.sharedTrackName = track.name
         /**
          Grab the share if the track is already shared.
          */
@@ -70,7 +71,7 @@ extension PersistenceController {
              */
             self.persistentContainer.share([unsharedTrack], to: nil) { _, share, container, error in
                 if let share = share {
-                    self.configure(share: share)
+                    self.configure(share: share, with: unsharedTrack)
                 }
                 completion(share, container, error)
             }
@@ -130,7 +131,7 @@ extension PersistenceController: UICloudSharingControllerDelegate {
     }
 
     func itemTitle(for csc: UICloudSharingController) -> String? {
-        return csc.share?.title ?? "A cool track"
+        return csc.share?.title ?? (sharedTrackName ?? "A cool track")
     }
 }
 #endif
@@ -210,7 +211,7 @@ extension PersistenceController {
     }
 
     private func configure(share: CKShare, with track: Track? = nil) {
-        share[CKShare.SystemFieldKey.title] = "A cool track"
+        share[CKShare.SystemFieldKey.title] = track?.name ?? "A cool track"
     }
 }
 

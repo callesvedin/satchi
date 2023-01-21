@@ -17,11 +17,6 @@ struct MapView: UIViewRepresentable {
         category: String(describing: MapView.self)
     )
 
-    private var pathStartAnnotation: MKAnnotation?
-    private var pathStopAnnotation: MKAnnotation?
-    private var trackStartAnnotation: MKAnnotation?
-    private var trackStopAnnotation: MKAnnotation?
-    private var dummyAnnotation: MKAnnotation?
 
     init(mapModel: TrackMapModel) {
         self.mapModel = mapModel

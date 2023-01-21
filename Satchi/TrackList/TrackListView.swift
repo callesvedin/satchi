@@ -121,27 +121,8 @@ struct TrackListView: View {
         PersistenceController.shared.presentCloudSharingController(track: track)
     }
 
-//    func createShare(_ track:Track) throws {
-//        waitingForShareId = track.id
-//
-//        mocc.perform {
-//            Task {
-//                if track.share != nil {
-//                    return
-//                }
-//
-//                let (_, share, _) = try await stack.persistentContainer.share([track], to: nil)
-//                share[CKShare.SystemFieldKey.title] = track.name
-//                print("Created share with url:\(String(describing: share.url))")
-//                sharingTrack = track
-//                track.share = share
-//            }
-//        }
-
-//    }
-
     func deleteTrack(_ track: Track) {
-//        stack.delete(track)
+        PersistenceController.shared.delete(track: track)
     }
 }
 

@@ -5,14 +5,14 @@
 //  Created by carl-johan.svedin on 2021-04-06.
 //
 
-import SwiftUI
 import MapKit
 import os.log
+import SwiftUI
 
 struct PreviewTrackMapView: View {
     @Environment(\.presentationMode) var presentationMode
 
-    var track:Track
+    var track: Track
 
     private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
@@ -24,13 +24,14 @@ struct PreviewTrackMapView: View {
     }
 
     var body: some View {
-        PreviewMapView(laidPath: track.laidPath, trackPath:track.trackPath)
-        .navigationBarHidden(true)
-        .ignoresSafeArea()        
+        PreviewMapView(laidPath: track.laidPath, trackPath: track.trackPath, dummies: track.dummies)
+            .navigationBarHidden(true)
+            .ignoresSafeArea()
     }
 }
+
 //
-//struct PreviewTrackMapView_Previews: PreviewProvider {
+// struct PreviewTrackMapView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        let stack = CoreDataStack.preview
 //
@@ -39,4 +40,4 @@ struct PreviewTrackMapView: View {
 //                .environmentObject(CoreDataStack.preview)
 //        }
 //    }
-//}
+// }
