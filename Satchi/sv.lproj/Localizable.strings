@@ -100,3 +100,16 @@
 /* No comment provided by engineer. */
 "Start" = "Starta";
 
+
+
+/* No comment provided by engineer. */
+"Location tracking denied" = "Spårning ej tillåtet";
+
+/* No comment provided by engineer. */
+"Cancel" = "Avbryt";
+
+/* No comment provided by engineer. */
+"Show me the settings" = "Visa inställningen";
+
+/* No comment provided by engineer. */
+"You must allow the application to track you. Prefferably while the application is not in use to be able to put away your phone while tracking with your dog.\nYou may always change this setting in Settings->Satchi->Location" = "Du måste tillåta att appen spårar dig. Helst även när den ärav stängd för att du ska kunna stoppa undan telefonen medan du spårar.\nDu kan ändra den här inställningen under Inställningar->Satchi->Plats";

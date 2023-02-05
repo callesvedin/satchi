@@ -26,10 +26,6 @@
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Allow us to track you while creating tracks for your dog</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow us to track you while creating tracks for your dog</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow us to track you while creating tracks for your dog</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -9,11 +9,16 @@ import SwiftUI
 
 struct TrackMapOverlayView: View {
     @Environment(\.preferredColorPalette) private var palette
+    @Environment(\.openURL) var openURL
     @ObservedObject var mapModel: TrackMapModel
     @Environment(\.colorScheme) var colorScheme
+    @State var showAccessDenied = false
 
     init(mapModel: TrackMapModel) {
         self.mapModel = mapModel
+        if mapModel.locationAuthorizationStatus == .denied || mapModel.locationAuthorizationStatus == .restricted {
+            showAccessDenied = true
+        }
     }
 
     var addApportButton: some View {
@@ -25,7 +30,7 @@ struct TrackMapOverlayView: View {
     var body: some View {
         let window = UIApplication.shared.currentKeyWindow
         let topPadding = window == nil ? 40 : window!.safeAreaInsets.top + 10
-
+        showAccessDenied = mapModel.locationAuthorizationStatus == .denied
         return VStack {
             HStack {
                 Text("Distance: \(DistanceFormatter.distanceFor(meters: mapModel.distance))")
@@ -68,10 +73,27 @@ struct TrackMapOverlayView: View {
                 .frame(height: 40)
                 .padding(.horizontal, 10)
             }
+
             Spacer()
+                .alert("Location tracking denied", isPresented: $mapModel.showAccessDenied, actions: {
+                    Button("Cancel", role: .cancel, action: { showAccessDenied = false })
+                    Button("Show me the settings", role: .none, action: {
+                        openSettingsApp()
+                    })
+                },
+                message: {
+                    Text("You must allow the application to track you. Prefferably while the application is not in use to be able to put away your phone while tracking with your dog.\nYou may always change this setting in Settings->Satchi->Location")
+                })
             StateButtonView(mapModel: mapModel)
                 .padding(.bottom, 30)
         }
+    }
+
+    func openSettingsApp() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else {
+            return
+        }
+        openURL(url)
     }
 }
 

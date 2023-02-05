@@ -33,7 +33,7 @@ class TrackMapModel: NSObject, ObservableObject {
     @Published var pathEndLocation: CLLocationCoordinate2D?
     @Published var trackStartLocation: CLLocationCoordinate2D?
     @Published var trackEndLocation: CLLocationCoordinate2D?
-
+    private var isTracking = false
     var followUser: Bool = true
     @Published var timer: TrackTimer = .init()
     @Published var distance: CLLocationDistance = 0
@@ -41,6 +41,23 @@ class TrackMapModel: NSObject, ObservableObject {
     public var currentLocation: CLLocation?
     @Published public var accuracy: Double = 0
     @Published public var done: Bool = false
+    @Published public var showAccessDenied: Bool = false
+    public var locationAuthorizationStatus: CLAuthorizationStatus {
+        didSet {
+            switch locationAuthorizationStatus {
+            case .notDetermined:
+                print("Status not determined. Requesting authorization")
+                locationManager.requestAlwaysAuthorization()
+            case .authorizedWhenInUse, .authorizedAlways:
+                startTracking()
+            case .denied, .restricted:
+                showAccessDenied = true
+                print("locationAuthorizationStatus prohibits tracking")
+            @unknown default:
+                gotUserLocation = false
+            }
+        }
+    }
 
     private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
@@ -96,18 +113,24 @@ class TrackMapModel: NSObject, ObservableObject {
         locationManager = CLLocationManager()
         let isViewing = track.getState() == .trailTracked
         stateMachine = Machine(state: isViewing ? .viewing : .notStarted)
+        locationAuthorizationStatus = locationManager.authorizationStatus
+
         super.init()
-        if isViewing {
+        if isViewing || locationAuthorizationStatus == .denied || locationAuthorizationStatus == .restricted {
             followUser = false
             distance = Double(track.length)
             timer.secondsElapsed = track.timeToFinish
         }
 
         locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.pausesLocationUpdatesAutomatically = false
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
 
         locationManager.delegate = self
-        locationManager.requestLocation()
+        if locationAuthorizationStatus == .notDetermined {
+            locationManager.requestAlwaysAuthorization()
+        }
+
         if track.getState() == .trailTracked {
             trackStartLocation = trackPath.first?.coordinate
             trackEndLocation = trackPath.last?.coordinate
@@ -185,13 +208,13 @@ class TrackMapModel: NSObject, ObservableObject {
             track.created = Date()
             track.state = track.getState().rawValue
             track.dummies = dummies
-//            stack?.save()
+            PersistenceController.shared.updateTrack(track: track)
         case .trailAdded:
             track.trackPath = trackPath
             track.timeToFinish = timer.secondsElapsed
             track.started = trackingStarted
             track.state = track.getState().rawValue
-//            stack?.save()
+            PersistenceController.shared.updateTrack(track: track)
         default:
             print("Unknown state when stopRunning is called \(track.getState())")
         }
@@ -268,14 +291,18 @@ class TrackMapModel: NSObject, ObservableObject {
 
     public func startTracking() {
         print("Start tracking.")
-        locationManager.startUpdatingLocation()
-        locationManager.startUpdatingHeading()
+        if !isTracking {
+            locationManager.startUpdatingLocation()
+            locationManager.startUpdatingHeading()
+            isTracking = true
+        }
     }
 
     private func stopTracking() {
         print("Stop tracking.")
         locationManager.stopUpdatingHeading()
         locationManager.stopUpdatingLocation()
+        isTracking = false
     }
 }
 
@@ -292,17 +319,8 @@ extension TrackMapModel: CLLocationManagerDelegate {
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        print("locationManagerDidChangeAuthorization:manager. Status:\(manager.authorizationStatus.rawValue)")
-        switch manager.authorizationStatus {
-        case .notDetermined:
-            print("Status not determined. Requesting authorization")
-            gotUserLocation = false
-            manager.requestAlwaysAuthorization()
-        case .authorizedWhenInUse, .authorizedAlways:
-            startTracking()
-        default:
-            gotUserLocation = false
-        }
+        print("locationManagerDidChangeAuthorization:manager. Status:\(manager.authorizationStatus)")
+        locationAuthorizationStatus = manager.authorizationStatus
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

@@ -100,3 +100,11 @@
 /* No comment provided by engineer. */
 "Start" = "Starta   ";
 
+/* No comment provided by engineer. */
+"Location tracking denied" = "Location tracking denied";
+/* No comment provided by engineer. */
+"Cancel" = "Cancel";
+/* No comment provided by engineer. */
+"Show me the settings" = "Show me the settings";
+/* No comment provided by engineer. */
+"You must allow the application to track you. Prefferably while the application is not in use to be able to put away your phone while tracking with your dog.\nYou may always change this setting in Settings->Satchi->Location" = "You must allow the application to track you. Prefferably while the application is not in use to be able to put away your phone while tracking with your dog.\nYou may always change this setting in Settings->Satchi->Location";
