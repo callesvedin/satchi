@@ -98,7 +98,19 @@
 "Pause" = "Pausa";
 
 /* No comment provided by engineer. */
-"Start" = "Starta   ";
+"Start" = "Starta";
+
+/* No comment provided by engineer. */
+"trackStart" = "Start";
+
+/* No comment provided by engineer. */
+"trackStop" = "Goal";
+
+/* No comment provided by engineer. */
+"laidStart" = "Start";
+
+/* No comment provided by engineer. */
+"laidStop" = "Stop";
 
 /* No comment provided by engineer. */
 "Location tracking denied" = "Location tracking denied";
@@ -107,4 +119,4 @@
 /* No comment provided by engineer. */
 "Show me the settings" = "Show me the settings";
 /* No comment provided by engineer. */
-"You must allow the application to track you. Prefferably while the application is not in use to be able to put away your phone while tracking with your dog.\nYou may always change this setting in Settings->Satchi->Location" = "You must allow the application to track you. Prefferably while the application is not in use to be able to put away your phone while tracking with your dog.\nYou may always change this setting in Settings->Satchi->Location";
+"allow.tracking.info" = "You must allow the application to track you. Prefferably while the application is not in use to be able to put away your phone while tracking with your dog.\nYou may always change this setting in Settings->Satchi->Location";

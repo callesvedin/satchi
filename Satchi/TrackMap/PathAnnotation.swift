@@ -57,16 +57,24 @@ class PathAnnotation: MKPointAnnotation {
 
         switch kind {
         case .trailStart:
-            self.imageIdentifier = "flag.circle"
+            if #available(iOS 16.1, *) {
+                self.imageIdentifier = "signpost.right.circle"
+            } else {
+                self.imageIdentifier = "signpost.right"
+            }
             self.color = UIColor.systemGreen
         case .trailEnd:
-            self.imageIdentifier = "flag.filled.and.flag.crossed"
+            if #available(iOS 16.1, *) {
+                self.imageIdentifier = "signpost.right.circle"
+            } else {
+                self.imageIdentifier = "signpost.right"
+            }
             self.color = UIColor.systemGreen
         case .trackingStart:
             self.imageIdentifier = "figure.walk.circle"
             self.color = UIColor.systemRed
         case .trackingEnd:
-            self.imageIdentifier = "flag.filled.and.flag.crossed"
+            self.imageIdentifier = "figure.walk.circle"
             self.color = UIColor.systemRed
         case .dummy:
             self.imageIdentifier = "rosette"

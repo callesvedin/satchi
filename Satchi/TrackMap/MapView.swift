@@ -4,7 +4,11 @@ import os.log
 import SwiftUI
 
 enum AnnotationType: String {
-    case trackStart = "Track Start", trackStop = "Track Stop", laidStart = "Start ", laidStop = "Stop", dummy = "Dummy"
+    case trackStart, trackStop, laidStart, laidStop, dummy
+    func localized() -> String {
+        let key = String.LocalizationValue(stringLiteral: rawValue)
+        return String(localized: key)
+    }
 }
 
 struct MapView: UIViewRepresentable {
@@ -16,7 +20,6 @@ struct MapView: UIViewRepresentable {
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: MapView.self)
     )
-
 
     init(mapModel: TrackMapModel) {
         self.mapModel = mapModel
@@ -63,16 +66,16 @@ struct MapView: UIViewRepresentable {
         switch type {
         case .trackStart:
             annotation = PathAnnotation(kind: .trackingStart)
-            annotation.title = AnnotationType.trackStart.rawValue
+            annotation.title = type.localized()
         case .trackStop:
             annotation = PathAnnotation(kind: .trackingEnd)
-            annotation.title = AnnotationType.trackStop.rawValue
+            annotation.title = type.localized()
         case .laidStart:
             annotation = PathAnnotation(kind: .trailStart)
-            annotation.title = AnnotationType.laidStart.rawValue
+            annotation.title = type.localized()
         case .laidStop:
             annotation = PathAnnotation(kind: .trailEnd)
-            annotation.title = AnnotationType.laidStop.rawValue
+            annotation.title = type.localized()
         case .dummy:
             annotation = PathAnnotation(kind: .dummy)
         }

@@ -82,7 +82,7 @@ struct TrackMapOverlayView: View {
                     })
                 },
                 message: {
-                    Text("You must allow the application to track you. Prefferably while the application is not in use to be able to put away your phone while tracking with your dog.\nYou may always change this setting in Settings->Satchi->Location")
+                    Text("allow.tracking.info")
                 })
             StateButtonView(mapModel: mapModel)
                 .padding(.bottom, 30)

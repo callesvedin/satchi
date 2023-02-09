@@ -5,14 +5,14 @@
 //  Created by Carl-Johan Svedin on 2022-05-14.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct AddTrackView: View {
     @Environment(\.preferredColorPalette) private var palette
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.managedObjectContext) var viewContext
-    @State private var name: String = ""
+    @State private var name: String = TimeFormatter.dayDateStringFrom(date: Date())
     private let persistenceController = PersistenceController.shared
 
     var body: some View {
@@ -49,13 +49,13 @@ struct AddTrackView: View {
 }
 
 // MARK: Loading image and creating a new destination
-extension AddTrackView {
 
+extension AddTrackView {
     private func createNewTrack() {
         let controller = persistenceController
         let taskContext = controller.persistentContainer.newTaskContext()
         taskContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        controller.addTrack(name:name, context: taskContext)
+        controller.addTrack(name: name, context: taskContext)
 //        let track = Track(context: managedObjectContext)
 //        track.id = UUID()
 //        track.name = name

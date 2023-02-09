@@ -63,16 +63,16 @@ struct PreviewMapView: UIViewRepresentable {
         switch type {
         case .trackStart:
             annotation = PathAnnotation(kind: .trackingStart)
-            annotation.title = AnnotationType.trackStart.rawValue
+            annotation.title = type.localized()
         case .trackStop:
             annotation = PathAnnotation(kind: .trackingEnd)
-            annotation.title = AnnotationType.trackStop.rawValue
+            annotation.title = type.localized()
         case .laidStart:
             annotation = PathAnnotation(kind: .trailStart)
-            annotation.title = AnnotationType.laidStart.rawValue
+            annotation.title = type.localized()
         case .laidStop:
             annotation = PathAnnotation(kind: .trailEnd)
-            annotation.title = AnnotationType.laidStop.rawValue
+            annotation.title = type.localized()
         case .dummy:
             annotation = PathAnnotation(kind: .dummy)
         }

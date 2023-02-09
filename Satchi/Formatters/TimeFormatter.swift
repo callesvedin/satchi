@@ -8,6 +8,13 @@
 import Foundation
 
 struct TimeFormatter {
+    private static let dayDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        dateFormatter.locale = Locale.current
+        return dateFormatter
+    }()
 
     private static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -17,8 +24,7 @@ struct TimeFormatter {
         return dateFormatter
     }()
 
-
-    private static let secondsTimeFormatter:DateComponentsFormatter = {
+    private static let secondsTimeFormatter: DateComponentsFormatter = {
         let elapsedTimeFormatter = DateComponentsFormatter()
         elapsedTimeFormatter.unitsStyle = .abbreviated
         elapsedTimeFormatter.zeroFormattingBehavior = .dropAll
@@ -26,27 +32,31 @@ struct TimeFormatter {
         return elapsedTimeFormatter
     }()
 
-    private static let minutesTimeFormatter:DateComponentsFormatter = {
+    private static let minutesTimeFormatter: DateComponentsFormatter = {
         let elapsedTimeFormatter = DateComponentsFormatter()
         elapsedTimeFormatter.unitsStyle = .abbreviated
         elapsedTimeFormatter.zeroFormattingBehavior = .dropAll
-        elapsedTimeFormatter.allowedUnits = [.day,.hour, .minute]
+        elapsedTimeFormatter.allowedUnits = [.day, .hour, .minute]
         return elapsedTimeFormatter
     }()
 
-    public static func shortTimeWithSecondsFor(seconds:Double) -> String {
+    public static func shortTimeWithSecondsFor(seconds: Double) -> String {
         let r = TimeFormatter.secondsTimeFormatter.string(from: seconds) ?? "-"
         return r
     }
 
-    public static func shortTimeWithMinutesFor(seconds:Double) -> String {
+    public static func shortTimeWithMinutesFor(seconds: Double) -> String {
         let r = TimeFormatter.minutesTimeFormatter.string(from: seconds) ?? "-"
         return r
     }
 
-    public static func dateStringFrom(date:Date?) -> String {
-        guard let date = date else {return "-"}
+    public static func dateStringFrom(date: Date?) -> String {
+        guard let date = date else { return "-" }
         return dateFormatter.string(from: date)
     }
 
+    public static func dayDateStringFrom(date: Date?) -> String {
+        guard let date = date else { return "-" }
+        return dayDateFormatter.string(from: date)
+    }
 }
