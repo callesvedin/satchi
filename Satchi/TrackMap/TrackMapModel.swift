@@ -273,12 +273,12 @@ class TrackMapModel: NSObject, ObservableObject {
         stateMachine <-! .stop
     }
 
-    public func addApport() {
-        print("Add dummy now!")
-        if let location = locationManager.location {
-            dummies.append(location.coordinate)
-        }
-    }
+//    public func addApport() {
+//        print("Add dummy now!")
+//        if let location = locationManager.location {
+//            dummies.append(location.coordinate)
+//        }
+//    }
 
     private func getLength(from locations: [CLLocation]) -> Double {
         var length: Double = 0

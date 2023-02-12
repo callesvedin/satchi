@@ -15,6 +15,7 @@ struct MapView: UIViewRepresentable {
     typealias UIViewType = MKMapView
 
     @ObservedObject var mapModel: TrackMapModel
+    @State var firstView = true
 
     private static let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
@@ -43,6 +44,7 @@ struct MapView: UIViewRepresentable {
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trackingEnd.getIdentifier())
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.dummy.getIdentifier())
         theView.tintColor = UIColor.systemBlue
+
         return theView
     }
 
@@ -150,12 +152,13 @@ struct MapView: UIViewRepresentable {
             mapView.addOverlay(polyline)
         }
 
-        if mapModel.stateMachine.state == .viewing, let first = mapView.overlays.first {
+        if firstView && mapModel.stateMachine.state == .viewing, let first = mapView.overlays.first {
             let rect = mapView.overlays.reduce(first.boundingMapRect) { $0.union($1.boundingMapRect) }
             mapView.showsUserLocation = true
             mapView.setVisibleMapRect(rect,
                                       edgePadding: UIEdgeInsets(top: 50.0, left: 50.0, bottom: 50.0, right: 50.0),
                                       animated: true)
+            firstView = false
         } else if mapModel.stateMachine.state != .viewing {
             mapView.showsUserLocation = true
         }
@@ -178,8 +181,6 @@ struct MapView: UIViewRepresentable {
             if let over = overlay as? TrackPolyline {
                 renderer.strokeColor = over.color
                 renderer.lineWidth = 2
-//                renderer.lineDashPhase = 2
-//                renderer.lineDashPattern = [NSNumber(value: 1), NSNumber(value: 5)]
             }
             return renderer
         }
@@ -198,30 +199,6 @@ struct MapView: UIViewRepresentable {
             }
             return nil
         }
-
-//        func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-//            print("Region will change")
-//        }
-//
-//        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-//            print("Region did change")
-//        }
-//
-//        func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
-//            print("did finish loading map")
-//        }
-//        func mapViewWillStartLoadingMap(_ mapView: MKMapView) {
-//            print("Will start loading map")
-//        }
-//        func mapViewWillStartRenderingMap(_ mapView: MKMapView) {
-//            print("Will start rendering map")
-//        }
-//        func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
-//            print("Finished rendering map")
-//        }
-//        func mapViewWillStartLocatingUser(_ mapView: MKMapView) {
-//            print("Will start locating user")
-//        }
     }
 }
 

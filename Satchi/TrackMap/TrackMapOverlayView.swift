@@ -21,11 +21,11 @@ struct TrackMapOverlayView: View {
         }
     }
 
-    var addApportButton: some View {
-        Button(action: { mapModel.addApport() }, label: { Text("Add dummy") })
-            .buttonStyle(OverlayButtonStyle(backgroundColor: palette.mainBackground))
-            .padding(15)
-    }
+//    var addApportButton: some View {
+//        Button(action: { mapModel.addApport() }, label: { Text("Add dummy") })
+//            .buttonStyle(OverlayButtonStyle(backgroundColor: palette.mainBackground))
+//            .padding(15)
+//    }
 
     var body: some View {
         let window = UIApplication.shared.currentKeyWindow
@@ -44,9 +44,9 @@ struct TrackMapOverlayView: View {
 
             if mapModel.stateMachine.state != .viewing {
                 HStack {
-                    if mapModel.stateMachine.state == .running {
-                        addApportButton
-                    }
+//                    if mapModel.stateMachine.state == .running {
+//                        addApportButton
+//                    }
                     Spacer()
                     if mapModel.accuracy > 10 {
                         Image(systemName: "antenna.radiowaves.left.and.right.slash")
