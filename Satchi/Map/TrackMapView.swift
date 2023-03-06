@@ -24,7 +24,6 @@ struct TrackMapView: View {
             return model
 
         }())
-       
     }
 
     var body: some View {

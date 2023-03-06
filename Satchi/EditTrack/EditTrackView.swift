@@ -5,42 +5,33 @@
 //  Created by carl-johan.svedin on 2021-04-05.
 //
 
-import SwiftUI
 import CloudKit
+import SwiftUI
 
 struct EditTrackView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.preferredColorPalette) private var palette
 
-    @StateObject var viewModel:TrackViewModel
-    var theTrack:Track
-    @State var sharingTrack:Track?
+    @StateObject var viewModel: TrackViewModel
+    var theTrack: Track
     private var persistanceController = PersistenceController.shared
 
     init(_ track: Track) {
         theTrack = track
         _viewModel = StateObject(wrappedValue: TrackViewModel(track))
     }
+
     var shareButton: some View {
         Button {
-            createNewShare(track:theTrack)
+            showShareView(track: theTrack)
         } label: {
             Image(systemName: "square.and.arrow.up")
         }
         .accentColor(palette.link)
-//        .sheet(item: $sharingTrack){
-//            sharingTrack = nil
-//        } content: { tr in
-////            CloudSharingView(
-////                container: stack.ckContainer,
-////                share: tr.share!,
-////                title: tr.name!
-////            )
-//        }
     }
 
-    var showMapViewButton : some View {
-        NavigationLink(destination: TrackMapView(track:theTrack, preview: false )) {
+    var showMapViewButton: some View {
+        NavigationLink(destination: TrackMapView(track: theTrack, preview: false)) {
             if viewModel.state == .trailTracked {
                 Text("Show track")
             } else if viewModel.state == .notStarted {
@@ -59,7 +50,7 @@ struct EditTrackView: View {
                 LazyVStack(alignment: .leading) {
                     HStack {
                         Spacer()
-                        PreviewTrackMapView(track:theTrack)
+                        PreviewTrackMapView(track: theTrack)
                             .scaledToFit()
                             .cornerRadius(10)
                             .padding(.bottom, 30)
@@ -68,7 +59,7 @@ struct EditTrackView: View {
                     }
                     FieldsView(viewModel: viewModel)
                 }
-            }            
+            }
         }
         .font(Font.system(size: 22))
         .foregroundColor(palette.primaryText)
@@ -85,13 +76,13 @@ struct EditTrackView: View {
         .navigationBarTitle(viewModel.trackName)
         .navigationBarHidden(false)
         .navigationBarBackButtonHidden(false)
-        .onChange(of: viewModel.difficulty, perform: {_ in
+        .onChange(of: viewModel.difficulty, perform: { _ in
             theTrack.difficulty = viewModel.difficulty
         })
-        .onChange(of: viewModel.comments, perform: {_ in
+        .onChange(of: viewModel.comments, perform: { _ in
             theTrack.comments = viewModel.comments
         })
-        .onChange(of: viewModel.trackName, perform: {_ in
+        .onChange(of: viewModel.trackName, perform: { _ in
             theTrack.name = viewModel.trackName
         })
         .onAppear {
@@ -101,34 +92,12 @@ struct EditTrackView: View {
             persistanceController.updateTrack(track: theTrack)
         }
     }
-    private func createNewShare( track: Track) {
+
+    private func showShareView(track: Track) {
         PersistenceController.shared.presentCloudSharingController(track: track)
     }
-
-    private func manageParticipation(track: Track) {
-        PersistenceController.shared.presentCloudSharingController(track: track)
-    }
-    func createShare()  {
-//        stack.context.perform {
-//            Task {
-//                if theTrack.share != nil {
-//                    sharingTrack = theTrack
-//                    return
-//                }
-//                do {
-//                    let (_, share, _) = try await stack.persistentContainer.share([theTrack], to: nil)
-//                    share[CKShare.SystemFieldKey.title] = theTrack.name
-//                    print("Created share with url:\(String(describing: share.url))")
-//                    theTrack.share = share
-//                    sharingTrack = theTrack
-//                }catch{
-//                    print("Failed to create share")
-//                }
-//            }
-//        }
-    }
-
 }
+
 //
 extension EditTrackView {
 //    private func string(for permission: CKShare.ParticipantPermission) -> String {
@@ -176,45 +145,18 @@ extension EditTrackView {
 //        }
 //    }
 //
-//    private func createShare(_ track: Track) async {
-//        if !stack.isShared(object: track) {
-//            do {
-//                let (_, share, _) = try await stack.persistentContainer.share([track], to: nil)
-//                share[CKShare.SystemFieldKey.title] = track.name
-//                self.share = share
-//                print("Created share with url:\(String(describing: share.url))")
-//            } catch {
-//                print("Failed to create share")
-//            }
-//        }
-//
-//        showShareSheet = true
-//    }
 }
-
-//struct EditTrackView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let track = CoreDataStack.preview.getTracks()[3]
-//        return ForEach(ColorScheme.allCases, id: \.self) {
-//            EditTrackView(track)
-//                .preferredColorScheme($0)
-//                .environment(\.locale, .init(identifier: "sv"))
-//                .environmentObject(CoreDataStack.preview)
-////                .environment(\.managedObjectContext, CoreDataStack.preview.context)
-//        }
-//    }
-//}
 
 struct FieldsView: View {
     @Environment(\.preferredColorPalette) private var palette
-    @ObservedObject var viewModel:TrackViewModel
+    @ObservedObject var viewModel: TrackViewModel
 
     var body: some View {
         Group {
             HStack {
                 Text("**Name:**")
                 TextField("Name", text: $viewModel.trackName)
-                    .padding(.horizontal,8)
+                    .padding(.horizontal, 8)
                     .background(RoundedRectangle(cornerRadius: 4)
                         .fill(palette.midBackground)
                     )
@@ -227,15 +169,14 @@ struct FieldsView: View {
                 DifficultyView(difficulty: $viewModel.difficulty)
             }.padding(0)
 
-            Text("**Length:** \(DistanceFormatter.distanceFor(meters:Double(viewModel.length)))")
-            Text("**Time to create:** \(TimeFormatter.shortTimeWithSecondsFor(seconds:viewModel.timeToCreate))")
-
+            Text("**Length:** \(DistanceFormatter.distanceFor(meters: Double(viewModel.length)))")
+            Text("**Time to create:** \(TimeFormatter.shortTimeWithSecondsFor(seconds: viewModel.timeToCreate))")
 
             if viewModel.started != nil {
                 Text("""
-                     **Track rested:** \
-                     \(getTimeBetween(date: viewModel.created, and: viewModel.started))
-                     """
+                    **Track rested:** \
+                    \(getTimeBetween(date: viewModel.created, and: viewModel.started))
+                    """
                 )
             } else {
                 Text("**Time since created:** \(getTimeSinceCreated())")
@@ -244,9 +185,9 @@ struct FieldsView: View {
                 Text("**Tracking started:** \(TimeFormatter.dateStringFrom(date: viewModel.started!))")
 
                 Text("""
-                     **Time to finish:** \
-                     \(TimeFormatter.shortTimeWithSecondsFor(seconds:viewModel.timeToFinish))
-                     """
+                    **Time to finish:** \
+                    \(TimeFormatter.shortTimeWithSecondsFor(seconds: viewModel.timeToFinish))
+                    """
                 )
             }
 
@@ -260,13 +201,13 @@ struct FieldsView: View {
     }
 
     private func getTimeBetween(date: Date?, and toDate: Date?) -> String {
-        guard let fromDate = date, let toDate = toDate else {return "-"}
+        guard let fromDate = date, let toDate = toDate else { return "-" }
         return TimeFormatter.shortTimeWithMinutesFor(seconds: fromDate.distance(to: toDate))
     }
 
     private func getTimeSinceCreated() -> String {
-        guard let timeDistance = viewModel.created?.distance(to: Date()) else {return "-"}
+        guard let timeDistance = viewModel.created?.distance(to: Date()) else { return "-" }
         return TimeFormatter.shortTimeWithMinutesFor(seconds: timeDistance)
     }
-
 }
+

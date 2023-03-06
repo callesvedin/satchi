@@ -4,7 +4,6 @@
 //
 //  Created by carl-johan.svedin on 2021-03-26.
 //
-
 import SwiftUI
 
 struct MainTabView: View {
@@ -17,11 +16,11 @@ struct MainTabView: View {
         }
         .navigationViewStyle(.stack)
         .id(palette.name)
-        .accentColor(palette.link)        
+        .accentColor(palette.link)
     }
 }
 
-fileprivate func setNavigationColors(background:Color, text:Color) {
+private func setNavigationColors(background: Color, text: Color) {
     let backgroundColor = UIColor(background)
 
     let textColor = UIColor(text)
@@ -38,14 +37,14 @@ fileprivate func setNavigationColors(background:Color, text:Color) {
     UINavigationBar.appearance().compactAppearance = coloredAppearance
     UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
     UINavigationBar.appearance().tintColor = textColor
-
 }
+
 //
-//struct MainTabView_Previews: PreviewProvider {
+// struct MainTabView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        MainTabView()
 //            .environmentObject(CoreDataStack.preview)
 //            .environment(\.managedObjectContext, CoreDataStack.preview.context)
 //
 //    }
-//}
+// }

@@ -5,8 +5,8 @@
 //  Created by carl-johan.svedin on 2021-03-25.
 //
 
-import SwiftUI
 import os
+import SwiftUI
 
 @main
 struct SatchiApp: App {
@@ -29,13 +29,13 @@ struct SatchiApp: App {
         WindowGroup {
             Text("Initializing CloudKit Schema...").font(.title)
             Text("Stop after Xcode says 'no more requests to execute', " +
-                 "then check with CloudKit Console if the schema is created correctly.").padding()
+                "then check with CloudKit Console if the schema is created correctly.").padding()
         }
         #else
         WindowGroup {
             MainTabView()
-                .environment(\.managedObjectContext,persistentContainer.viewContext)
-                .environment(\.preferredColorPalette,environment.palette)
+                .environment(\.managedObjectContext, persistentContainer.viewContext)
+                .environment(\.preferredColorPalette, environment.palette)
                 .environmentObject(environment)
         }
         #endif

@@ -10,14 +10,16 @@ import CoreData
 import SwiftUI
 
 struct TrackListView: View {
-//    @EnvironmentObject private var stack: CoreDataStack
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var environment: AppEnvironment
     @Environment(\.preferredColorPalette) private var palette
+    @Environment(\.colorScheme) private var colorScheme
+
     @SectionedFetchRequest(
         sectionIdentifier: \Track.state,
         sortDescriptors: [
             SortDescriptor(\Track.state, order: .forward),
+            SortDescriptor(\Track.created, order: .reverse),
             SortDescriptor(\Track.name, order: .forward)
         ],
         animation: Animation.default
@@ -27,8 +29,21 @@ struct TrackListView: View {
 
     @State private var showMapView = false
     @State private var waitingForShareId: UUID?
-    @State var sharingTrack: Track?
     @State var selectedTrack: Track?
+
+    @AppStorage("systemTheme") private var systemTheme: Int = SchemeType.allCases.first!.rawValue
+
+    private var selectedScheme: ColorScheme? {
+        guard let theme = SchemeType(rawValue: systemTheme) else { return nil }
+        switch theme {
+        case .light:
+            return .light
+        case .dark:
+            return .dark
+        default:
+            return nil
+        }
+    }
 
     var body: some View {
         UITableView.appearance().backgroundColor = .clear
@@ -50,8 +65,7 @@ struct TrackListView: View {
                                 )
                                 .swipeActions(allowsFullSwipe: false) {
                                     Button {
-                                        createNewShare(track: track)
-                                        print("Runnig by share!!")
+                                        showShareView(track: track)
                                     } label: {
                                         Label("Share", systemImage: "square.and.arrow.up")
                                     }
@@ -75,35 +89,33 @@ struct TrackListView: View {
                 }
             }
         }
-        .sheet(item: $sharingTrack) {
-            sharingTrack = nil
-            waitingForShareId = nil
-        } content: { _ in
-//            CloudSharingView(
-//                container: stack.ckContainer,
-//                share: tr.share!,
-//                title: tr.name!
-//            )
-        }
         .foregroundColor(palette.primaryText)
         .navigationTitle(LocalizedStringKey("Tracks"))
         .toolbar {
             HStack {
-//                ColorSelectionView()
+                HStack {
+                    //            Button(action: {
+                    //                environment.palette = Color.Palette.satchi
+                    //                print("Changed color palette to \(environment.palette)")
+                    //            }, label: {
+                    //                RoundedRectangle(cornerRadius: 3)
+                    //                    .foregroundColor(Color.Palette.satchi.mainBackground)
+                    //                    .frame(width: 15, height: 15)
+                    //                    .border(.black)
+                    //
+                    //            })
+                }
                 Button(action: { showMapView.toggle() }, label: { Text("Add track") })
                     .foregroundColor(palette.link)
                     .padding(0)
             }
         }
-//        .onAppear() {
-//            stack.save()
-//        }
         .sheet(isPresented: $showMapView, content: {
             AddTrackView()
         })
         .onReceive(NotificationCenter.default.storeDidChangePublisher) { notification in
             processStoreChangeNotification(notification)
-        }
+        }.preferredColorScheme(selectedScheme)
     }
 
     private func processStoreChangeNotification(_ notification: Notification) {
@@ -113,11 +125,7 @@ struct TrackListView: View {
         }
     }
 
-    private func createNewShare(track: Track) {
-        PersistenceController.shared.presentCloudSharingController(track: track)
-    }
-
-    private func manageParticipation(track: Track) {
+    private func showShareView(track: Track) {
         PersistenceController.shared.presentCloudSharingController(track: track)
     }
 
@@ -199,62 +207,48 @@ struct TrackSectionView: View {
 //    }
 // }
 
-struct ColorSelectionView: View {
-    @EnvironmentObject var environment: AppEnvironment
-    var body: some View {
-#if DEBUG
-        HStack {
-            Button(action: {
-                environment.palette = Color.Palette.satchi
-                print("Changed color palette to \(environment.palette)")
-            }, label: {
-                RoundedRectangle(cornerRadius: 3)
-                    .foregroundColor(Color.Palette.satchi.mainBackground)
-                    .frame(width: 15, height: 15)
-                    .border(.black)
+// struct ColorSelectionView: View {
+//    @EnvironmentObject var environment: AppEnvironment
+//    var body: some View {
+// #if DEBUG
+//        HStack {
+////            Button(action: {
+////                environment.palette = Color.Palette.satchi
+////                print("Changed color palette to \(environment.palette)")
+////            }, label: {
+////                RoundedRectangle(cornerRadius: 3)
+////                    .foregroundColor(Color.Palette.satchi.mainBackground)
+////                    .frame(width: 15, height: 15)
+////                    .border(.black)
+////
+////            })
+//            Button(action: {
+//                print("Changed mode to dark")
+//                systemTheme = .dark
+//            }, label: {
+//                Text("Dark")
+//            })
+//        }
+// #endif
+//    }
+// }
 
-            })
-//            Button(action: {
-//                environment.palette = Color.Palette.darkNature
-//                print("Changed color palette to \(environment.palette)")
-//            }, label: {
-//                RoundedRectangle(cornerRadius: 3)
-//                    .foregroundColor(Color.Palette.darkNature.mainBackground)
-//                    .frame(width: 15, height: 15)
-//                    .border(.black)
-//
-//            })
-//            Button(action: {
-//                environment.palette = Color.Palette.cold
-//                print("Changed color palette to \(environment.palette)")
-//            }, label: {
-//                RoundedRectangle(cornerRadius: 3)
-//                    .foregroundColor(Color.Palette.cold.mainBackground)
-//                    .frame(width: 15, height: 15)
-//                    .border(.black)
-//
-//            })
-//            Button(action: {
-//                environment.palette = Color.Palette.icyGrey
-//                print("Changed color palette to \(environment.palette)")
-//            }, label: {
-//                RoundedRectangle(cornerRadius: 3)
-//                    .foregroundColor(Color.Palette.icyGrey.mainBackground)
-//                    .frame(width: 15, height: 15)
-//                    .border(.black)
-//
-//            })
-//            Button(action: {
-//                environment.palette = Color.Palette.warm
-//                print("Changed color palette to \(environment.palette)")
-//            }, label: {
-//                RoundedRectangle(cornerRadius: 3)
-//                    .foregroundColor(Color.Palette.warm.mainBackground)
-//                    .frame(width: 15, height: 15)
-//                    .border(.black)
-//
-//            })
+enum SchemeType: Int, Identifiable, CaseIterable {
+    var id: Self { self }
+    case system
+    case light
+    case dark
+}
+
+extension SchemeType {
+    var title: String {
+        switch self {
+        case .system:
+            return "System"
+        case .light:
+            return "Light"
+        case .dark:
+            return "Dark"
         }
-#endif
     }
 }

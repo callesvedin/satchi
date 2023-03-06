@@ -42,6 +42,7 @@ class TrackMapModel: NSObject, ObservableObject {
     @Published public var accuracy: Double = 0
     @Published public var done: Bool = false
     @Published public var showAccessDenied: Bool = false
+
     public var locationAuthorizationStatus: CLAuthorizationStatus {
         didSet {
             switch locationAuthorizationStatus {
@@ -273,7 +274,7 @@ class TrackMapModel: NSObject, ObservableObject {
         stateMachine <-! .stop
     }
 
-//    public func addApport() {
+//    public func addDummy() {
 //        print("Add dummy now!")
 //        if let location = locationManager.location {
 //            dummies.append(location.coordinate)

@@ -9,3 +9,4 @@ To reset the locationManager authorization for the running simulators: xcrun sim
 
 
 
+- Maybe scrap the MapView and use this: https://github.com/pauljohanneskraft/Map?ref=iosexample.com

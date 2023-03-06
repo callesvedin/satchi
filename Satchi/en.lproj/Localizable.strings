@@ -1,122 +1,125 @@
 /* No comment provided by engineer. */
-"Delete" = "Radera";
+"Delete" = "Delete";
 
 /* No comment provided by engineer. */
-"Share" = "Dela";
+"Share" = "Share";
 
 /* No comment provided by engineer. */
-"You have no tracks." = "Du har inte några spår";
+"You have no tracks." = "You have no tracks";
 
 /* No comment provided by engineer. */
-"**Comments:**" = "**Kommentarer:**";
+"**Comments:**" = "**Comments:**";
 
 /* No comment provided by engineer. */
-"**Created:** %@" = "**Skapat:** %@";
+"**Created:** %@" = "**Created:** %@";
 
 /* No comment provided by engineer. */
-"**Difficulty:**" = "**Svårighetsgrad:**";
+"**Difficulty:**" = "**Difficulty:**";
 
 /* No comment provided by engineer. */
-"**Length:** %@" = "**Längd:** %@";
+"**Length:** %@" = "**Length:** %@";
 
 /* No comment provided by engineer. */
 "**Name:**" = "**Namn:**";
 
 /* No comment provided by engineer. */
-"**Time since created:** %@" = "**Tid sedan spåret lades:** %@";
+"**Time since created:** %@" = "**Time since created:** %@";
 
 /* No comment provided by engineer. */
-"**Time to create:** %@" = "**Tid att skapa:** %@";
+"**Time to create:** %@" = "**Time to create:** %@";
 
 /* No comment provided by engineer. */
-"**Time to finish:** %@" = "**Tid att spåra:** %@";
+"**Time to finish:** %@" = "**Time to finish:** %@";
 
 /* No comment provided by engineer. */
-"**Track rested:** %@" = "**Tid spåret legat:** %@";
+"**Track rested:** %@" = "**Track rested:** %@";
 
 /* No comment provided by engineer. */
-"**Tracking started:** %@" = "**Spårning startades:** %@";
+"**Tracking started:** %@" = "**Tracking started:** %@";
 
 /* No comment provided by engineer. */
-"Comments" = "Kommentarer";
+"Comments" = "Comments";
 
 /* No comment provided by engineer. */
-"Create track" = "Skapa spår";
+"Create track" = "Create track";
 
 /* No comment provided by engineer. */
-"Lay track" = "Lägg spår";
+"Lay track" = "Lay track";
 
 /* No comment provided by engineer. */
-"Follow Track" = "Följ spår";
+"Follow Track" = "Follow Track";
 
 /* No comment provided by engineer. */
-"Name" = "Namn";
+"Name" = "Name";
 
 /* No comment provided by engineer. */
-"Show track" = "Visa spår";
+"Show track" = "Show track";
 
 /* No comment provided by engineer. */
-"Add track" = "Skapa spår";
+"Add track" = "Add track";
 
 /* No comment provided by engineer. */
-"Created tracks" = "Skapade spår";
+"Created tracks" = "Created tracks";
 
 /* No comment provided by engineer. */
-"Started tracks" = "Lagda spår";
+"Started tracks" = "Started tracks";
 
 /* No comment provided by engineer. */
-"Finished tracks" = "Avslutade spår";
+"Finished tracks" = "Finished tracks";
 
 /* No comment provided by engineer. */
-"Tracks" = "Spår";
+"Tracks" = "Tracks";
 
 /* No comment provided by engineer. */
-"Save" = "Spara";
+"Save" = "Save";
 
 /* No comment provided by engineer. */
-"Difficulty" = "Svårighetsgrad";
+"Difficulty" = "Difficulty";
 
 /* No comment provided by engineer. */
-"Difficulty: %d" = "Svårighetsgrad: %d";
+"Difficulty: %d" = "Difficulty: %d";
 
 /* No comment provided by engineer. */
-"Distance: %@" = "Längd: %@";
+"Distance: %@" = "Distance: %@";
 
 /* No comment provided by engineer. */
-"Time: %@" = "Tid: %@";
+"Time: %@" = "Time: %@";
 
 /* No comment provided by engineer. */
-"Close" = "Stäng";
+"Close" = "Close";
 
 /* No comment provided by engineer. */
-"Stop" = "Avsluta";
+"Stop" = "Stop";
 
 /* No comment provided by engineer. */
-"Continue" = "Fortsätt";
+"Continue" = "Continue";
 
 /* No comment provided by engineer. */
-"Pause" = "Pausa";
+"Pause" = "Pause";
 
 /* No comment provided by engineer. */
-"Start" = "Starta";
+"Start" = "Start";
 
 /* No comment provided by engineer. */
 "trackStart" = "Start";
 
 /* No comment provided by engineer. */
-"trackStop" = "Goal";
+"trackStop" = "Stop";
 
 /* No comment provided by engineer. */
 "laidStart" = "Start";
 
 /* No comment provided by engineer. */
-"laidStop" = "Stop";
+"laidStop" = "Goal";
 
 /* No comment provided by engineer. */
 "Location tracking denied" = "Location tracking denied";
+
 /* No comment provided by engineer. */
 "Cancel" = "Cancel";
+
 /* No comment provided by engineer. */
 "Show me the settings" = "Show me the settings";
+
 /* No comment provided by engineer. */
 "allow.tracking.info" = "You must allow the application to track you. Prefferably while the application is not in use to be able to put away your phone while tracking with your dog.\nYou may always change this setting in Settings->Satchi->Location";

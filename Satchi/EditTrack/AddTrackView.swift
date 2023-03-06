@@ -34,7 +34,6 @@ struct AddTrackView: View {
                     .disabled(name.isBlank)
                     .listRowBackground(palette.midBackground)
                 }
-
                 .padding(.vertical, 20)
                 .hideScroll()
                 .submitLabel(.done)
@@ -52,13 +51,9 @@ struct AddTrackView: View {
 
 extension AddTrackView {
     private func createNewTrack() {
-        let controller = persistenceController
-        let taskContext = controller.persistentContainer.newTaskContext()
+        let taskContext = persistenceController.persistentContainer.newTaskContext()
         taskContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        controller.addTrack(name: name, context: taskContext)
-//        let track = Track(context: managedObjectContext)
-//        track.id = UUID()
-//        track.name = name
+        persistenceController.addTrack(name: name, context: taskContext)
     }
 }
 
