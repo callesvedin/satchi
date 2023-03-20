@@ -8,34 +8,34 @@
 "You have no tracks." = "You have no tracks";
 
 /* No comment provided by engineer. */
-"**Comments:**" = "**Comments:**";
+"Comments:" = "Comments:";
 
 /* No comment provided by engineer. */
-"**Created:** %@" = "**Created:** %@";
+"Created:" = "Created:";
 
 /* No comment provided by engineer. */
-"**Difficulty:**" = "**Difficulty:**";
+"Difficulty:" = "Difficulty:";
 
 /* No comment provided by engineer. */
-"**Length:** %@" = "**Length:** %@";
+"Length:" = "Length:";
 
 /* No comment provided by engineer. */
-"**Name:**" = "**Namn:**";
+"Name:" = "Name:";
 
 /* No comment provided by engineer. */
-"**Time since created:** %@" = "**Time since created:** %@";
+"Time since created:" = "Time since created:";
 
 /* No comment provided by engineer. */
-"**Time to create:** %@" = "**Time to create:** %@";
+"Time to create:" = "Time to create:";
 
 /* No comment provided by engineer. */
-"**Time to finish:** %@" = "**Time to finish:** %@";
+"Time to finish:" = "Time to finish:";
 
 /* No comment provided by engineer. */
-"**Track rested:** %@" = "**Track rested:** %@";
+"Track rested:" = "Track rested:";
 
 /* No comment provided by engineer. */
-"**Tracking started:** %@" = "**Tracking started:** %@";
+"Tracking started:" = "Tracking started:";
 
 /* No comment provided by engineer. */
 "Comments" = "Comments";

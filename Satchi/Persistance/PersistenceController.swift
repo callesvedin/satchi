@@ -30,6 +30,7 @@ enum TransactionAuthor {
 
 class PersistenceController: NSObject, ObservableObject {
     static let shared = PersistenceController()
+
     var sharedTrackName: String?
     lazy var persistentContainer: NSPersistentCloudKitContainer = {
         /**
