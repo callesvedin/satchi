@@ -8,34 +8,34 @@
 "You have no tracks." = "Du har inte några spår";
 
 /* No comment provided by engineer. */
-"**Comments:**" = "**Kommentarer:**";
+"Comments:" = "Kommentarer:";
 
 /* No comment provided by engineer. */
-"**Created:** %@" = "**Skapat:** %@";
+"Created:" = "Skapat:";
 
 /* No comment provided by engineer. */
-"**Difficulty:**" = "**Svårighetsgrad:**";
+"Difficulty:" = "Svårighetsgrad:";
 
 /* No comment provided by engineer. */
-"**Length:** %@" = "**Längd:** %@";
+"Length:" = "Längd:";
 
 /* No comment provided by engineer. */
-"**Name:**" = "**Namn:**";
+"Name:" = "Namn:";
 
 /* No comment provided by engineer. */
-"**Time since created:** %@" = "**Tid sedan spåret lades:** %@";
+"Time since created:" = "Tid sedan spåret lades:";
 
 /* No comment provided by engineer. */
-"**Time to create:** %@" = "**Tid att skapa:** %@";
+"Time to create:" = "Tid att skapa:";
 
 /* No comment provided by engineer. */
-"**Time to finish:** %@" = "**Tid att spåra:** %@";
+"Time to finish:" = "Tid att spåra:";
 
 /* No comment provided by engineer. */
-"**Track rested:** %@" = "**Tid spåret legat:** %@";
+"Track rested:" = "Tid spåret legat:";
 
 /* No comment provided by engineer. */
-"**Tracking started:** %@" = "**Spårning startades:** %@";
+"Tracking started:" = "Spårning startades:";
 
 /* No comment provided by engineer. */
 "Comments" = "Kommentarer";
