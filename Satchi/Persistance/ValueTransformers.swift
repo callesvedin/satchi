@@ -8,7 +8,7 @@
 import CoreLocation
 import Foundation
 
-@objc(MyTestClassValueTransformer)
+@objc(CLLocationValueTransformer)
 final class CLLocationValueTransformer: NSSecureUnarchiveFromDataTransformer {
     // The name of the transformer. This is what we will use to register the transformer `ValueTransformer.setValueTrandformer(_"forName:)`.
     static let name = NSValueTransformerName(rawValue: String(describing: CLLocationValueTransformer.self))
