@@ -167,13 +167,13 @@ struct FieldsView: View {
     var body: some View {
         Group {
             HStack {
-                // Text("Name:")
-                TextField("Name", text: $viewModel.trackName).font(Font.title2)
+                TextField("Name", text: $viewModel.trackName)
+                    .font(Font.title2)
                     .padding(.horizontal, 8)
                     .background(RoundedRectangle(cornerRadius: 4)
                         .fill(palette.midBackground)
                     )
-            }
+            }.padding(.bottom,18)
 
             VStack {
                 EditRow(textOne: "Created:", textTwo: "\(viewModel.created != nil ? TimeFormatter.dateStringFrom(date: viewModel.created) : "-")")
@@ -211,7 +211,7 @@ struct FieldsView: View {
         .font(
             .body
         )
-        .padding(.horizontal, 8)
+        .padding(.horizontal, 10)
     }
 
     private func getTimeBetween(date: Date?, and toDate: Date?) -> String {
