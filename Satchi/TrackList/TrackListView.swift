@@ -96,7 +96,7 @@ struct TrackListView: View {
                 HStack {
                     //            Button(action: {
                     //                environment.palette = Color.Palette.satchi
-                    //                print("Changed color palette to \(environment.palette)")
+                    //                Logger.listView.error("Changed color palette to \(environment.palette)")
                     //            }, label: {
                     //                RoundedRectangle(cornerRadius: 3)
                     //                    .foregroundColor(Color.Palette.satchi.mainBackground)
@@ -214,7 +214,7 @@ struct TrackSectionView: View {
 //        HStack {
 ////            Button(action: {
 ////                environment.palette = Color.Palette.satchi
-////                print("Changed color palette to \(environment.palette)")
+////                Logger.listView.trace(("Changed color palette to \(environment.palette)")
 ////            }, label: {
 ////                RoundedRectangle(cornerRadius: 3)
 ////                    .foregroundColor(Color.Palette.satchi.mainBackground)
@@ -223,7 +223,7 @@ struct TrackSectionView: View {
 ////
 ////            })
 //            Button(action: {
-//                print("Changed mode to dark")
+//                Logger.listView.trace(("Changed mode to dark")
 //                systemTheme = .dark
 //            }, label: {
 //                Text("Dark")

@@ -29,7 +29,7 @@ public extension Track {
     @NSManaged var timeToFinish: Double
     @NSManaged var trackPath: [CLLocation]?
     @NSManaged var state: Int16
-    @NSManaged var dummies: [CLLocationCoordinate2D]?
+//    @NSManaged var dummies: [CLLocationCoordinate2D]?
 }
 
 extension Track: Identifiable {}

@@ -13,12 +13,12 @@ struct PreviewMapView: UIViewRepresentable {
 
     private var laidPath: [CLLocation]?
     private var trackPath: [CLLocation]?
-    private var dummies: [CLLocationCoordinate2D]?
+//    private var dummies: [CLLocationCoordinate2D]?
 
-    init(laidPath: [CLLocation]?, trackPath: [CLLocation]?, dummies: [CLLocationCoordinate2D]?) {
+    init(laidPath: [CLLocation]?, trackPath: [CLLocation]?) {
         self.laidPath = laidPath
         self.trackPath = trackPath
-        self.dummies = dummies
+//        self.dummies = dummies
     }
 
     func makeCoordinator() -> PreviewMapViewCoordinator {
@@ -109,11 +109,11 @@ struct PreviewMapView: UIViewRepresentable {
         } else {
             removeAnnotation(from: mapView, type: AnnotationType.trackStop)
         }
-        if let dummies, !dummies.isEmpty {
-            for location in dummies {
-                addAnnotation(to: mapView, withType: AnnotationType.dummy, at: location)
-            }
-        }
+//        if let dummies, !dummies.isEmpty {
+//            for location in dummies {
+//                addAnnotation(to: mapView, withType: AnnotationType.dummy, at: location)
+//            }
+//        }
     }
 
     func removeAnnotations(mapView: MKMapView) {
@@ -172,7 +172,7 @@ struct PreviewMapView: UIViewRepresentable {
                     view.markerTintColor = annotation.color
                     return view
                 } else {
-                    print("dequeued view not known")
+                    Logger.mapView.error("dequeued view not known")
                 }
             }
             return nil

@@ -1,4 +1,5 @@
 import CloudKit
+import os.log
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -12,7 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let container = persistenceController.persistentContainer
         container.acceptShareInvitations(from: [cloudKitShareMetadata], into: sharedStore) { _, error in
             if let error = error {
-                print("\(#function): Failed to accept share invitations: \(error)")
+                Logger.sharing.error("\(#function): Failed to accept share invitations: \(error)")
             }
         }
     }

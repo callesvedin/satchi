@@ -92,6 +92,9 @@
 		EBB05D772878C02500C9723F /* DistanceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB05D762878C02500C9723F /* DistanceFormatter.swift */; };
 		EBB11B8B29B47936008EE889 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EBB11B8A29B47935008EE889 /* Settings.bundle */; };
 		EBB11B8C29B47936008EE889 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EBB11B8A29B47935008EE889 /* Settings.bundle */; };
+		EBB85EF229CA19F40058E0B5 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB85EF129CA19F40058E0B5 /* Logger.swift */; };
+		EBB85EF429CA22AD0058E0B5 /* ValueTransformers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB85EF329CA22AD0058E0B5 /* ValueTransformers.swift */; };
+		EBB85EF529CA22AD0058E0B5 /* ValueTransformers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB85EF329CA22AD0058E0B5 /* ValueTransformers.swift */; };
 		EBC69ACE2641B88F0094EAA3 /* TextInputDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */; };
 		EBCDAAA729B75BC10035809D /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCDAAA629B75BC10035809D /* NotificationCenter.swift */; };
 		EBD117BA2919AEA50067402E /* View+Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD117B92919AEA50067402E /* View+Navigation.swift */; };
@@ -174,6 +177,8 @@
 		EBA842E7287589CF0061C338 /* TimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormatter.swift; sourceTree = "<group>"; };
 		EBB05D762878C02500C9723F /* DistanceFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceFormatter.swift; sourceTree = "<group>"; };
 		EBB11B8A29B47935008EE889 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		EBB85EF129CA19F40058E0B5 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		EBB85EF329CA22AD0058E0B5 /* ValueTransformers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueTransformers.swift; sourceTree = "<group>"; };
 		EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputDialog.swift; sourceTree = "<group>"; };
 		EBCB4816266762F800E5631C /* Satchi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Satchi.xcdatamodel; sourceTree = "<group>"; };
 		EBCDAAA629B75BC10035809D /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
@@ -344,6 +349,7 @@
 				EBA6D5AC296B6264000579FC /* PersistenceController+Share.swift */,
 				EB352C89278CEB0D0015AC5A /* Entities */,
 				EBCB4815266762F800E5631C /* Satchi.xcdatamodeld */,
+				EBB85EF329CA22AD0058E0B5 /* ValueTransformers.swift */,
 			);
 			path = Persistance;
 			sourceTree = "<group>";
@@ -412,6 +418,7 @@
 				EBE9440228D25AE900C1C7A5 /* Color.swift */,
 				EBD117B92919AEA50067402E /* View+Navigation.swift */,
 				EBCDAAA629B75BC10035809D /* NotificationCenter.swift */,
+				EBB85EF129CA19F40058E0B5 /* Logger.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -605,6 +612,7 @@
 				EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */,
 				EB7D2149282C6553006CB703 /* UIApplicationExt.swift in Sources */,
 				EB35885F2970BAEB00CCB235 /* SceneDelegate.swift in Sources */,
+				EBB85EF229CA19F40058E0B5 /* Logger.swift in Sources */,
 				EB59DE3E2830051F0043DE33 /* String.swift in Sources */,
 				EBDC075C29B69B0A0028FC64 /* TrackTimer.swift in Sources */,
 				EBDC075F29B69F750028FC64 /* MainTabView.swift in Sources */,
@@ -628,6 +636,7 @@
 				EBE9440328D25AE900C1C7A5 /* Color.swift in Sources */,
 				EB9726602843B0DD00583007 /* DifficultyView.swift in Sources */,
 				EB2F91212624B6500026773D /* TrackMapOverlayView.swift in Sources */,
+				EBB85EF429CA22AD0058E0B5 /* ValueTransformers.swift in Sources */,
 				EBA842C528702F0C0061C338 /* SyncMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -661,6 +670,7 @@
 				EBA6D5C3296B6738000579FC /* OverlayButtonStyle.swift in Sources */,
 				EBA6D5C4296B6738000579FC /* TrackMapModel.swift in Sources */,
 				EBA6D5C5296B6738000579FC /* PreviewTrackMapView.swift in Sources */,
+				EBB85EF529CA22AD0058E0B5 /* ValueTransformers.swift in Sources */,
 				EBA6D5C6296B6738000579FC /* TrackListView.swift in Sources */,
 				EBA6D5C7296B6738000579FC /* Track+CoreDataClass.swift in Sources */,
 				EBA6D5C8296B6738000579FC /* MapView.swift in Sources */,

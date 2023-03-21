@@ -33,7 +33,7 @@ struct MapView: UIViewRepresentable {
 
         theView.showsUserLocation = true
         theView.mapType = .satellite
-        theView.userTrackingMode = .follow
+//        theView.userTrackingMode = .follow
         theView.layoutMargins.top = 100.0 // This is for the maps compass that shows up when rotating the view
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailStart.getIdentifier())
         theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailEnd.getIdentifier())
@@ -52,7 +52,7 @@ struct MapView: UIViewRepresentable {
 
         let end = Date()
         let consumedTime = end.timeIntervalSince(start)
-        print("MapView updateUIView. Time spent \(consumedTime). Overlays:\(mapView.overlays.count)")
+        Logger.mapView.trace("MapView updateUIView. Time spent \(consumedTime). Overlays:\(mapView.overlays.count)")
     }
 }
 

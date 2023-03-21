@@ -34,7 +34,7 @@ struct TrackMapView: View {
         .navigationBarHidden(true)
         .ignoresSafeArea()
         .onChange(of: mapModel.done) { _ in
-            print("Map model done")
+            Logger.mapView.debug("Map model done")
             presentationMode.wrappedValue.dismiss()
         }
     }

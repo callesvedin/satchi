@@ -40,7 +40,7 @@ class MapViewCoordinator: NSObject, MKMapViewDelegate {
                 view.markerTintColor = annotation.color
                 return view
             } else {
-                print("dequeued view not known")
+                Logger.mapView.error("dequeued view not known")
             }
         }
         return nil
@@ -147,11 +147,11 @@ class MapViewCoordinator: NSObject, MKMapViewDelegate {
             removeAnnotation(from: mapView, type: AnnotationType.trackStop)
         }
 
-        if !mapModel.dummies.isEmpty {
-            for location in mapModel.dummies {
-                addAnnotation(to: mapView, withType: AnnotationType.dummy, at: location)
-            }
-        }
+//        if !mapModel.dummies.isEmpty {
+//            for location in mapModel.dummies {
+//                addAnnotation(to: mapView, withType: AnnotationType.dummy, at: location)
+//            }
+//        }
     }
 
     func removeAnnotations(mapView: MKMapView) {

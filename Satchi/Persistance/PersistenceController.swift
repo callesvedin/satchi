@@ -32,6 +32,7 @@ class PersistenceController: NSObject, ObservableObject {
     static let shared = PersistenceController()
     var sharedTrackName: String?
     lazy var persistentContainer: NSPersistentCloudKitContainer = {
+        CLLocationValueTransformer.register()
         /**
          Prepare the containing folder for the Core Data stores.
          A Core Data store has companion files, so it's a good practice to put a store under a folder.
@@ -110,7 +111,7 @@ class PersistenceController: NSObject, ObservableObject {
         do {
             try container.initializeCloudKitSchema()
         } catch {
-            print("\(#function): initializeCloudKitSchema: \(error)")
+            Logger.persistance.error("\(#function): initializeCloudKitSchema: \(error)")
         }
         #else
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy

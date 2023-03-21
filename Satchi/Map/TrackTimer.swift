@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os.log
 
 enum TimerMode {
     case running
@@ -18,7 +19,7 @@ class TrackTimer: ObservableObject {
     @Published var mode: TimerMode = .stopped
 
     public func start() {
-        print("Starting timer")
+        Logger.timer.debug("Starting timer")
         secondsElapsed = 0.0
         mode = .running
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
@@ -27,14 +28,14 @@ class TrackTimer: ObservableObject {
     }
 
     public func stop() {
-        print("Stopping timer")
+        Logger.timer.debug("Stopping timer")
         timer.invalidate()
         mode = .stopped
     }
 
     public func resume() {
-        print("Resuming timer")
-        
+        Logger.timer.debug("Resuming timer")
+
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
             self.secondsElapsed += 0.1
         }

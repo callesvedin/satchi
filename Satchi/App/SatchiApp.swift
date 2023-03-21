@@ -20,7 +20,7 @@ struct SatchiApp: App {
         #if DEBUG
         let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory,
                                                         FileManager.SearchPathDomainMask.userDomainMask, true)
-        print("Path to device content \(paths[0])")
+        Logger.satchiApp.debug("Path to device content \(paths[0])")
         #endif
     }
 

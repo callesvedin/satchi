@@ -8,6 +8,7 @@
 import CloudKit
 import CoreData
 import Foundation
+import os.log
 import UIKit
 
 #if os(iOS) // UICloudSharingController is only available in iOS.
@@ -17,7 +18,7 @@ import UIKit
 //
 extension PersistenceController {
     func presentCloudSharingController(track: Track) {
-        self.sharedTrackName = track.name
+        sharedTrackName = track.name
         /**
          Grab the share if the track is already shared.
          */
@@ -87,7 +88,7 @@ extension PersistenceController {
                 return window?.rootViewController
             }
         }
-        print("\(#function): Failed to retrieve the window's root view controller.")
+        Logger.sharing.warning("\(#function): Failed to retrieve the window's root view controller.")
         return nil
     }
 }
@@ -120,14 +121,14 @@ extension PersistenceController: UICloudSharingControllerDelegate {
         if let share = csc.share, let persistentStore = share.persistentStore {
             persistentContainer.persistUpdatedShare(share, in: persistentStore) { _, error in
                 if let error = error {
-                    print("\(#function): Failed to persist updated share: \(error)")
+                    Logger.sharing.error("\(#function): Failed to persist updated share: \(error)")
                 }
             }
         }
     }
 
     func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
-        print("\(#function): Failed to save a share: \(error)")
+        Logger.sharing.error("\(#function): Failed to save a share: \(error)")
     }
 
     func itemTitle(for csc: UICloudSharingController) -> String? {
@@ -139,7 +140,7 @@ extension PersistenceController: UICloudSharingControllerDelegate {
 #if os(watchOS)
 extension PersistenceController {
     func presentCloudSharingController(share: CKShare) {
-        print("\(#function): Cloud sharing controller is unavailable on watchOS.")
+        Logger.sharing.error("\(#function): Cloud sharing controller is unavailable on watchOS.")
     }
 }
 #endif
@@ -150,7 +151,7 @@ extension PersistenceController {
     {
         persistentContainer.share([unsharedObject], to: existingShare) { _, share, _, error in
             guard error == nil, let share = share else {
-                print("\(#function): Failed to share an object: \(error!))")
+                Logger.sharing.error("\(#function): Failed to share an object: \(error!))")
                 completionHandler?(share, error)
                 return
             }
@@ -166,7 +167,7 @@ extension PersistenceController {
              */
             self.persistentContainer.persistUpdatedShare(share, in: self.privatePersistentStore) { share, error in
                 if let error = error {
-                    print("\(#function): Failed to persist updated share: \(error)")
+                    Logger.sharing.error("\(#function): Failed to persist updated share: \(error)")
                 }
                 completionHandler?(share, error)
             }
@@ -178,12 +179,12 @@ extension PersistenceController {
      */
     func purgeObjectsAndRecords(with share: CKShare, in persistentStore: NSPersistentStore? = nil) {
         guard let store = (persistentStore ?? share.persistentStore) else {
-            print("\(#function): Failed to find the persistent store for share. \(share))")
+            Logger.sharing.error("\(#function): Failed to find the persistent store for share. \(share))")
             return
         }
         persistentContainer.purgeObjectsAndRecordsInZone(with: share.recordID.zoneID, in: store) { _, error in
             if let error = error {
-                print("\(#function): Failed to purge objects and records: \(error)")
+                Logger.sharing.error("\(#function): Failed to purge objects and records: \(error)")
             }
         }
     }
@@ -238,7 +239,7 @@ extension PersistenceController {
 
             self.persistentContainer.persistUpdatedShare(share, in: persistentStore) { share, error in
                 if let error = error {
-                    print("\(#function): Failed to persist updated share: \(error)")
+                    Logger.sharing.error("\(#function): Failed to persist updated share: \(error)")
                 }
                 completionHandler?(share, error)
             }
@@ -256,7 +257,7 @@ extension PersistenceController {
          */
         persistentContainer.persistUpdatedShare(share, in: privatePersistentStore) { share, error in
             if let error = error {
-                print("\(#function): Failed to persist updated share: \(error)")
+                Logger.sharing.error("\(#function): Failed to persist updated share: \(error)")
             }
             completionHandler?(share, error)
         }

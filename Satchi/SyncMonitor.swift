@@ -1,6 +1,7 @@
+import CloudKit
 import Combine
 import CoreData
-import CloudKit
+import os.log
 
 @available(iOS 14.0, *)
 class SyncMonitor {
@@ -11,131 +12,128 @@ class SyncMonitor {
         NotificationCenter.default.publisher(for: NSPersistentCloudKitContainer.eventChangedNotification)
             .sink(receiveValue: { notification in
                 if let event = notification.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey]
-                    as? NSPersistentCloudKitContainer.Event {
-
+                    as? NSPersistentCloudKitContainer.Event
+                {
                     let isFinished = event.endDate != nil
                     switch (event.type, isFinished) {
                     case (.import, false):
-                        print("Started downloading records")
+                        Logger.persistance.trace("Started downloading records")
                     case (.import, true):
-                        print("Finished downloading records")
-                        case (.export, false):
-                        print("Started uploading records")
-                        case (.export, true):
-                        print("Finished uploading records")
+                        Logger.persistance.trace("Finished downloading records")
+                    case (.export, false):
+                        Logger.persistance.trace("Started uploading records")
+                    case (.export, true):
+                        Logger.persistance.trace("Finished uploading records")
                     case (.setup, false):
-                        print("Started setup")
+                        Logger.persistance.trace("Started setup")
                     case (.setup, true):
-                        print("Finished setup")
+                        Logger.persistance.trace("Finished setup")
                     case (_, _):
-                        print("Unknown case. EventType: \(event.type) IsFinished:\(isFinished)")
+                        Logger.persistance.trace("Unknown case. EventType: \(String(describing: event.type)) IsFinished:\(isFinished)")
                     }
-
 
                     if let error = event.error as? CKError {
                         self.handleError(error)
-                    }else if let error = event.error as? NSError {
+                    } else if let error = event.error as? NSError {
                         // nsError.domain is most likely `NSCocoaErrorDomain`
 
                         switch error.code {
-                        case 133000: print("NSError: Data integrity error")
-                        case 133020: print("NSError: Merge error")
-                        case 134301: print("NSError: 134301 ???")
-                        case 134400: print("NSError: Not logged in to iCloud")
-                        case 134404: print("NSError: Constraint conflict")
-                        case 134405: print("NSError: iCloud account changed")
-                        case 134407: print("NSError: 134407 ???")
-                        case 134419: print("NSError: Too much work to do")
-                        case 134421: print("NSError: Unhandled exception")
+                        case 133000: Logger.persistance.warning("NSError: Data integrity error")
+                        case 133020: Logger.persistance.warning("NSError: Merge error")
+                        case 134301: Logger.persistance.warning("NSError: 134301 ???")
+                        case 134400: Logger.persistance.warning("NSError: Not logged in to iCloud")
+                        case 134404: Logger.persistance.warning("NSError: Constraint conflict")
+                        case 134405: Logger.persistance.warning("NSError: iCloud account changed")
+                        case 134407: Logger.persistance.warning("NSError: 134407 ???")
+                        case 134419: Logger.persistance.warning("NSError: Too much work to do")
+                        case 134421: Logger.persistance.warning("NSError: Unhandled exception")
                         default:
-                            print("NSError: Unknown exception")
+                            Logger.persistance.warning("NSError: Unknown exception \(error.localizedDescription)")
                         }
-                    }else if let error = event.error {
-                        print("Unknown error \(error.localizedDescription)")
+                    } else if let error = event.error {
+                        Logger.persistance.trace("Unknown error \(error.localizedDescription)")
                     }
                 }
             })
             .store(in: &disposables)
     }
 
-    private func handleError(_ error:CKError) {
+    private func handleError(_ error: CKError) {
         switch error.code {
         case .quotaExceeded:
-            print("CKError quotaExceeded")
+            Logger.persistance.trace("CKError quotaExceeded")
         case .internalError:
-            print("CKError internalError")
+            Logger.persistance.trace("CKError internalError")
         case .partialFailure:
-            print("CKError partialFailure")
+            Logger.persistance.trace("CKError partialFailure")
         case .networkUnavailable:
-            print("CKError networkUnavailable")
+            Logger.persistance.trace("CKError networkUnavailable")
         case .networkFailure:
-            print("CKError networkFailure")
+            Logger.persistance.trace("CKError networkFailure")
         case .badContainer:
-            print("CKError badContainer")
+            Logger.persistance.trace("CKError badContainer")
         case .serviceUnavailable:
-            print("CKError serviceUnavailable")
+            Logger.persistance.trace("CKError serviceUnavailable")
         case .requestRateLimited:
-            print("CKError requestRateLimited")
+            Logger.persistance.trace("CKError requestRateLimited")
         case .missingEntitlement:
-            print("CKError missingEntitlement")
+            Logger.persistance.trace("CKError missingEntitlement")
         case .notAuthenticated:
-            print("CKError notAuthenticated")
+            Logger.persistance.trace("CKError notAuthenticated")
         case .permissionFailure:
-            print("CKError permissionFailure")
+            Logger.persistance.trace("CKError permissionFailure")
         case .unknownItem:
-            print("CKError unknownItem")
+            Logger.persistance.trace("CKError unknownItem")
         case .invalidArguments:
-            print("CKError invalidArguments")
+            Logger.persistance.trace("CKError invalidArguments")
         case .resultsTruncated:
-            print("CKError resultsTruncated")
+            Logger.persistance.trace("CKError resultsTruncated")
         case .serverRecordChanged:
-            print("CKError serverRecordChanged")
+            Logger.persistance.trace("CKError serverRecordChanged")
         case .serverRejectedRequest:
-            print("CKError serverRejectedRequest")
+            Logger.persistance.trace("CKError serverRejectedRequest")
         case .assetFileNotFound:
-            print("CKError assetFileNotFound")
+            Logger.persistance.trace("CKError assetFileNotFound")
         case .assetFileModified:
-            print("CKError assetFileModified")
+            Logger.persistance.trace("CKError assetFileModified")
         case .incompatibleVersion:
-            print("CKError incompatibleVersion")
+            Logger.persistance.trace("CKError incompatibleVersion")
         case .constraintViolation:
-            print("CKError constraintViolation")
+            Logger.persistance.trace("CKError constraintViolation")
         case .operationCancelled:
-            print("CKError operationCancelled")
+            Logger.persistance.trace("CKError operationCancelled")
         case .changeTokenExpired:
-            print("CKError changeTokenExpired")
+            Logger.persistance.trace("CKError changeTokenExpired")
         case .batchRequestFailed:
-            print("CKError batchRequestFailed")
+            Logger.persistance.trace("CKError batchRequestFailed")
         case .zoneBusy:
-            print("CKError zoneBusy")
+            Logger.persistance.trace("CKError zoneBusy")
         case .badDatabase:
-            print("CKError badDatabase")
+            Logger.persistance.trace("CKError badDatabase")
         case .zoneNotFound:
-            print("CKError zoneNotFound")
+            Logger.persistance.trace("CKError zoneNotFound")
         case .limitExceeded:
-            print("CKError limitExceeded")
+            Logger.persistance.trace("CKError limitExceeded")
         case .userDeletedZone:
-            print("CKError userDeletedZone")
+            Logger.persistance.trace("CKError userDeletedZone")
         case .tooManyParticipants:
-            print("CKError tooManyParticipants")
+            Logger.persistance.trace("CKError tooManyParticipants")
         case .alreadyShared:
-            print("CKError alreadyShared")
+            Logger.persistance.trace("CKError alreadyShared")
         case .referenceViolation:
-            print("CKError referenceViolation")
+            Logger.persistance.trace("CKError referenceViolation")
         case .managedAccountRestricted:
-            print("CKError managedAccountRestricted")
+            Logger.persistance.trace("CKError managedAccountRestricted")
         case .participantMayNeedVerification:
-            print("CKError participantMayNeedVerification")
+            Logger.persistance.trace("CKError participantMayNeedVerification")
         case .serverResponseLost:
-            print("CKError serverResponseLost")
+            Logger.persistance.trace("CKError serverResponseLost")
         case .assetNotAvailable:
-            print("CKError assetNotAvailable")
+            Logger.persistance.trace("CKError assetNotAvailable")
         case .accountTemporarilyUnavailable:
-            print("CKError accountTemporarilyUnavailable")
+            Logger.persistance.trace("CKError accountTemporarilyUnavailable")
         @unknown default:
-            print("CKError UNKNOWN")
+            Logger.persistance.trace("CKError UNKNOWN")
         }
-
     }
-
 }

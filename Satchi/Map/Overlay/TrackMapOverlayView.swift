@@ -30,7 +30,6 @@ struct TrackMapOverlayView: View {
     var body: some View {
         let window = UIApplication.shared.currentKeyWindow
         let topPadding = window == nil ? 40 : window!.safeAreaInsets.top + 10
-        showAccessDenied = mapModel.locationAuthorizationStatus == .denied
         return VStack {
             HStack {
                 Text("Distance: \(DistanceFormatter.distanceFor(meters: mapModel.distance))")
@@ -86,6 +85,8 @@ struct TrackMapOverlayView: View {
                 })
             StateButtonView(mapModel: mapModel)
                 .padding(.bottom, 30)
+        }.onAppear {
+            showAccessDenied = mapModel.locationAuthorizationStatus == .denied
         }
     }
 

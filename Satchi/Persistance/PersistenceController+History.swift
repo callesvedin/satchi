@@ -1,14 +1,16 @@
 /*
-See LICENSE folder for this sample’s licensing information.
+ See LICENSE folder for this sample’s licensing information.
 
-Abstract:
-Extensions that wrap the related methods for persistence history processing.
-*/
+ Abstract:
+ Extensions that wrap the related methods for persistence history processing.
+ */
 
-import CoreData
 import CloudKit
+import CoreData
+import os.log
 
 // MARK: - Notification handlers that trigger history processing.
+
 //
 extension PersistenceController {
     /**
@@ -18,8 +20,9 @@ extension PersistenceController {
     @objc
     func storeRemoteChange(_ notification: Notification) {
         guard let storeUUID = notification.userInfo?[NSStoreUUIDKey] as? String,
-              [privatePersistentStore.identifier, sharedPersistentStore.identifier].contains(storeUUID) else {
-            print("\(#function): Ignore a store remote Change notification because of no valid storeUUID.")
+              [privatePersistentStore.identifier, sharedPersistentStore.identifier].contains(storeUUID)
+        else {
+            Logger.persistance.warning("\(#function): Ignore a store remote Change notification because of no valid storeUUID.")
             return
         }
         processHistoryAsynchronously(storeUUID: storeUUID)
@@ -30,18 +33,20 @@ extension PersistenceController {
      */
     @objc
     func containerEventChanged(_ notification: Notification) {
-         guard let value = notification.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey],
-              let event = value as? NSPersistentCloudKitContainer.Event else {
-            print("\(#function): Failed to retrieve the container event from notification.userInfo.")
+        guard let value = notification.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey],
+              let event = value as? NSPersistentCloudKitContainer.Event
+        else {
+            Logger.persistance.error("\(#function): Failed to retrieve the container event from notification.userInfo.")
             return
         }
         if event.error != nil {
-            print("\(#function): Received a persistent CloudKit container event changed notification.\n\(event)")
+            Logger.persistance.error("\(#function): Received a persistent CloudKit container event changed notification.\n\(event)")
         }
     }
 }
 
 // MARK: - Process persistent historty asynchronously.
+
 //
 extension PersistenceController {
     /**
@@ -57,11 +62,11 @@ extension PersistenceController {
             }
         }
     }
-    
+
     private func performHistoryProcessing(storeUUID: String, performingContext: NSManagedObjectContext) {
         /**
-         Fetch the history by the other author since the last timestamp.
-        */
+          Fetch the history by the other author since the last timestamp.
+         */
         let lastHistoryToken = historyToken(with: storeUUID)
         let request = NSPersistentHistoryChangeRequest.fetchHistory(after: lastHistoryToken)
         let historyFetchRequest = NSPersistentHistoryTransaction.fetchRequest!
@@ -78,7 +83,7 @@ extension PersistenceController {
         guard let transactions = result?.result as? [NSPersistentHistoryTransaction] else {
             return
         }
-        // print("\(#function): Processing transactions: \(transactions.count).")
+        // Logger.persistance.debug("\(#function): Processing transactions: \(transactions.count).")
 
         /**
          Post transactions so observers can update the UI, if necessary, even when transactions is empty
@@ -92,7 +97,7 @@ extension PersistenceController {
         if let newToken = transactions.last?.token {
             updateHistoryToken(with: storeUUID, newToken: newToken)
         }
-        
+
         /**
          Limit to the private store so only owners can deduplicate the tags. Owners have full access to the private database, and so
          don't need to worry about the permissions.
@@ -100,9 +105,8 @@ extension PersistenceController {
         guard !transactions.isEmpty, storeUUID == privatePersistentStore.identifier else {
             return
         }
-        
     }
-    
+
     /**
      Track the last history tokens for the stores.
      The historyQueue reads the token when executing operations, and updates it after completing the processing.
@@ -111,11 +115,11 @@ extension PersistenceController {
     private func historyToken(with storeUUID: String) -> NSPersistentHistoryToken? {
         let key = "HistoryToken" + storeUUID
         if let data = UserDefaults.standard.data(forKey: key) {
-            return  try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSPersistentHistoryToken.self, from: data)
+            return try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSPersistentHistoryToken.self, from: data)
         }
         return nil
     }
-    
+
     private func updateHistoryToken(with storeUUID: String, newToken: NSPersistentHistoryToken) {
         let key = "HistoryToken" + storeUUID
         let data = try? NSKeyedArchiver.archivedData(withRootObject: newToken, requiringSecureCoding: true)

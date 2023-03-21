@@ -24,7 +24,7 @@ struct PreviewTrackMapView: View {
     }
 
     var body: some View {
-        PreviewMapView(laidPath: track.laidPath, trackPath: track.trackPath, dummies: track.dummies)
+        PreviewMapView(laidPath: track.laidPath, trackPath: track.trackPath)
             .navigationBarHidden(true)
             .ignoresSafeArea()
     }

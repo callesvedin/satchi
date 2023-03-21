@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22A400" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22D68" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Track" representedClassName="Track" syncable="YES">
         <attribute name="comments" optional="YES" attributeType="String"/>
         <attribute name="created" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="difficulty" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
-        <attribute name="dummies" optional="YES" attributeType="Transformable" customClassName="[CLLocationCoordinate2D]"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="image" optional="YES" attributeType="Binary"/>
-        <attribute name="laidPath" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="[CLLocation]"/>
+        <attribute name="laidPath" optional="YES" attributeType="Transformable" valueTransformerName="CLLocationValueTransformer" customClassName="[CLLocation]"/>
         <attribute name="length" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="started" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="state" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timeToCreate" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="timeToFinish" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="trackPath" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="[CLLocation]"/>
+        <attribute name="trackPath" optional="YES" attributeType="Transformable" valueTransformerName="CLLocationValueTransformer" customClassName="[CLLocation]"/>
     </entity>
 </model>
