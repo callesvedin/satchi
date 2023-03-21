@@ -61,7 +61,6 @@ struct EditTrackView: View {
                 }
             }
         }
-        .font(Font.system(size: 22))
         .foregroundColor(palette.primaryText)
         .padding()
         .toolbar {
@@ -173,7 +172,7 @@ struct FieldsView: View {
                     .background(RoundedRectangle(cornerRadius: 4)
                         .fill(palette.midBackground)
                     )
-            }.padding(.bottom,18)
+            }.padding(.bottom, 18)
 
             VStack {
                 EditRow(textOne: "Created:", textTwo: "\(viewModel.created != nil ? TimeFormatter.dateStringFrom(date: viewModel.created) : "-")")
@@ -239,11 +238,13 @@ struct EditTrackView_Previews: PreviewProvider {
         track.length = 1000
         return ForEach(ColorScheme.allCases, id: \.self) { scheme in
             ForEach(localizations, id: \.identifier) { locale in
-                EditTrackView(track)
-                    .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
-                    .previewDisplayName("iPhone 13 \(scheme) \(locale.identifier) ")
-                    .preferredColorScheme(scheme)
-                    .environment(\.locale, .init(identifier: locale.identifier))
+                NavigationView {
+                    EditTrackView(track)
+                        .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
+                        .previewDisplayName("iPhone 13 \(scheme) \(locale.identifier) ")
+                        .preferredColorScheme(scheme)
+                        .environment(\.locale, .init(identifier: locale.identifier))
+                }
             }
         }
     }
