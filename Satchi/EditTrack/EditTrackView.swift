@@ -97,54 +97,6 @@ struct EditTrackView: View {
     }
 }
 
-//
-extension EditTrackView {
-//    private func string(for permission: CKShare.ParticipantPermission) -> String {
-//        switch permission {
-//        case .unknown:
-//            return "Unknown"
-//        case .none:
-//            return "None"
-//        case .readOnly:
-//            return "Read-Only"
-//        case .readWrite:
-//            return "Read-Write"
-//        @unknown default:
-//            fatalError("A new value added to CKShare.Participant.Permission")
-//        }
-//    }
-//
-//    private func string(for role: CKShare.ParticipantRole) -> String {
-//        switch role {
-//        case .owner:
-//            return "Owner"
-//        case .privateUser:
-//            return "Private User"
-//        case .publicUser:
-//            return "Public User"
-//        case .unknown:
-//            return "Unknown"
-//        @unknown default:
-//            fatalError("A new value added to CKShare.Participant.Role")
-//        }
-//    }
-//
-//    private func string(for acceptanceStatus: CKShare.ParticipantAcceptanceStatus) -> String {
-//        switch acceptanceStatus {
-//        case .accepted:
-//            return "Accepted"
-//        case .removed:
-//            return "Removed"
-//        case .pending:
-//            return "Invited"
-//        case .unknown:
-//            return "Unknown"
-//        @unknown default:
-//            fatalError("A new value added to CKShare.Participant.AcceptanceStatus")
-//        }
-//    }
-//
-}
 
 struct EditRow: View {
     var textOne: String

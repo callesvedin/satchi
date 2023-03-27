@@ -48,6 +48,26 @@ public extension Track {
     }
 }
 
+public extension Track {
+    func clone(with context: NSManagedObjectContext) -> Track {
+        let t = Track(context: context)
+        t.comments = comments
+        t.created = created
+        t.difficulty = difficulty
+        t.id = UUID()
+        t.image = image
+        t.laidPath = laidPath
+        t.length = length
+        t.name = name
+        t.started = started
+        t.timeToCreate = timeToCreate
+        t.timeToFinish = timeToFinish
+        t.trackPath = trackPath
+        t.state = state
+        return t
+    }
+}
+
 @objc
 public enum TrackState: Int16 {
     case notStarted, trailAdded, trailTracked

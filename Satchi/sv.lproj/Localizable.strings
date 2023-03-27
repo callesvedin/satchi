@@ -122,4 +122,4 @@
 "Show me the settings" = "Visa inställningarna";
 
 /* No comment provided by engineer. */
-"allow.tracking.info" = "Du måste tillåta att appen spårar dig. Helst även när den ärav stängd för att du ska kunna stoppa undan telefonen medan du spårar.\nDu kan ändra den här inställningen under Inställningar->Satchi->Plats";
+"allow.tracking.info" = "Du måste tillåta att appen spårar dig. Helst även när den är avstängd för att du ska kunna stoppa undan telefonen medan du spårar.\nDu kan ändra den här inställningen under Inställningar->Satchi->Plats";

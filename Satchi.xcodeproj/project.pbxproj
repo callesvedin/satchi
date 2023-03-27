@@ -95,6 +95,8 @@
 		EBB85EF229CA19F40058E0B5 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB85EF129CA19F40058E0B5 /* Logger.swift */; };
 		EBB85EF429CA22AD0058E0B5 /* ValueTransformers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB85EF329CA22AD0058E0B5 /* ValueTransformers.swift */; };
 		EBB85EF529CA22AD0058E0B5 /* ValueTransformers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB85EF329CA22AD0058E0B5 /* ValueTransformers.swift */; };
+		EBC01F4629D048B300693A5F /* NSManagedObject+Clone.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC01F4529D048B300693A5F /* NSManagedObject+Clone.swift */; };
+		EBC01F4729D048B300693A5F /* NSManagedObject+Clone.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC01F4529D048B300693A5F /* NSManagedObject+Clone.swift */; };
 		EBC69ACE2641B88F0094EAA3 /* TextInputDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */; };
 		EBCDAAA729B75BC10035809D /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCDAAA629B75BC10035809D /* NotificationCenter.swift */; };
 		EBD117BA2919AEA50067402E /* View+Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD117B92919AEA50067402E /* View+Navigation.swift */; };
@@ -179,6 +181,7 @@
 		EBB11B8A29B47935008EE889 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		EBB85EF129CA19F40058E0B5 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		EBB85EF329CA22AD0058E0B5 /* ValueTransformers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueTransformers.swift; sourceTree = "<group>"; };
+		EBC01F4529D048B300693A5F /* NSManagedObject+Clone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+Clone.swift"; sourceTree = "<group>"; };
 		EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputDialog.swift; sourceTree = "<group>"; };
 		EBCB4816266762F800E5631C /* Satchi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Satchi.xcdatamodel; sourceTree = "<group>"; };
 		EBCDAAA629B75BC10035809D /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
@@ -350,6 +353,7 @@
 				EB352C89278CEB0D0015AC5A /* Entities */,
 				EBCB4815266762F800E5631C /* Satchi.xcdatamodeld */,
 				EBB85EF329CA22AD0058E0B5 /* ValueTransformers.swift */,
+				EBC01F4529D048B300693A5F /* NSManagedObject+Clone.swift */,
 			);
 			path = Persistance;
 			sourceTree = "<group>";
@@ -620,6 +624,7 @@
 				EB59DE3C283003830043DE33 /* AddTrackView.swift in Sources */,
 				EBA6D5B5296B6266000579FC /* CoreDataHelper.swift in Sources */,
 				EB05E19526277868002941B6 /* PathAnnotation.swift in Sources */,
+				EBC01F4629D048B300693A5F /* NSManagedObject+Clone.swift in Sources */,
 				EB5688E0269C304000AF9AB1 /* TrackCellView.swift in Sources */,
 				EBA6D5B9296B6325000579FC /* PersistenceController+Track.swift in Sources */,
 				EBDC075529B6989D0028FC64 /* MapViewCoordinator.swift in Sources */,
@@ -702,6 +707,7 @@
 				EBA6D5E2296B6738000579FC /* DifficultyView.swift in Sources */,
 				EBA6D5E3296B6738000579FC /* TrackMapOverlayView.swift in Sources */,
 				EBA6D5E4296B6738000579FC /* SyncMonitor.swift in Sources */,
+				EBC01F4729D048B300693A5F /* NSManagedObject+Clone.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

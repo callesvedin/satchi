@@ -13,7 +13,6 @@ import CloudKit
 //@MainActor
 class TrackViewModel: ObservableObject, Identifiable {
     var objectID: NSManagedObjectID
-    var share: CKShare?
     var id: UUID?
     @Published var showTrackView = false
     @Published var editName = false

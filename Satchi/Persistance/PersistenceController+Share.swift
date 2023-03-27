@@ -18,7 +18,7 @@ import UIKit
 //
 extension PersistenceController {
     func presentCloudSharingController(track: Track) {
-        sharedTrackName = track.name
+        sharedTrack = track
         /**
          Grab the share if the track is already shared.
          */
@@ -113,12 +113,30 @@ extension PersistenceController: UICloudSharingControllerDelegate {
      */
     func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
         if let share = csc.share {
+            if let currentUserParticipant = share.currentUserParticipant {
+                let role = string(for: currentUserParticipant.role)
+                Logger.sharing.debug("\(#function): Called with share \(share.title). (User role:\(role) Owner:\(share.owner) Participants:\(share.participants)")
+            } else {
+                Logger.sharing.debug("\(#function): Called with no currentUserParticipant. Share \(share.title). Owner: \(share.owner) Participants:\(share.participants)")
+            }
+
             purgeObjectsAndRecords(with: share)
+            do {
+                let _ = sharedTrack?.clone(with: persistentContainer.viewContext)
+//                let clone = try sharedTrack?.deepcopy()
+//                if let track = clone as? Track {
+//                    track.name = track.name! + " copy"
+//                }
+                try persistentContainer.viewContext.save()
+            } catch {
+                Logger.sharing.error("Could not clone unshared object.\(error)")
+            }
         }
     }
 
     func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
         if let share = csc.share, let persistentStore = share.persistentStore {
+            Logger.sharing.debug("\(#function): With share title:\(share.title)")
             persistentContainer.persistUpdatedShare(share, in: persistentStore) { _, error in
                 if let error = error {
                     Logger.sharing.error("\(#function): Failed to persist updated share: \(error)")
@@ -132,10 +150,59 @@ extension PersistenceController: UICloudSharingControllerDelegate {
     }
 
     func itemTitle(for csc: UICloudSharingController) -> String? {
-        return csc.share?.title ?? (sharedTrackName ?? "A cool track")
+        if sharedTrack == nil {
+            Logger.sharing.warning("\(#function): Shared track is nil")
+        }
+        return csc.share?.title ?? (sharedTrack?.name ?? "A cool track")
     }
 }
 #endif
+extension PersistenceController {
+    func string(for permission: CKShare.ParticipantPermission) -> String {
+        switch permission {
+        case .unknown:
+            return "Unknown"
+        case .none:
+            return "None"
+        case .readOnly:
+            return "Read-Only"
+        case .readWrite:
+            return "Read-Write"
+        @unknown default:
+            fatalError("A new value added to CKShare.Participant.Permission")
+        }
+    }
+
+    func string(for role: CKShare.ParticipantRole) -> String {
+        switch role {
+        case .owner:
+            return "Owner"
+        case .privateUser:
+            return "Private User"
+        case .publicUser:
+            return "Public User"
+        case .unknown:
+            return "Unknown"
+        @unknown default:
+            fatalError("A new value added to CKShare.Participant.Role")
+        }
+    }
+
+    func string(for acceptanceStatus: CKShare.ParticipantAcceptanceStatus) -> String {
+        switch acceptanceStatus {
+        case .accepted:
+            return "Accepted"
+        case .removed:
+            return "Removed"
+        case .pending:
+            return "Invited"
+        case .unknown:
+            return "Unknown"
+        @unknown default:
+            fatalError("A new value added to CKShare.Participant.AcceptanceStatus")
+        }
+    }
+}
 
 #if os(watchOS)
 extension PersistenceController {
@@ -226,7 +293,7 @@ extension PersistenceController {
          */
         let lookupInfo = CKUserIdentity.LookupInfo(emailAddress: emailAddress)
         let persistentStore = privatePersistentStore // share.persistentStore!
-
+        Logger.sharing.debug("\(#function): Called with email = \(emailAddress)")
         persistentContainer.fetchParticipants(matching: [lookupInfo], into: persistentStore) { results, error in
             guard let participants = results, let participant = participants.first, error == nil else {
                 completionHandler?(share, error)
@@ -249,6 +316,8 @@ extension PersistenceController {
     func deleteParticipant(_ participants: [CKShare.Participant], share: CKShare,
                            completionHandler: ((_ share: CKShare?, _ error: Error?) -> Void)?)
     {
+        Logger.sharing.debug("\(#function): Called")
+
         for participant in participants {
             share.removeParticipant(participant)
         }

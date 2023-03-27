@@ -31,7 +31,8 @@ enum TransactionAuthor {
 class PersistenceController: NSObject, ObservableObject {
     static let shared = PersistenceController()
 
-    var sharedTrackName: String?
+    
+    var sharedTrack:Track?
     lazy var persistentContainer: NSPersistentCloudKitContainer = {
         CLLocationValueTransformer.register()
         /**

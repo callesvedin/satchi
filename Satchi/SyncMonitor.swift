@@ -16,14 +16,14 @@ class SyncMonitor {
                 {
                     let isFinished = event.endDate != nil
                     switch (event.type, isFinished) {
-                    case (.import, false):
-                        Logger.persistance.trace("Started downloading records")
-                    case (.import, true):
-                        Logger.persistance.trace("Finished downloading records")
-                    case (.export, false):
-                        Logger.persistance.trace("Started uploading records")
-                    case (.export, true):
-                        Logger.persistance.trace("Finished uploading records")
+                    case (.import, false): break
+//                        Logger.persistance.trace("Started downloading records")
+                    case (.import, true): break
+//                        Logger.persistance.trace("Finished downloading records")
+                    case (.export, false): break
+//                        Logger.persistance.trace("Started uploading records")
+                    case (.export, true): break
+//                        Logger.persistance.trace("Finished uploading records")
                     case (.setup, false):
                         Logger.persistance.trace("Started setup")
                     case (.setup, true):
