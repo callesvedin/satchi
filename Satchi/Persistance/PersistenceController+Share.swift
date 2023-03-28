@@ -11,6 +11,19 @@ import Foundation
 import os.log
 import UIKit
 
+enum ShareError: Error {
+    case noPersistentStore(share: CKShare)
+}
+
+extension ShareError: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case let .noPersistentStore(share):
+            return "No persistent store found for share \(share.title)"
+        }
+    }
+}
+
 #if os(iOS) // UICloudSharingController is only available in iOS.
 
 // MARK: - Convenient methods for managing sharing.
@@ -18,14 +31,16 @@ import UIKit
 //
 extension PersistenceController {
     func presentCloudSharingController(track: Track) {
+        Logger.sharing.debug("presentCloudSharingController called with track: \(track)")
+
         sharedTrack = track
         /**
          Grab the share if the track is already shared.
          */
-        var trackShare: CKShare?
         if let shareSet = try? persistentContainer.fetchShares(matching: [track.objectID]),
            let (_, share) = shareSet.first
         {
+            Logger.sharing.debug("Track is already shared")
             trackShare = share
         }
 
@@ -47,6 +62,8 @@ extension PersistenceController {
     }
 
     func presentCloudSharingController(share: CKShare) {
+        Logger.sharing.debug("\(#function):")
+
         let sharingController = UICloudSharingController(share: share, container: cloudKitContainer)
         sharingController.delegate = self
         /**
@@ -59,6 +76,7 @@ extension PersistenceController {
     }
 
     private func newSharingController(unsharedTrack: Track, persistenceController: PersistenceController) -> UICloudSharingController {
+        Logger.sharing.debug("\(#function):")
         return UICloudSharingController { (_, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
             /**
              The app doesn't specify a share intentionally, so Core Data creates a new share (zone).
@@ -112,24 +130,36 @@ extension PersistenceController: UICloudSharingControllerDelegate {
      the UI, if necessary.
      */
     func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
-        if let share = csc.share {
-            if let currentUserParticipant = share.currentUserParticipant {
-                let role = string(for: currentUserParticipant.role)
-                Logger.sharing.debug("\(#function): Called with share \(share.title). (User role:\(role) Owner:\(share.owner) Participants:\(share.participants)")
-            } else {
-                Logger.sharing.debug("\(#function): Called with no currentUserParticipant. Share \(share.title). Owner: \(share.owner) Participants:\(share.participants)")
-            }
+        if trackShare != nil {
+            trackShare = nil // This is not how we like to do it... But why is this called more than once?
+            if let share = csc.share {
+                if let currentUserParticipant = share.currentUserParticipant {
+                    let role = string(for: currentUserParticipant.role)
+                    Logger.sharing.debug("\(#function): Called with share \(share.title). (User role:\(role) Owner:\(share.owner) Participants:\(share.participants)")
+                } else {
+                    Logger.sharing.debug("\(#function): Called with no currentUserParticipant. Share \(share.title). Owner: \(share.owner) Participants:\(share.participants)")
+                }
+                Logger.sharing.debug("\nBefore task\n")
+                Task {
+                    do {
+                        Logger.sharing.debug("\nBefore purge\n")
 
-            purgeObjectsAndRecords(with: share)
-            do {
-                let _ = sharedTrack?.clone(with: persistentContainer.viewContext)
-//                let clone = try sharedTrack?.deepcopy()
-//                if let track = clone as? Track {
-//                    track.name = track.name! + " copy"
-//                }
-                try persistentContainer.viewContext.save()
-            } catch {
-                Logger.sharing.error("Could not clone unshared object.\(error)")
+                        let id = try await purgeObjectsAndRecords(with: share)
+                        Logger.sharing.trace("\nreturned \(id) from purge\n")
+                        let _ = sharedTrack?.clone(with: persistentContainer.viewContext)
+                        Logger.sharing.debug("\nAfter clone\n")
+
+                        try persistentContainer.viewContext.save()
+                        Logger.sharing.debug("\nAfter save\n")
+
+                    } catch let ShareError.noPersistentStore(errShare) {
+                        Logger.sharing.error("\(#function): No persistetent store found for share: \(errShare).")
+                    } catch {
+                        Logger.sharing.error("Could not clone unshared object.\(error)")
+                    }
+                    Logger.sharing.debug("\nEnd of task\n")
+                }
+                Logger.sharing.debug("\nAfter task\n")
             }
         }
     }
@@ -150,6 +180,8 @@ extension PersistenceController: UICloudSharingControllerDelegate {
     }
 
     func itemTitle(for csc: UICloudSharingController) -> String? {
+        Logger.sharing.debug("\(#function):")
+
         if sharedTrack == nil {
             Logger.sharing.warning("\(#function): Shared track is nil")
         }
@@ -216,6 +248,8 @@ extension PersistenceController {
     func shareObject(_ unsharedObject: NSManagedObject, to existingShare: CKShare?,
                      completionHandler: ((_ share: CKShare?, _ error: Error?) -> Void)? = nil)
     {
+        Logger.sharing.debug("\(#function):")
+
         persistentContainer.share([unsharedObject], to: existingShare) { _, share, _, error in
             guard error == nil, let share = share else {
                 Logger.sharing.error("\(#function): Failed to share an object: \(error!))")
@@ -244,16 +278,14 @@ extension PersistenceController {
     /**
      Delete the Core Data objects and the records in the CloudKit record zone associated with the share.
      */
-    func purgeObjectsAndRecords(with share: CKShare, in persistentStore: NSPersistentStore? = nil) {
+    func purgeObjectsAndRecords(with share: CKShare, in persistentStore: NSPersistentStore? = nil) async throws -> CKRecordZone.ID {
         guard let store = (persistentStore ?? share.persistentStore) else {
             Logger.sharing.error("\(#function): Failed to find the persistent store for share. \(share))")
-            return
+            throw ShareError.noPersistentStore(share: share)
         }
-        persistentContainer.purgeObjectsAndRecordsInZone(with: share.recordID.zoneID, in: store) { _, error in
-            if let error = error {
-                Logger.sharing.error("\(#function): Failed to purge objects and records: \(error)")
-            }
-        }
+
+        let recordId = try await persistentContainer.purgeObjectsAndRecordsInZone(with: share.recordID.zoneID, in: store)
+        return recordId
     }
 
     func existingShare(track: Track) -> CKShare? {
@@ -279,6 +311,8 @@ extension PersistenceController {
     }
 
     private func configure(share: CKShare, with track: Track? = nil) {
+        Logger.sharing.debug("\(#function):")
+
         share[CKShare.SystemFieldKey.title] = track?.name ?? "A cool track"
     }
 }
@@ -287,6 +321,8 @@ extension PersistenceController {
     func addParticipant(emailAddress: String, permission: CKShare.ParticipantPermission = .readWrite, share: CKShare,
                         completionHandler: ((_ share: CKShare?, _ error: Error?) -> Void)?)
     {
+        Logger.sharing.debug("\(#function):")
+
         /**
          Use the email address to look up the participant from the private store. Return if the participant doesn't exist.
          Use privatePersistentStore directly because only the owner may add participants to a share.
@@ -341,6 +377,8 @@ extension CKShare.ParticipantAcceptanceStatus {
 
 extension CKShare {
     var title: String {
+        Logger.sharing.debug("\(#function): Share.title")
+
         guard let date = creationDate else {
             return "Share-\(UUID().uuidString)"
         }
