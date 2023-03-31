@@ -14,6 +14,7 @@ struct AddTrackView: View {
     @Environment(\.managedObjectContext) var viewContext
     @State private var name: String = TimeFormatter.dayDateStringFrom(date: Date())
     private let persistenceController = PersistenceController.shared
+    var trackAdded: (String?) -> Void
 
     var body: some View {
         NavigationView {
@@ -47,18 +48,19 @@ struct AddTrackView: View {
     }
 }
 
-// MARK: Loading image and creating a new destination
+// MARK: Createing a new track
 
 extension AddTrackView {
     private func createNewTrack() {
-        let taskContext = persistenceController.persistentContainer.newTaskContext()
-        taskContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        persistenceController.addTrack(name: name, context: taskContext)
+//        let taskContext = persistenceController.persistentContainer.newTaskContext()
+//        taskContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+//        let track = persistenceController.addTrack(name: name, context: taskContext)
+        trackAdded(name)
     }
 }
 
-struct AddDestinationView_Previews: PreviewProvider {
+struct AddTrackView_Previews: PreviewProvider {
     static var previews: some View {
-        AddTrackView()
+        AddTrackView { _ in }
     }
 }

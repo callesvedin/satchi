@@ -22,6 +22,19 @@ extension NSPersistentStore {
         }
         return false
     }
+
+    func get(manageObject: NSManagedObject) -> Track? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: manageObject.entity.name!)
+        fetchRequest.predicate = NSPredicate(format: "self == %@", manageObject)
+        fetchRequest.affectedStores = [self]
+
+        if let context = manageObject.managedObjectContext,
+           let result = try? context.fetch(fetchRequest)
+        {
+            return result.first as? Track
+        }
+        return nil
+    }
 }
 
 extension NSManagedObject {

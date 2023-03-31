@@ -111,7 +111,10 @@ struct TrackListView: View {
             }
         }
         .sheet(isPresented: $showMapView, content: {
-            AddTrackView()
+            AddTrackView { trackName in
+                let track = persistenceController.addTrack(name: trackName!, context: viewContext)
+                selectedTrack = track
+            }
         })
         .onReceive(NotificationCenter.default.storeDidChangePublisher) { notification in
             processStoreChangeNotification(notification)

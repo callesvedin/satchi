@@ -1,26 +1,26 @@
 /*
-See LICENSE folder for this sample’s licensing information.
+ See LICENSE folder for this sample’s licensing information.
 
-Abstract:
-An extension that wraps the related methods for managing photos.
-*/
+ Abstract:
+ An extension that wraps the related methods for managing photos.
+ */
 
-import Foundation
 import CoreData
+import Foundation
 
 // MARK: - Convenient methods for managing photos.
+
 //
 extension PersistenceController {
-    func addTrack(name: String, context: NSManagedObjectContext) {
-        context.perform {
-            let track = Track(context: context)
-            track.id = UUID()
-            track.name = name
-
+    func addTrack(name: String, context: NSManagedObjectContext) -> Track? {
+        var track: Track?
+        context.performAndWait {
+            track = Track(context: context, name: name, id: UUID())
             context.save(with: .addTrack)
         }
+        return track
     }
-    
+
     func delete(track: Track) {
         if let context = track.managedObjectContext {
             context.perform {
@@ -30,14 +30,14 @@ extension PersistenceController {
         }
     }
 
-    func updateTrack(track:Track){
+    func updateTrack(track: Track) {
         if let context = track.managedObjectContext {
             context.perform {
                 context.save(with: .updateTrack)
             }
         }
     }
-    
+
     func trackTransactions(from notification: Notification) -> [NSPersistentHistoryTransaction] {
         var results = [NSPersistentHistoryTransaction]()
         if let transactions = notification.userInfo?[UserInfoKey.transactions] as? [NSPersistentHistoryTransaction] {
@@ -51,7 +51,7 @@ extension PersistenceController {
         }
         return results
     }
-    
+
     func mergeTransactions(_ transactions: [NSPersistentHistoryTransaction], to context: NSManagedObjectContext) {
         context.perform {
             for transaction in transactions {

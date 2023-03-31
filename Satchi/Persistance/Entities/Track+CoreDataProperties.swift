@@ -34,6 +34,14 @@ public extension Track {
 
 extension Track: Identifiable {}
 
+extension Track {
+    convenience init(context: NSManagedObjectContext, name: String, id: UUID) {
+        self.init(context: context)
+        self.name = name
+        self.id = id
+    }
+}
+
 // MARK: State
 
 public extension Track {
