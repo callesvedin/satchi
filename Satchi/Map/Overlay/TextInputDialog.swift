@@ -44,7 +44,7 @@ struct TextInputDialog_Previews: PreviewProvider {
     static var previews: some View {
         var name = "Stensö"
         TextInputDialog(prompt: "Track name:",
-                        value: Binding<String>.init(get: { name }, set: {name = $0}))
+                        value: Binding<String>.init(get: { name }, set: { name = $0 }))
             .frame(width: 100, height: 100, alignment: .center)
     }
 }

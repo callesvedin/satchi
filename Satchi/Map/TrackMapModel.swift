@@ -286,9 +286,9 @@ class TrackMapModel: NSObject, ObservableObject {
 
     private func getLength(from locations: [CLLocation]) -> Double {
         var length: Double = 0
-        for (count, location) in locations.enumerated() {
-            if count == 0 { continue }
-            length += location.distance(from: locations[count - 1])
+        for (changed, location) in locations.enumerated() {
+            if changed == 0 { continue }
+            length += location.distance(from: locations[changed - 1])
         }
         return length
     }
@@ -312,9 +312,11 @@ class TrackMapModel: NSObject, ObservableObject {
 
 extension TrackMapModel: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if stateMachine.state == .running && track.getState() == .notStarted { // If we want to continue updating while paused we have to add .paused state here but we then have to save the location where we paused...
+        // If we want to continue updating while paused we have to add .paused state here but we then have to save the location where we paused...
+        if stateMachine.state == .running && track.getState() == .notStarted {
             laidPath.append(contentsOf: locations)
-        } else if stateMachine.state == .running && track.getState() == .trailAdded { // If we want to continue updating while paused we have to add .paused state here but we then have to save the location where we paused...
+        // If we want to continue updating while paused we have to add .paused state here but we then have to save the location where we paused...
+        } else if stateMachine.state == .running && track.getState() == .trailAdded {
             trackPath.append(contentsOf: locations)
         }
         accuracy = locations.first?.horizontalAccuracy ?? 0

@@ -5,12 +5,12 @@
 //  Created by carl-johan.svedin on 2021-04-05.
 //
 
-import Foundation
-import CoreLocation
-import CoreData
 import CloudKit
+import CoreData
+import CoreLocation
+import Foundation
 
-//@MainActor
+// @MainActor
 class TrackViewModel: ObservableObject, Identifiable {
     var objectID: NSManagedObjectID
     var id: UUID?
@@ -25,21 +25,20 @@ class TrackViewModel: ObservableObject, Identifiable {
     @Published var trackPath: [CLLocation]?
     @Published var length: Int32
     @Published var started: Date?
-    @Published var timeToCreate: Double
-    {
-        didSet {state = getState()}
+    @Published var timeToCreate: Double {
+        didSet { state = getState() }
     }
-    @Published var timeToFinish: Double
-    {
-        didSet {state = getState()}
+
+    @Published var timeToFinish: Double {
+        didSet { state = getState() }
     }
+
     @Published var state: TrackState
 
-    
-    init(_ track:Track) {
+    init(_ track: Track) {
         id = track.id
         objectID = track.objectID
-        trackName = track.name  ?? ""
+        trackName = track.name ?? ""
         comments = track.comments ?? ""
         difficulty = max(1, track.difficulty)
         created = track.created
@@ -52,10 +51,10 @@ class TrackViewModel: ObservableObject, Identifiable {
         state = track.getState()
     }
 
-    public func setValues(_ track:Track) {
+    public func setValues(_ track: Track) {
         id = track.id
         objectID = track.objectID
-        trackName = track.name  ?? ""
+        trackName = track.name ?? ""
         comments = track.comments ?? ""
         difficulty = max(1, track.difficulty)
         created = track.created
@@ -66,9 +65,8 @@ class TrackViewModel: ObservableObject, Identifiable {
         timeToCreate = track.timeToCreate
         timeToFinish = track.timeToFinish
         state = track.getState()
-
     }
-    
+
     public func getState() -> TrackState {
         if timeToFinish > 0 {
             return .trailTracked
@@ -80,7 +78,6 @@ class TrackViewModel: ObservableObject, Identifiable {
     }
 }
 
-
-//enum ModelTrackState {
+// enum ModelTrackState {
 //    case notCreated, created, tracked
-//}
+// }

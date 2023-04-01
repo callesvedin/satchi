@@ -58,21 +58,21 @@ public extension Track {
 
 public extension Track {
     func clone(with context: NSManagedObjectContext) -> Track {
-        let t = Track(context: context)
-        t.comments = comments
-        t.created = created
-        t.difficulty = difficulty
-        t.id = UUID()
-        t.image = image
-        t.laidPath = laidPath
-        t.length = length
-        t.name = name
-        t.started = started
-        t.timeToCreate = timeToCreate
-        t.timeToFinish = timeToFinish
-        t.trackPath = trackPath
-        t.state = state
-        return t
+        let track = Track(context: context)
+        track.comments = comments
+        track.created = created
+        track.difficulty = difficulty
+        track.id = UUID()
+        track.image = image
+        track.laidPath = laidPath
+        track.length = length
+        track.name = name
+        track.started = started
+        track.timeToCreate = timeToCreate
+        track.timeToFinish = timeToFinish
+        track.trackPath = trackPath
+        track.state = state
+        return track
     }
 }
 

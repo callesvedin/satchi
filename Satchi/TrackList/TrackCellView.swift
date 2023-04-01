@@ -48,10 +48,6 @@ struct TrackCellView: View {
                     }
                 }
                 Text("Difficulty: \(track.difficulty)")
-//                HStack {
-                ////                    Text("Difficulty:")
-//                    DifficultyView(difficulty: .constant(track.difficulty))
-//                }
                 if persistenceController.existingShare(track: track) != nil {
                     Image(systemName: "person.3.fill")
                         .resizable()

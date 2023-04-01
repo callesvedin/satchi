@@ -126,14 +126,14 @@ struct PreviewMapView: UIViewRepresentable {
     func updateUIView(_ mapView: MKMapView, context: Context) {
         updateAnnotations(mapView: mapView)
 
-        if let path = laidPath, path.count > 0 {
+        if let path = laidPath, !path.isEmpty {
             var laidCoordinates = path.map { $0.coordinate }
             let polyline = TrackPolyline(coordinates: &laidCoordinates, count: laidCoordinates.count)
             polyline.color = .systemGreen
             mapView.addOverlay(polyline)
         }
 
-        if let path = trackPath, path.count > 0 {
+        if let path = trackPath, !path.isEmpty {
             var trackCoordinates = path.map { $0.coordinate }
             let polyline = TrackPolyline(coordinates: &trackCoordinates, count: trackCoordinates.count)
             polyline.color = .systemRed

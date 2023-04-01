@@ -129,15 +129,23 @@ extension PersistenceController: UICloudSharingControllerDelegate {
      The purge API posts an NSPersistentStoreRemoteChange notification after finishing its job, so observe the notification to update
      the UI, if necessary.
      */
-    func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
+    func cloudSharingControllerDidStopSharing(_ cloudSharingController: UICloudSharingController) {
         if trackShare != nil {
             trackShare = nil // This is not how we like to do it... But why is this called more than once?
-            if let share = csc.share {
+            if let share = cloudSharingController.share {
                 if let currentUserParticipant = share.currentUserParticipant {
                     let role = string(for: currentUserParticipant.role)
-                    Logger.sharing.debug("\(#function): Called with share \(share.title). (User role:\(role) Owner:\(share.owner) Participants:\(share.participants)")
+                    Logger.sharing
+                        .debug("""
+                           \(#function): Called with share \(share.title). \
+                           (User role:\(role) Owner:\(share.owner) Participants:\(share.participants)
+                        """)
                 } else {
-                    Logger.sharing.debug("\(#function): Called with no currentUserParticipant. Share \(share.title). Owner: \(share.owner) Participants:\(share.participants)")
+                    Logger.sharing
+                        .debug("""
+                            \(#function): Called with no currentUserParticipant. \
+                            Share \(share.title). Owner: \(share.owner) Participants:\(share.participants)
+                        """)
                 }
                 Logger.sharing.debug("\nBefore task\n")
                 Task {
@@ -146,7 +154,7 @@ extension PersistenceController: UICloudSharingControllerDelegate {
 
                         let id = try await purgeObjectsAndRecords(with: share)
                         Logger.sharing.trace("\nreturned \(id) from purge\n")
-                        let _ = sharedTrack?.clone(with: persistentContainer.viewContext)
+                        _ = sharedTrack?.clone(with: persistentContainer.viewContext)
                         Logger.sharing.debug("\nAfter clone\n")
 
                         try persistentContainer.viewContext.save()
@@ -164,8 +172,8 @@ extension PersistenceController: UICloudSharingControllerDelegate {
         }
     }
 
-    func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
-        if let share = csc.share, let persistentStore = share.persistentStore {
+    func cloudSharingControllerDidSaveShare(_ cloudSharingController: UICloudSharingController) {
+        if let share = cloudSharingController.share, let persistentStore = share.persistentStore {
             Logger.sharing.debug("\(#function): With share title:\(share.title)")
             persistentContainer.persistUpdatedShare(share, in: persistentStore) { _, error in
                 if let error = error {
@@ -175,17 +183,17 @@ extension PersistenceController: UICloudSharingControllerDelegate {
         }
     }
 
-    func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
+    func cloudSharingController(_ cloudSharingController: UICloudSharingController, failedToSaveShareWithError error: Error) {
         Logger.sharing.error("\(#function): Failed to save a share: \(error)")
     }
 
-    func itemTitle(for csc: UICloudSharingController) -> String? {
+    func itemTitle(for cloudSharingController: UICloudSharingController) -> String? {
         Logger.sharing.debug("\(#function):")
 
         if sharedTrack == nil {
             Logger.sharing.warning("\(#function): Shared track is nil")
         }
-        return csc.share?.title ?? (sharedTrack?.name ?? "A cool track")
+        return cloudSharingController.share?.title ?? (sharedTrack?.name ?? "A cool track")
     }
 }
 #endif
@@ -245,7 +253,8 @@ extension PersistenceController {
 #endif
 
 extension PersistenceController {
-    func shareObject(_ unsharedObject: NSManagedObject, to existingShare: CKShare?,
+    func shareObject(_ unsharedObject: NSManagedObject,
+                     to existingShare: CKShare?,
                      completionHandler: ((_ share: CKShare?, _ error: Error?) -> Void)? = nil)
     {
         Logger.sharing.debug("\(#function):")
@@ -318,7 +327,9 @@ extension PersistenceController {
 }
 
 extension PersistenceController {
-    func addParticipant(emailAddress: String, permission: CKShare.ParticipantPermission = .readWrite, share: CKShare,
+    func addParticipant(emailAddress: String,
+                        permission: CKShare.ParticipantPermission = .readWrite,
+                        share: CKShare,
                         completionHandler: ((_ share: CKShare?, _ error: Error?) -> Void)?)
     {
         Logger.sharing.debug("\(#function):")
@@ -349,7 +360,8 @@ extension PersistenceController {
         }
     }
 
-    func deleteParticipant(_ participants: [CKShare.Participant], share: CKShare,
+    func deleteParticipant(_ participants: [CKShare.Participant],
+                           share: CKShare,
                            completionHandler: ((_ share: CKShare?, _ error: Error?) -> Void)?)
     {
         Logger.sharing.debug("\(#function): Called")

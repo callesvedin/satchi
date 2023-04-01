@@ -18,25 +18,6 @@ struct EditTrackView: View {
     private var persistanceController = PersistenceController.shared
 
     init(_ track: Track) {
-        // let tr = persistanceController.privatePersistentStore.get(manageObject: track)
-//        var request = NSFetchRequest<NSFetchRequestResult>()
-//        request = Track.fetchRequest()
-//        request.returnsObjectsAsFaults = false
-//        do {
-//            let arrayOfData = try persistanceController.persistentContainer.viewContext.fetch(request)
-//            let res = arrayOfData.first { r in
-//                let resultTrack = r as! Track
-//                return track.id == resultTrack.id
-//            }
-//            if res != nil {
-//                theTrack = res as! Track
-//            } else {
-//                theTrack = track
-//            }
-//        } catch {
-//            // Handle the error!
-//            theTrack = track
-//        }
         theTrack = track
         _viewModel = StateObject(wrappedValue: TrackViewModel(track))
     }

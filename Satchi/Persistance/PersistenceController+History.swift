@@ -113,16 +113,16 @@ extension PersistenceController {
      Access this user default from the history queue.
      */
     private func historyToken(with storeUUID: String) -> NSPersistentHistoryToken? {
-        let key = "HistoryToken" + storeUUID
-        if let data = UserDefaults.standard.data(forKey: key) {
+        let tokenKey = "HistoryToken" + storeUUID
+        if let data = UserDefaults.standard.data(forKey: tokenKey) {
             return try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSPersistentHistoryToken.self, from: data)
         }
         return nil
     }
 
     private func updateHistoryToken(with storeUUID: String, newToken: NSPersistentHistoryToken) {
-        let key = "HistoryToken" + storeUUID
+        let tokenKey = "HistoryToken" + storeUUID
         let data = try? NSKeyedArchiver.archivedData(withRootObject: newToken, requiringSecureCoding: true)
-        UserDefaults.standard.set(data, forKey: key)
+        UserDefaults.standard.set(data, forKey: tokenKey)
     }
 }

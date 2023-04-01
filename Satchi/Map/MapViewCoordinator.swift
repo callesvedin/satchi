@@ -55,14 +55,14 @@ class MapViewCoordinator: NSObject, MKMapViewDelegate {
 
         updateAnnotations(mapView: mapView)
         mapView.removeOverlays(mapView.overlays)
-        if mapModel.laidPath.count > 0 {
+        if !mapModel.laidPath.isEmpty {
             let laidCoordinates = mapModel.laidPath.map { $0.coordinate }
             let polyline = TrackPolyline(coordinates: laidCoordinates, count: laidCoordinates.count, color: .systemGreen)
 
             mapView.addOverlay(polyline, level: .aboveLabels)
         }
 
-        if mapModel.trackPath.count > 0 {
+        if !mapModel.trackPath.isEmpty {
             let trackCoordinates = mapModel.trackPath.map { $0.coordinate }
             let polyline = TrackPolyline(coordinates: trackCoordinates, count: trackCoordinates.count, color: .systemRed)
             mapView.addOverlay(polyline, level: .aboveLabels)

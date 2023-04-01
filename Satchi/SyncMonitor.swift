@@ -8,6 +8,23 @@ class SyncMonitor {
     /// Where we store Combine cancellables for publishers we're listening to, e.g. NSPersistentCloudKitContainer's notifications.
     fileprivate var disposables = Set<AnyCancellable>()
 
+    fileprivate func logErrorCode(_ error: NSError) {
+        // The nsError.domain is most likely `NSCocoaErrorDomain`
+        switch error.code {
+        case 133000: Logger.persistance.warning("NSError: Data integrity error")
+        case 133020: Logger.persistance.warning("NSError: Merge error")
+        case 134301: Logger.persistance.warning("NSError: 134301 ???")
+        case 134400: Logger.persistance.warning("NSError: Not logged in to iCloud")
+        case 134404: Logger.persistance.warning("NSError: Constraint conflict")
+        case 134405: Logger.persistance.warning("NSError: iCloud account changed")
+        case 134407: Logger.persistance.warning("NSError: 134407 ???")
+        case 134419: Logger.persistance.warning("NSError: Too much work to do")
+        case 134421: Logger.persistance.warning("NSError: Unhandled exception")
+        default:
+            Logger.persistance.warning("NSError: Unknown exception \(error.localizedDescription)")
+        }
+    }
+
     init() {
         NotificationCenter.default.publisher(for: NSPersistentCloudKitContainer.eventChangedNotification)
             .sink(receiveValue: { notification in
@@ -35,21 +52,7 @@ class SyncMonitor {
                     if let error = event.error as? CKError {
                         self.handleError(error)
                     } else if let error = event.error as? NSError {
-                        // nsError.domain is most likely `NSCocoaErrorDomain`
-
-                        switch error.code {
-                        case 133000: Logger.persistance.warning("NSError: Data integrity error")
-                        case 133020: Logger.persistance.warning("NSError: Merge error")
-                        case 134301: Logger.persistance.warning("NSError: 134301 ???")
-                        case 134400: Logger.persistance.warning("NSError: Not logged in to iCloud")
-                        case 134404: Logger.persistance.warning("NSError: Constraint conflict")
-                        case 134405: Logger.persistance.warning("NSError: iCloud account changed")
-                        case 134407: Logger.persistance.warning("NSError: 134407 ???")
-                        case 134419: Logger.persistance.warning("NSError: Too much work to do")
-                        case 134421: Logger.persistance.warning("NSError: Unhandled exception")
-                        default:
-                            Logger.persistance.warning("NSError: Unknown exception \(error.localizedDescription)")
-                        }
+                        self.logErrorCode(error)
                     } else if let error = event.error {
                         Logger.persistance.trace("Unknown error \(error.localizedDescription)")
                     }

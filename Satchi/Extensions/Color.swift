@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 extension Color {
-    struct Palette : Equatable {
+    struct Palette: Equatable {
         let name: String
 
         var mainBackground: Color {
@@ -52,7 +52,6 @@ extension Color {
             Color(fromPalette: self.name, semanticName: "link")
         }
     }
-
 }
 
 extension Color.Palette {
@@ -63,9 +62,7 @@ private extension Color {
     init(fromPalette palette: String, semanticName: String) {
         self.init(UIColor(named: "\(palette)/\(semanticName)")!)
     }
-
 }
-
 
 private struct ColorPaletteKey: EnvironmentKey {
     static let defaultValue = Color.Palette.satchi

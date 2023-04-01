@@ -6,8 +6,8 @@ import SwiftUI
 enum AnnotationType: String {
     case trackStart, trackStop, laidStart, laidStop, dummy
     func localized() -> String {
-        let key = String.LocalizationValue(stringLiteral: rawValue)
-        return String(localized: key)
+        let typeKey = String.LocalizationValue(stringLiteral: rawValue)
+        return String(localized: typeKey)
     }
 }
 
@@ -35,11 +35,16 @@ struct MapView: UIViewRepresentable {
         theView.mapType = .satellite
 //        theView.userTrackingMode = .follow
         theView.layoutMargins.top = 100.0 // This is for the maps compass that shows up when rotating the view
-        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailStart.getIdentifier())
-        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailEnd.getIdentifier())
-        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trackingStart.getIdentifier())
-        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trackingEnd.getIdentifier())
-        theView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: PathAnnotationKind.dummy.getIdentifier())
+        theView.register(MKMarkerAnnotationView.self,
+                         forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailStart.getIdentifier())
+        theView.register(MKMarkerAnnotationView.self,
+                         forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trailEnd.getIdentifier())
+        theView.register(MKMarkerAnnotationView.self,
+                         forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trackingStart.getIdentifier())
+        theView.register(MKMarkerAnnotationView.self,
+                         forAnnotationViewWithReuseIdentifier: PathAnnotationKind.trackingEnd.getIdentifier())
+        theView.register(MKMarkerAnnotationView.self,
+                         forAnnotationViewWithReuseIdentifier: PathAnnotationKind.dummy.getIdentifier())
         theView.tintColor = UIColor.systemBlue
 
         return theView
@@ -50,8 +55,8 @@ struct MapView: UIViewRepresentable {
         context.coordinator.update(mapView)
         mapView.delegate = context.coordinator
 
-        let end = Date()
-        let consumedTime = end.timeIntervalSince(start)
+        let endDate = Date()
+        let consumedTime = endDate.timeIntervalSince(start)
         Logger.mapView.trace("MapView updateUIView. Time spent \(consumedTime). Overlays:\(mapView.overlays.count)")
     }
 }

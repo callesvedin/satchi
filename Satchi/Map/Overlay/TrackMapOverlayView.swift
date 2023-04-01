@@ -91,10 +91,10 @@ struct TrackMapOverlayView: View {
     }
 
     func openSettingsApp() {
-        guard let url = URL(string: UIApplication.openSettingsURLString) else {
+        guard let theUrl = URL(string: UIApplication.openSettingsURLString) else {
             return
         }
-        openURL(url)
+        openURL(theUrl)
     }
 }
 

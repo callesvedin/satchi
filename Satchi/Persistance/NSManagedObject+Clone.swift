@@ -1,4 +1,3 @@
-
 // This code is stolen/based on a copy from this Stackoverflow posting https://stackoverflow.com/a/66966869
 // by Alexander Braekevelt (https://stackoverflow.com/users/5504977/alexander-braekevelt)
 // It takes care of creating a deep copy of an NSManaged Object.
@@ -22,7 +21,9 @@ extension NSManagedObject {
         }
     }
 
-    private func deepcopy(context: NSManagedObjectContext, cache alreadyCopied: inout [NSManagedObjectID: NSManagedObject]) throws -> NSManagedObject {
+    private func deepcopy(context: NSManagedObjectContext,
+                          cache alreadyCopied: inout [NSManagedObjectID: NSManagedObject]) throws -> NSManagedObject
+    {
         guard let entityName = entity.name else {
             throw DeepCopyError.missingEntityName(self)
         }

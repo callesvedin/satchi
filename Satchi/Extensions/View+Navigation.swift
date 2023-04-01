@@ -31,7 +31,7 @@ public extension View {
         for binding: Binding<Item?>,
         @ViewBuilder destination: @escaping (Item) -> Destination
     ) -> some View {
-        self.modifier(NavigationStackModifier(item: binding, destination: destination))
+        modifier(NavigationStackModifier(item: binding, destination: destination))
     }
 }
 
@@ -42,18 +42,18 @@ public extension Binding where Value == Bool {
                 bindingOptional.wrappedValue != nil
             },
             set: { newValue in
-                guard newValue == false else { return }
+                guard !newValue else { return }
 
-                /// We only handle `false` booleans to set our optional to `nil`
-                /// as we can't handle `true` for restoring the previous value.
+                // We only handle `false` booleans to set our optional to `nil`
+                // as we can't handle `true` for restoring the previous value.
                 bindingOptional.wrappedValue = nil
             }
         )
     }
 }
 
-extension Binding {
-    public func mappedToBool<Wrapped>() -> Binding<Bool> where Value == Wrapped? {
+public extension Binding {
+    func mappedToBool<Wrapped>() -> Binding<Bool> where Value == Wrapped? {
         return Binding<Bool>(bindingOptional: self)
     }
 }

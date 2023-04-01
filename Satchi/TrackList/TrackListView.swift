@@ -84,8 +84,8 @@ struct TrackListView: View {
                 }
                 .listStyle(.automatic)
                 .hideScroll()
-                .navigationDestination(for: $selectedTrack) { tr in
-                    EditTrackView(tr)
+                .navigationDestination(for: $selectedTrack) { track in
+                    EditTrackView(track)
                 }
             }
         }
@@ -207,32 +207,6 @@ struct TrackSectionView: View {
 //        .environment(\.managedObjectContext, CoreDataStack.preview.context)
 //        .environment(\.preferredColorPalette,environment.palette)
 //        .environmentObject(environment)
-//    }
-// }
-
-// struct ColorSelectionView: View {
-//    @EnvironmentObject var environment: AppEnvironment
-//    var body: some View {
-// #if DEBUG
-//        HStack {
-////            Button(action: {
-////                environment.palette = Color.Palette.satchi
-////                Logger.listView.trace(("Changed color palette to \(environment.palette)")
-////            }, label: {
-////                RoundedRectangle(cornerRadius: 3)
-////                    .foregroundColor(Color.Palette.satchi.mainBackground)
-////                    .frame(width: 15, height: 15)
-////                    .border(.black)
-////
-////            })
-//            Button(action: {
-//                Logger.listView.trace(("Changed mode to dark")
-//                systemTheme = .dark
-//            }, label: {
-//                Text("Dark")
-//            })
-//        }
-// #endif
 //    }
 // }
 

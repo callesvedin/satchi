@@ -41,13 +41,13 @@ struct TimeFormatter {
     }()
 
     public static func shortTimeWithSecondsFor(seconds: Double) -> String {
-        let r = TimeFormatter.secondsTimeFormatter.string(from: seconds) ?? "-"
-        return r
+        let seconds = TimeFormatter.secondsTimeFormatter.string(from: seconds) ?? "-"
+        return seconds
     }
 
     public static func shortTimeWithMinutesFor(seconds: Double) -> String {
-        let r = TimeFormatter.minutesTimeFormatter.string(from: seconds) ?? "-"
-        return r
+        let minutes = TimeFormatter.minutesTimeFormatter.string(from: seconds) ?? "-"
+        return minutes
     }
 
     public static func dateStringFrom(date: Date?) -> String {

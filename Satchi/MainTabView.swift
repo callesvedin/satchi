@@ -24,7 +24,6 @@ private func setNavigationColors(background: Color, text: Color) {
     let backgroundColor = UIColor(background)
 
     let textColor = UIColor(text)
-    //      let textColor = UIColor.green
     let coloredAppearance = UINavigationBarAppearance()
     coloredAppearance.configureWithTransparentBackground()
     coloredAppearance.backgroundColor = backgroundColor

@@ -20,7 +20,7 @@ struct DistanceFormatter {
         return theFormatter
     }()
 
-    public static func distanceFor(meters:Double) -> String {
+    public static func distanceFor(meters: Double) -> String {
         let distanceInMeters = Measurement(value: meters, unit: UnitLength.meters)
         return measurementFormatter.string(from: distanceInMeters)
     }
