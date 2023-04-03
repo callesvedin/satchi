@@ -7,11 +7,13 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @EnvironmentObject var coordinator: ViewCoordinator
+
     @Environment(\.preferredColorPalette) private var palette
     var body: some View {
         setNavigationColors(background: palette.mainBackground, text: palette.primaryText)
 
-        return NavigationView {
+        return NavigationStack(path: $coordinator.path) {
             TrackListView()
         }
         .navigationViewStyle(.stack)

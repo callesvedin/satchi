@@ -76,6 +76,9 @@ struct EditTrackView: View {
         .navigationBarTitle(viewModel.trackName)
         .navigationBarHidden(false)
         .navigationBarBackButtonHidden(false)
+        .navigationDestination(for: Track.self) { _ in
+            TrackMapView(track: theTrack, preview: false)
+        }
         .onChange(of: viewModel.difficulty, perform: { _ in
             theTrack.difficulty = viewModel.difficulty
         })

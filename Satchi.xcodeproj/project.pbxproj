@@ -24,6 +24,7 @@
 		EB59DE3E2830051F0043DE33 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59DE3D2830051F0043DE33 /* String.swift */; };
 		EB59DE40283045A60043DE33 /* Track+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59DE3F283045A60043DE33 /* Track+CoreDataProperties.swift */; };
 		EB59DE4428310BF60043DE33 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59DE4328310BF60043DE33 /* AppDelegate.swift */; };
+		EB5A5BA929DB79B000F05A4F /* SchemeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5A5BA829DB79B000F05A4F /* SchemeType.swift */; };
 		EB5CE226261CBA3D00D56711 /* TrackMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE225261CBA3D00D56711 /* TrackMapView.swift */; };
 		EB5CE22E261CBFE100D56711 /* TrackMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5CE22D261CBFE100D56711 /* TrackMapModel.swift */; };
 		EB6DC7B32882BA3D009E788A /* SwiftState in Frameworks */ = {isa = PBXBuildFile; productRef = EB6DC7B22882BA3D009E788A /* SwiftState */; };
@@ -98,6 +99,8 @@
 		EBC01F4629D048B300693A5F /* NSManagedObject+Clone.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC01F4529D048B300693A5F /* NSManagedObject+Clone.swift */; };
 		EBC01F4729D048B300693A5F /* NSManagedObject+Clone.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC01F4529D048B300693A5F /* NSManagedObject+Clone.swift */; };
 		EBC69ACE2641B88F0094EAA3 /* TextInputDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */; };
+		EBC6BBE029D8B64000093EF4 /* ViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6BBDF29D8B64000093EF4 /* ViewCoordinator.swift */; };
+		EBC6BBE129D8B9BE00093EF4 /* ViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6BBDF29D8B64000093EF4 /* ViewCoordinator.swift */; };
 		EBCDAAA729B75BC10035809D /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCDAAA629B75BC10035809D /* NotificationCenter.swift */; };
 		EBD117BA2919AEA50067402E /* View+Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD117B92919AEA50067402E /* View+Navigation.swift */; };
 		EBD13A55261AF3760080C4FE /* EditTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD13A54261AF3760080C4FE /* EditTrackView.swift */; };
@@ -145,6 +148,7 @@
 		EB59DE3D2830051F0043DE33 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		EB59DE3F283045A60043DE33 /* Track+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Track+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		EB59DE4328310BF60043DE33 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		EB5A5BA829DB79B000F05A4F /* SchemeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeType.swift; sourceTree = "<group>"; };
 		EB5BDF0E28181E03009DF497 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		EB5BDF0F28181E61009DF497 /* Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Notes.md; sourceTree = "<group>"; };
 		EB5CE225261CBA3D00D56711 /* TrackMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackMapView.swift; sourceTree = "<group>"; };
@@ -174,7 +178,6 @@
 		EBA6D5AF296B6266000579FC /* PersistenceController+History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PersistenceController+History.swift"; sourceTree = "<group>"; };
 		EBA6D5B8296B6325000579FC /* PersistenceController+Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PersistenceController+Track.swift"; sourceTree = "<group>"; };
 		EBA6D5F1296B6738000579FC /* InitializeCloudKitSchema.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InitializeCloudKitSchema.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		EBA6D5F2296B6739000579FC /* Satchi copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Satchi copy-Info.plist"; path = "/Users/calle/Developer/Satchi/Satchi copy-Info.plist"; sourceTree = "<absolute>"; };
 		EBA842C428702F0C0061C338 /* SyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMonitor.swift; sourceTree = "<group>"; };
 		EBA842E7287589CF0061C338 /* TimeFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormatter.swift; sourceTree = "<group>"; };
 		EBB05D762878C02500C9723F /* DistanceFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceFormatter.swift; sourceTree = "<group>"; };
@@ -183,6 +186,7 @@
 		EBB85EF329CA22AD0058E0B5 /* ValueTransformers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueTransformers.swift; sourceTree = "<group>"; };
 		EBC01F4529D048B300693A5F /* NSManagedObject+Clone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+Clone.swift"; sourceTree = "<group>"; };
 		EBC69ACD2641B88F0094EAA3 /* TextInputDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputDialog.swift; sourceTree = "<group>"; };
+		EBC6BBDF29D8B64000093EF4 /* ViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCoordinator.swift; sourceTree = "<group>"; };
 		EBCB4816266762F800E5631C /* Satchi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Satchi.xcdatamodel; sourceTree = "<group>"; };
 		EBCDAAA629B75BC10035809D /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 		EBD117B92919AEA50067402E /* View+Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Navigation.swift"; sourceTree = "<group>"; };
@@ -256,7 +260,6 @@
 				EB872528260CC0C5008AD8E7 /* SatchiUITests */,
 				EB872505260CC0C4008AD8E7 /* Products */,
 				EB7D2143282C6181006CB703 /* Frameworks */,
-				EBA6D5F2296B6739000579FC /* Satchi copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -411,6 +414,8 @@
 				EB35885E2970BAEB00CCB235 /* SceneDelegate.swift */,
 				EB59DE4328310BF60043DE33 /* AppDelegate.swift */,
 				EB7D2148282C6553006CB703 /* UIApplicationExt.swift */,
+				EBC6BBDF29D8B64000093EF4 /* ViewCoordinator.swift */,
+				EB5A5BA829DB79B000F05A4F /* SchemeType.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -600,6 +605,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		EB54AFEC29D75504000DBD5A /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -655,10 +661,12 @@
 				EB3DF31F28C65BEE00A45A8D /* PreviewMapView.swift in Sources */,
 				EB59DE4428310BF60043DE33 /* AppDelegate.swift in Sources */,
 				EBC69ACE2641B88F0094EAA3 /* TextInputDialog.swift in Sources */,
+				EBC6BBE029D8B64000093EF4 /* ViewCoordinator.swift in Sources */,
 				EBA6D5B2296B6266000579FC /* PersistenceController.swift in Sources */,
 				EBD542B528D7971400FAE7FA /* AppEnvironment.swift in Sources */,
 				EBB05D772878C02500C9723F /* DistanceFormatter.swift in Sources */,
 				EB352C86278CEA170015AC5A /* TrackViewModel.swift in Sources */,
+				EB5A5BA929DB79B000F05A4F /* SchemeType.swift in Sources */,
 				EBE9440328D25AE900C1C7A5 /* Color.swift in Sources */,
 				EB9726602843B0DD00583007 /* DifficultyView.swift in Sources */,
 				EB2F91212624B6500026773D /* TrackMapOverlayView.swift in Sources */,
@@ -693,6 +701,7 @@
 				EBA6D5C0296B6738000579FC /* View+Navigation.swift in Sources */,
 				EBA6D5C1296B6738000579FC /* StateButtonView.swift in Sources */,
 				EBA6D5C2296B6738000579FC /* Track+CoreDataProperties.swift in Sources */,
+				EBC6BBE129D8B9BE00093EF4 /* ViewCoordinator.swift in Sources */,
 				EBA6D5C3296B6738000579FC /* OverlayButtonStyle.swift in Sources */,
 				EBA6D5C4296B6738000579FC /* TrackMapModel.swift in Sources */,
 				EBA6D5C5296B6738000579FC /* PreviewTrackMapView.swift in Sources */,
@@ -901,7 +910,7 @@
 				DEVELOPMENT_TEAM = 9469B78B2K;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Satchi/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -931,7 +940,7 @@
 				DEVELOPMENT_TEAM = 9469B78B2K;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Satchi/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1044,7 +1053,7 @@
 				DEVELOPMENT_TEAM = 9469B78B2K;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Satchi copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1073,7 +1082,7 @@
 				DEVELOPMENT_TEAM = 9469B78B2K;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Satchi copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

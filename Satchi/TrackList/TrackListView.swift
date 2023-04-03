@@ -7,11 +7,13 @@
 
 import CloudKit
 import CoreData
+import os.log
 import SwiftUI
 
 struct TrackListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var environment: AppEnvironment
+    @EnvironmentObject var coordinator: ViewCoordinator
     @Environment(\.preferredColorPalette) private var palette
     @Environment(\.colorScheme) private var colorScheme
 
@@ -27,9 +29,7 @@ struct TrackListView: View {
     private var tracks: SectionedFetchResults<Int16, Track>
     private let persistenceController = PersistenceController.shared
 
-    @State private var showMapView = false
     @State private var waitingForShareId: UUID?
-    @State var selectedTrack: Track?
 
     @AppStorage("systemTheme") private var systemTheme: Int = SchemeType.allCases.first!.rawValue
 
@@ -51,16 +51,20 @@ struct TrackListView: View {
         return ZStack {
             palette.mainBackground.ignoresSafeArea(.all)
             if tracks.isEmpty {
-                NoTracksView(addTrack: $showMapView)
+                NoTracksView(callback: createNewTrack)
             } else {
                 List {
                     ForEach(tracks) { section in
                         Section(header: Text(LocalizedStringKey(TrackState(rawValue: section.id)!.text()))) {
                             ForEach(section, id: \.id) { track in
                                 Button(
-                                    action: { selectedTrack = track },
+                                    action: {
+                                        coordinator.path.append(Destination.editView(track: track))
+                                    },
                                     label: {
-                                        TrackCellView(deleteFunction: deleteTrack, track: track, waitingForShare: track.id == waitingForShareId)
+                                        TrackCellView(deleteFunction: deleteTrack,
+                                                      track: track,
+                                                      waitingForShare: track.id == waitingForShareId)
                                     }
                                 )
                                 .swipeActions(allowsFullSwipe: false) {
@@ -84,8 +88,13 @@ struct TrackListView: View {
                 }
                 .listStyle(.automatic)
                 .hideScroll()
-                .navigationDestination(for: $selectedTrack) { track in
-                    EditTrackView(track)
+                .navigationDestination(for: Destination.self) { destination in
+                    switch destination {
+                    case Destination.editView(track: let track):
+                        EditTrackView(track)
+                    case .runView(track: let track):
+                        TrackMapView(track: track, preview: false)
+                    }
                 }
             }
         }
@@ -93,32 +102,28 @@ struct TrackListView: View {
         .navigationTitle(LocalizedStringKey("Tracks"))
         .toolbar {
             HStack {
-                HStack {
-                    //            Button(action: {
-                    //                environment.palette = Color.Palette.satchi
-                    //                Logger.listView.error("Changed color palette to \(environment.palette)")
-                    //            }, label: {
-                    //                RoundedRectangle(cornerRadius: 3)
-                    //                    .foregroundColor(Color.Palette.satchi.mainBackground)
-                    //                    .frame(width: 15, height: 15)
-                    //                    .border(.black)
-                    //
-                    //            })
-                }
-                Button(action: { showMapView.toggle() }, label: { Text("Add track") })
-                    .foregroundColor(palette.link)
-                    .padding(0)
+                Button(action: {
+                    createNewTrack()
+                }, label: {
+                    Text("Add track")
+                })
+                .foregroundColor(palette.link)
+                .padding(0)
             }
         }
-        .sheet(isPresented: $showMapView, content: {
-            AddTrackView { trackName in
-                let track = persistenceController.addTrack(name: trackName!, context: viewContext)
-                selectedTrack = track
-            }
-        })
         .onReceive(NotificationCenter.default.storeDidChangePublisher) { notification in
             processStoreChangeNotification(notification)
         }.preferredColorScheme(selectedScheme)
+    }
+
+    private func createNewTrack() {
+        let trackName = TimeFormatter.dayDateStringFrom(date: Date())
+        if let track = persistenceController.addTrack(name: trackName, context: viewContext) {
+            coordinator.path.append(Destination.editView(track: track))
+            coordinator.path.append(Destination.runView(track: track))
+        } else {
+            Logger.listView.warning("Could not create a new track when add button pushed.")
+        }
     }
 
     private func processStoreChangeNotification(_ notification: Notification) {
@@ -156,14 +161,13 @@ extension View {
 
 struct NoTracksView: View {
     @Environment(\.preferredColorPalette) private var palette
-    @Binding var addTrack: Bool
-
+    var callback: () -> Void
     var body: some View {
         VStack {
             Spacer()
             Text("You have no tracks.")
             Button("Add track") {
-                addTrack.toggle()
+                callback()
             }
             .foregroundColor(palette.link)
             Spacer()
@@ -181,51 +185,6 @@ struct TrackSectionView: View {
                 .padding(.top, 32)
                 .padding(.bottom, 2)
             Spacer()
-        }
-    }
-}
-
-//
-//
-// struct TrackListView_Previews: PreviewProvider {
-//
-//    static var previews: some View {
-//        let environment = AppEnvironment.shared
-//        return
-//        ForEach(ColorScheme.allCases, id: \.self) {
-//            NavigationView {
-//                TrackListView()
-//            }.previewDevice(PreviewDevice(rawValue: "iPhone 14")).previewDisplayName("iPhone 14")
-//            .preferredColorScheme($0)
-//            NavigationView {
-//                TrackListView()
-//            }.previewDevice(PreviewDevice(rawValue: "iPhone 13 ios 15.5")).previewDisplayName("iPhone 13 ios15")
-//            .preferredColorScheme($0)
-//        }
-//        .environment(\.locale, .init(identifier: "sv"))
-//        .environmentObject(CoreDataStack.preview)
-//        .environment(\.managedObjectContext, CoreDataStack.preview.context)
-//        .environment(\.preferredColorPalette,environment.palette)
-//        .environmentObject(environment)
-//    }
-// }
-
-enum SchemeType: Int, Identifiable, CaseIterable {
-    var id: Self { self }
-    case system
-    case light
-    case dark
-}
-
-extension SchemeType {
-    var title: String {
-        switch self {
-        case .system:
-            return "System"
-        case .light:
-            return "Light"
-        case .dark:
-            return "Dark"
         }
     }
 }

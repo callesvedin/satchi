@@ -15,6 +15,7 @@ struct SatchiApp: App {
     private let persistentContainer = PersistenceController.shared.persistentContainer
 
     @ObservedObject var environment = AppEnvironment.shared
+    @ObservedObject var coordinator = ViewCoordinator()
 
     init() {
         #if DEBUG
@@ -37,6 +38,7 @@ struct SatchiApp: App {
                 .environment(\.managedObjectContext, persistentContainer.viewContext)
                 .environment(\.preferredColorPalette, environment.palette)
                 .environmentObject(environment)
+                .environmentObject(coordinator)
         }
         #endif
     }
