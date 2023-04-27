@@ -90,7 +90,7 @@ struct TrackListView: View {
                 .hideScroll()
                 .navigationDestination(for: Destination.self) { destination in
                     switch destination {
-                    case Destination.editView(track: let track):
+                    case .editView(track: let track):
                         EditTrackView(track)
                     case .runView(track: let track):
                         TrackMapView(track: track, preview: false)

@@ -307,6 +307,7 @@ class TrackMapModel: NSObject, ObservableObject {
         locationManager.stopUpdatingHeading()
         locationManager.stopUpdatingLocation()
         isTracking = false
+        locationManager.delegate = nil
     }
 }
 
@@ -315,7 +316,7 @@ extension TrackMapModel: CLLocationManagerDelegate {
         // If we want to continue updating while paused we have to add .paused state here but we then have to save the location where we paused...
         if stateMachine.state == .running && track.getState() == .notStarted {
             laidPath.append(contentsOf: locations)
-        // If we want to continue updating while paused we have to add .paused state here but we then have to save the location where we paused...
+            // If we want to continue updating while paused we have to add .paused state here but we then have to save the location where we paused...
         } else if stateMachine.state == .running && track.getState() == .trailAdded {
             trackPath.append(contentsOf: locations)
         }
