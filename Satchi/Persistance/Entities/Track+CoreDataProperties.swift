@@ -16,14 +16,14 @@ public extension Track {
         return fetchRequest
     }
 
-    @NSManaged var comments: String?
+    @NSManaged var comments: String
     @NSManaged var created: Date?
     @NSManaged var difficulty: Int16
     @NSManaged var id: UUID?
     @NSManaged var image: Data?
     @NSManaged var laidPath: [CLLocation]?
     @NSManaged var length: Int32
-    @NSManaged var name: String?
+    @NSManaged var name: String
     @NSManaged var started: Date?
     @NSManaged var timeToCreate: Double
     @NSManaged var timeToFinish: Double

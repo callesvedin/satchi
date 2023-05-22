@@ -26,7 +26,7 @@ struct TrackCellView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("\(track.name ?? "")")
+                Text("\(track.name)")
                     .font(.headline)
                     .bold()
                 Spacer()

@@ -38,8 +38,8 @@ class TrackViewModel: ObservableObject, Identifiable {
     init(_ track: Track) {
         id = track.id
         objectID = track.objectID
-        trackName = track.name ?? ""
-        comments = track.comments ?? ""
+        trackName = track.name
+        comments = track.comments
         difficulty = max(1, track.difficulty)
         created = track.created
         laidPath = track.laidPath
@@ -49,13 +49,14 @@ class TrackViewModel: ObservableObject, Identifiable {
         timeToCreate = track.timeToCreate
         timeToFinish = track.timeToFinish
         state = track.getState()
+        self.objectWillChange.send()
     }
 
     public func setValues(_ track: Track) {
         id = track.id
         objectID = track.objectID
-        trackName = track.name ?? ""
-        comments = track.comments ?? ""
+        trackName = track.name 
+        comments = track.comments 
         difficulty = max(1, track.difficulty)
         created = track.created
         laidPath = track.laidPath

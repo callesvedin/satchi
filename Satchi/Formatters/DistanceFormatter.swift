@@ -11,7 +11,7 @@ struct DistanceFormatter {
     private static let measurementFormatter: MeasurementFormatter = {
         let theFormatter = MeasurementFormatter()
         theFormatter.unitStyle = MeasurementFormatter.UnitStyle.short
-        theFormatter.unitOptions = Locale.current.usesMetricSystem ? .providedUnit : .naturalScale
+        theFormatter.unitOptions = MeasurementFormatter.UnitOptions.providedUnit
         
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal

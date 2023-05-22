@@ -13,13 +13,11 @@ struct EditTrackView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.preferredColorPalette) private var palette
 
-    @StateObject var viewModel: TrackViewModel
-    var theTrack: Track
+    @ObservedObject var theTrack: Track
     private var persistanceController = PersistenceController.shared
 
     init(_ track: Track) {
         theTrack = track
-        _viewModel = StateObject(wrappedValue: TrackViewModel(track))
     }
 
     var shareButton: some View {
@@ -33,9 +31,9 @@ struct EditTrackView: View {
 
     var showMapViewButton: some View {
         NavigationLink(destination: TrackMapView(track: theTrack, preview: false)) {
-            if viewModel.state == .trailTracked {
+            if theTrack.getState() == .trailTracked {
                 Text("Show track")
-            } else if viewModel.state == .notStarted {
+            } else if theTrack.getState() == .notStarted {
                 Text("Lay track")
             } else {
                 Text("Follow Track")
@@ -58,7 +56,7 @@ struct EditTrackView: View {
 
                         Spacer()
                     }
-                    FieldsView(viewModel: viewModel)
+                    FieldsView(theTrack: theTrack)
                 }
             }
         }
@@ -73,23 +71,11 @@ struct EditTrackView: View {
             }
         }
         .background(palette.mainBackground)
-        .navigationBarTitle(viewModel.trackName)
+        .navigationBarTitle(theTrack.name)
         .navigationBarHidden(false)
         .navigationBarBackButtonHidden(false)
         .navigationDestination(for: Track.self) { _ in
             TrackMapView(track: theTrack, preview: false)
-        }
-        .onChange(of: viewModel.difficulty, perform: { _ in
-            theTrack.difficulty = viewModel.difficulty
-        })
-        .onChange(of: viewModel.comments, perform: { _ in
-            theTrack.comments = viewModel.comments
-        })
-        .onChange(of: viewModel.trackName, perform: { _ in
-            theTrack.name = viewModel.trackName
-        })
-        .onAppear {
-            viewModel.setValues(theTrack)
         }
         .onDisappear {
             persistanceController.updateTrack(track: theTrack)
@@ -116,12 +102,12 @@ struct EditRow: View {
 
 struct FieldsView: View {
     @Environment(\.preferredColorPalette) private var palette
-    @ObservedObject var viewModel: TrackViewModel
+    @ObservedObject var theTrack: Track
 
     var body: some View {
         Group {
             HStack {
-                TextField("Name", text: $viewModel.trackName)
+                TextField("Name", text: $theTrack.name)
                     .font(Font.title2)
                     .padding(.horizontal, 8)
                     .background(RoundedRectangle(cornerRadius: 4)
@@ -130,33 +116,33 @@ struct FieldsView: View {
             }.padding(.bottom, 18)
 
             VStack {
-                EditRow(textOne: "Created:", textTwo: "\(viewModel.created != nil ? TimeFormatter.dateStringFrom(date: viewModel.created) : "-")")
-                EditRow(textOne: "Time to create:", textTwo: "\(TimeFormatter.shortTimeWithSecondsFor(seconds: viewModel.timeToCreate))")
+                EditRow(textOne: "Created:", textTwo: "\(theTrack.created != nil ? TimeFormatter.dateStringFrom(date: theTrack.created) : "-")")
+                EditRow(textOne: "Time to create:", textTwo: "\(TimeFormatter.shortTimeWithSecondsFor(seconds: theTrack.timeToCreate))")
                 EditRow(textOne: "Time since created:", textTwo: "\(getTimeSinceCreated())")
 
             }.padding(.vertical, 4)
 
             VStack {
-                EditRow(textOne: "Length:", textTwo: "\(DistanceFormatter.distanceFor(meters: Double(viewModel.length)))")
+                EditRow(textOne: "Length:", textTwo: "\(DistanceFormatter.distanceFor(meters: Double(theTrack.length)))")
 
                 HStack {
                     Text("Difficulty:").frame(alignment: .leading)
                     Spacer()
-                    DifficultyView(difficulty: $viewModel.difficulty).frame(maxWidth: .infinity, alignment: .trailing)
+                    DifficultyView(difficulty: $theTrack.difficulty).frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }.padding(.vertical, 4)
 
             VStack {
-                EditRow(textOne: "Track rested:", textTwo: "\(getTimeBetween(date: viewModel.created, and: viewModel.started))")
+                EditRow(textOne: "Track rested:", textTwo: "\(getTimeBetween(date: theTrack.created, and: theTrack.started))")
             }.padding(.vertical, 4)
 
             VStack {
-                EditRow(textOne: "Tracking started:", textTwo: "\(viewModel.started != nil ? TimeFormatter.dateStringFrom(date: viewModel.started!) : "-")")
-                EditRow(textOne: "Time to finish:", textTwo: "\(viewModel.timeToFinish > 0 ? TimeFormatter.shortTimeWithSecondsFor(seconds: viewModel.timeToFinish) : "-")")
+                EditRow(textOne: "Tracking started:", textTwo: "\(theTrack.started != nil ? TimeFormatter.dateStringFrom(date: theTrack.started!) : "-")")
+                EditRow(textOne: "Time to finish:", textTwo: "\(theTrack.timeToFinish > 0 ? TimeFormatter.shortTimeWithSecondsFor(seconds: theTrack.timeToFinish) : "-")")
             }.padding(.vertical, 4)
 
             Text("Comments:").padding(.bottom, 0)
-            TextField("Comments", text: $viewModel.comments)
+            TextField("Comments", text: $theTrack.comments)
                 .padding()
                 .textFieldStyle(PlainTextFieldStyle())
                 .frame(minHeight: 80)
@@ -174,7 +160,7 @@ struct FieldsView: View {
     }
 
     private func getTimeSinceCreated() -> String {
-        guard let timeDistance = viewModel.created?.distance(to: Date()) else { return "-" }
+        guard let timeDistance = theTrack.created?.distance(to: Date()) else { return "-" }
         return TimeFormatter.shortTimeWithMinutesFor(seconds: timeDistance)
     }
 }
