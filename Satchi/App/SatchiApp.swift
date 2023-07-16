@@ -39,6 +39,9 @@ struct SatchiApp: App {
                 .environment(\.preferredColorPalette, environment.palette)
                 .environmentObject(environment)
                 .environmentObject(coordinator)
+                .onChange(of: coordinator.path, perform: {c in
+                    Logger.satchiApp.debug("Coordinator changed path count:\(c.count)")
+                })
         }
         #endif
     }

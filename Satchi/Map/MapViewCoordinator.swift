@@ -78,6 +78,10 @@ class MapViewCoordinator: NSObject, MKMapViewDelegate {
         } else if mapModel.stateMachine.state != .viewing {
             mapView.showsUserLocation = true
         }
+        if !mapModel.isTracking {
+            mapView.showsUserLocation = false
+            mapView.userTrackingMode = .none            
+        }
     }
 
     private func getAnnotation(kind: PathAnnotationKind, in view: MKMapView) -> MKAnnotation? {

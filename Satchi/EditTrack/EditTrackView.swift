@@ -43,6 +43,20 @@ struct EditTrackView: View {
         .accentColor(palette.link)
     }
 
+//    var showMapViewButton: some View {
+//        NavigationLink(destination: TrackMapView(track: theTrack, preview: false)) {
+//            if theTrack.getState() == .trailTracked {
+//                Text("Show track")
+//            } else if theTrack.getState() == .notStarted {
+//                Text("Lay track")
+//            } else {
+//                Text("Follow Track")
+//            }
+//        }
+//        .isDetailLink(false)
+//        .accentColor(palette.link)
+//    }
+
     var body: some View {
         VStack {
             ScrollView {

@@ -9,8 +9,10 @@ import MapKit
 import os.log
 import SwiftUI
 
+
 struct TrackMapView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var environment: AppEnvironment
     @StateObject public var mapModel: TrackMapModel
     @State var showAccessDenied: Bool = false
     private static let logger = Logger(
@@ -19,6 +21,7 @@ struct TrackMapView: View {
     )
 
     init(track: Track, preview: Bool = false) {
+        TrackMapView.logger.debug("Initializing TrackMapView")
         _mapModel = StateObject(wrappedValue: {
             let model = TrackMapModel(track: track)
             return model
@@ -37,6 +40,10 @@ struct TrackMapView: View {
             Logger.mapView.debug("Map model done")
             presentationMode.wrappedValue.dismiss()
         }
+        .onDisappear(){
+            Logger.mapView.debug("TrackMapView disappears")
+        }
+        
     }
 }
 

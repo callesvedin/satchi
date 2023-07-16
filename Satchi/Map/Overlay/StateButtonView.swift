@@ -22,18 +22,6 @@ struct StateButtonView: View {
                         .disabled(mapModel.accuracy > 10)
                         .padding(15)
                 }
-                /*
-                 Button(action: {mapModel.start()},
-                 label:  {
-                 Image(systemName: "play.circle.fill")
-                 .symbolRenderingMode(.palette)
-                 .foregroundStyle(.white, .green)
-                 .font(.system(size: 50))
-                 })
-                 .opacity(mapModel.accuracy > 10 ? 0.4:0.8)
-                 .disabled(mapModel.accuracy > 10)
-                 .padding(15)
-                 */
             }
             if mapModel.stateMachine.state == .running {
                 Button(action: { mapModel.pause() }, label: { Text("Pause") })
@@ -57,13 +45,44 @@ struct StateButtonView: View {
     }
 }
 
-// struct StateButtonView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let track = CoreDataStack.preview.getTracks()[0]
-//        let model = TrackMapModel(track: track, stack: CoreDataStack.preview)
-//        model.followUser = false
-//        model.accuracy = 15
-//
-//        return StateButtonView(mapModel:model)
-//    }
-// }
+struct StateButtonView_Previews: PreviewProvider {
+    static var previews: some View {
+        let track = Track(context: PersistenceController.shared.persistentContainer.viewContext)
+        track.name = "Test-Track"
+        track.created = Date()
+        // track.timeToFinish = 19*60
+        track.difficulty = 3
+        track.comments = "A little hard..."
+        track.timeToCreate = 21*60
+        track.started = Date().addingTimeInterval(60*60*3)
+        track.length = 1000
+        let m1 = TrackMapModel(track: track)
+        m1.followUser = false
+        m1.accuracy = 4
+        let m2 = TrackMapModel(track: track)
+        m1.followUser = false
+        m1.accuracy = 20
+
+        let track2 = Track(context: PersistenceController.shared.persistentContainer.viewContext)
+        track2.name = "Test-Track"
+        track2.created = Date()
+        track2.timeToFinish = 19*60
+        track2.difficulty = 3
+        track2.comments = "A little hard..."
+        track2.timeToCreate = 21*60
+        track2.started = Date().addingTimeInterval(60*60*3)
+        track2.length = 1000
+        let m3 = TrackMapModel(track: track2)
+        m3.followUser = false
+        m3.accuracy = 4
+
+        let examples = [m1, m2, m3]
+
+        return ForEach(examples, id: \.self) { model in
+            VStack {
+                Spacer()
+                StateButtonView(mapModel: model)
+            }
+        }
+    }
+}

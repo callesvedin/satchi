@@ -1,5 +1,5 @@
 //
-//  TrackMapModel.swift
+//  swift
 //  Satchi
 //
 //  Created by carl-johan.svedin on 2021-04-06.
@@ -23,22 +23,22 @@ class TrackMapModel: NSObject, ObservableObject {
     private var locationManager: CLLocationManager
     //    public var image: UIImage?
 
-    public var regionIsSet: Bool = false
-    public var trackingStarted: Date?
+//    public var regionIsSet: Bool = false
+    private var trackingStarted: Date?
 
-    public var track: Track
+    private var track: Track
     public var stateMachine: Machine<RunningState, RunningEvent>!
 
     @Published var pathStartLocation: CLLocationCoordinate2D?
     @Published var pathEndLocation: CLLocationCoordinate2D?
     @Published var trackStartLocation: CLLocationCoordinate2D?
     @Published var trackEndLocation: CLLocationCoordinate2D?
-    private var isTracking = false
+    public var isTracking = false
     var followUser: Bool = true
     @Published var timer: TrackTimer = .init()
     @Published var distance: CLLocationDistance = 0
     @Published public var gotUserLocation = false
-    public var currentLocation: CLLocation?
+    private var currentLocation: CLLocation?
     @Published public var accuracy: Double = 0
     @Published public var done: Bool = false
     @Published public var showAccessDenied: Bool = false
@@ -81,39 +81,15 @@ class TrackMapModel: NSObject, ObservableObject {
         }
     }
 
-//    @Published public var dummies: [CLLocationCoordinate2D] = []
-
-    //    private func createImage() {
-    //        if region != nil {
-    //            let snapShotOptions: MKMapSnapshotter.Options = MKMapSnapshotter.Options()
-    //            var snapShot: MKMapSnapshotter!
-    //
-    //            snapShotOptions.region = region!
-    //            //            _snapShotOptions.size = mapView.frame.size
-    //            snapShotOptions.scale = UIScreen.main.scale
-    //
-    //            // Set MKMapSnapShotOptions to MKMapSnapShotter.
-    //            snapShot = MKMapSnapshotter(options: snapShotOptions)
-    //
-    //            snapShot.start { [self] (snapshot, error) -> Void in
-    //                if error == nil {
-    //                    image = snapshot!.image
-    //                } else {
-    //                    Logger.mapView.debug("error")
-    //                }
-    //            }
-    //        }
-    //
-    //    }
-
-    init(track: Track) {
+    init(track: Track, locationManager:CLLocationManager = CLLocationManager()) {
+        Logger.mapView.debug("TrackMapModel initialized Track: \(track.name)-\(track.id?.uuidString ?? "*")")
         self.track = track
         laidPath = track.laidPath ?? []
         trackPath = track.trackPath ?? []
-//        dummies = track.dummies ?? []
-        locationManager = CLLocationManager()
+
         let isViewing = track.getState() == .trailTracked
         stateMachine = Machine(state: isViewing ? .viewing : .notStarted)
+        self.locationManager = locationManager
         locationAuthorizationStatus = locationManager.authorizationStatus
 
         super.init()
@@ -188,6 +164,10 @@ class TrackMapModel: NSObject, ObservableObject {
             Logger.mapView.debug(".resume is triggered! Context:\(String(describing: context))")
             self.resumeRunning()
         }
+    }
+
+    deinit {
+        locationManager.delegate = nil
     }
 
     private func resumeRunning() {
@@ -298,6 +278,8 @@ class TrackMapModel: NSObject, ObservableObject {
         if !isTracking {
             locationManager.startUpdatingLocation()
             locationManager.startUpdatingHeading()
+            locationManager.startMonitoringSignificantLocationChanges()
+
             isTracking = true
         }
     }
@@ -306,6 +288,8 @@ class TrackMapModel: NSObject, ObservableObject {
         Logger.mapView.debug("Stop tracking.")
         locationManager.stopUpdatingHeading()
         locationManager.stopUpdatingLocation()
+        locationManager.stopUpdatingHeading()
+        locationManager.stopMonitoringSignificantLocationChanges()
         isTracking = false
         locationManager.delegate = nil
     }

@@ -59,6 +59,7 @@ struct TrackListView: View {
                             ForEach(section, id: \.id) { track in
                                 Button(
                                     action: {
+                                        Logger.listView.debug("Adding destination")
                                         coordinator.path.append(Destination.editView(track: track))
                                     },
                                     label: {
