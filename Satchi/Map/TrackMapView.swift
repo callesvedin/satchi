@@ -9,7 +9,6 @@ import MapKit
 import os.log
 import SwiftUI
 
-
 struct TrackMapView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var environment: AppEnvironment

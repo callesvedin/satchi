@@ -12,7 +12,7 @@ import SwiftUI
 struct EditTrackView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.preferredColorPalette) private var palette
-
+    @EnvironmentObject var coordinator: ViewCoordinator
     @ObservedObject var theTrack: Track
     private var persistanceController = PersistenceController.shared
 
@@ -30,7 +30,7 @@ struct EditTrackView: View {
     }
 
     var showMapViewButton: some View {
-        NavigationLink(destination: TrackMapView(track: theTrack, preview: false)) {
+        NavigationLink(value: Destination.runView(track: theTrack)) {
             if theTrack.getState() == .trailTracked {
                 Text("Show track")
             } else if theTrack.getState() == .notStarted {
@@ -39,7 +39,6 @@ struct EditTrackView: View {
                 Text("Follow Track")
             }
         }
-        .isDetailLink(false)
         .accentColor(palette.link)
     }
 
