@@ -39,7 +39,7 @@ struct TrackMapView: View {
             Logger.mapView.debug("Map model done")
             presentationMode.wrappedValue.dismiss()
         }
-        .onDisappear(){
+        .onDisappear {
             Logger.mapView.debug("TrackMapView disappears")
         }
         

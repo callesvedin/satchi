@@ -81,7 +81,7 @@ class TrackMapModel: NSObject, ObservableObject {
         }
     }
 
-    init(track: Track, locationManager:CLLocationManager = CLLocationManager()) {
+    init(track: Track, locationManager: CLLocationManager = CLLocationManager()) {
         Logger.mapView.debug("TrackMapModel initialized Track: \(track.name)-\(track.id?.uuidString ?? "*")")
         self.track = track
         laidPath = track.laidPath ?? []

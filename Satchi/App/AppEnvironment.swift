@@ -13,7 +13,7 @@ final class AppEnvironment: ObservableObject {
     static let shared = AppEnvironment()
 
     @Published var palette: Color.Palette
-    var locationManager:CLLocationManager
+    var locationManager: CLLocationManager
 
     init(palette: Color.Palette = Color.Palette.satchi) {
         self.palette = palette
