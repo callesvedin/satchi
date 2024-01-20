@@ -51,13 +51,8 @@ struct MapView: UIViewRepresentable {
     }
 
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        let start = Date.now
         context.coordinator.update(mapView)
         mapView.delegate = context.coordinator
-
-        let endDate = Date()
-        let consumedTime = endDate.timeIntervalSince(start)
-        Logger.mapView.trace("MapView updateUIView. Time spent \(consumedTime). Overlays:\(mapView.overlays.count)")
     }
 }
 

@@ -60,8 +60,8 @@ struct StateButtonView_Previews: PreviewProvider {
         m1.followUser = false
         m1.accuracy = 4
         let m2 = TrackMapModel(track: track)
-        m1.followUser = false
-        m1.accuracy = 20
+        m2.followUser = false
+        m2.accuracy = 20
 
         let track2 = Track(context: PersistenceController.shared.persistentContainer.viewContext)
         track2.name = "Test-Track"

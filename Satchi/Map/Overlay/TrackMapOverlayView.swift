@@ -13,6 +13,7 @@ struct TrackMapOverlayView: View {
     @ObservedObject var mapModel: TrackMapModel
     @Environment(\.colorScheme) var colorScheme
     @State var showAccessDenied = false
+    @State var animate = true
 
     init(mapModel: TrackMapModel) {
         self.mapModel = mapModel
@@ -26,6 +27,32 @@ struct TrackMapOverlayView: View {
 //            .buttonStyle(OverlayButtonStyle(backgroundColor: palette.mainBackground))
 //            .padding(15)
 //    }
+
+    var antennaImage: some View {
+            if #available(iOS 17, *) {
+                return Image(systemName: "antenna.radiowaves.left.and.right.slash")
+                    .symbolEffect(
+                        .pulse,
+                        isActive: animate
+                    )
+                    .fontWeight(.bold)
+                    .imageScale(.large)
+                    .padding(8)
+                    .foregroundColor(Color.red)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6, style: .continuous).fill(palette.mainBackground).opacity(0.8)
+                    )
+            } else {
+                return Image(systemName: "antenna.radiowaves.left.and.right.slash")
+                    .fontWeight(.bold)
+                    .imageScale(.large)
+                    .padding(8)
+                    .foregroundColor(Color.red)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6, style: .continuous).fill(palette.mainBackground).opacity(0.8)
+                    )
+            }
+    }
 
     var body: some View {
         let window = UIApplication.shared.currentKeyWindow
@@ -48,13 +75,7 @@ struct TrackMapOverlayView: View {
 //                    }
                     Spacer()
                     if mapModel.accuracy > 10 {
-                        Image(systemName: "antenna.radiowaves.left.and.right.slash")
-                            .imageScale(.large)
-                            .padding(8)
-                            .foregroundColor(Color.red)
-                            .background(
-                                RoundedRectangle(cornerRadius: 6, style: .continuous).fill(palette.mainBackground).opacity(0.8)
-                            )
+                        antennaImage
                     }
                     Button(
                         action: { mapModel.followUser.toggle() },
@@ -98,17 +119,26 @@ struct TrackMapOverlayView: View {
     }
 }
 
-//
-//
-// struct TrackMapOverlayView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let model: TrackMapModel = TrackMapModel(track:CoreDataStack.preview.getTracks()[1], stack:CoreDataStack.preview)
-//        model.followUser = false
-//        model.accuracy = 15
-//
-//        return Group {
-//            TrackMapOverlayView(mapModel: model).ignoresSafeArea().environmentObject(CoreDataStack.preview)
-//            TrackMapOverlayView(mapModel: model).ignoresSafeArea().preferredColorScheme(.dark).environmentObject(CoreDataStack.preview)
-//        }
-//    }
-// }
+ struct TrackMapOverlayView_Previews: PreviewProvider {
+    static var previews: some View {
+        let track = Track(context: PersistenceController.shared.persistentContainer.viewContext)
+        track.name = "Test-Track"
+        track.created = Date()
+        // track.timeToFinish = 19*60
+        track.difficulty = 3
+        track.comments = "A little hard..."
+        track.timeToCreate = 21*60
+        track.started = Date().addingTimeInterval(60*60*3)
+        track.length = 1000
+        track.timeToCreate = 300.0
+
+        let model: TrackMapModel = TrackMapModel(track: track)
+        model.followUser = true
+        model.accuracy = 45
+
+        return Group {
+            TrackMapOverlayView(mapModel: model).ignoresSafeArea()
+            TrackMapOverlayView(mapModel: model).ignoresSafeArea().preferredColorScheme(.dark)
+        }
+    }
+ }

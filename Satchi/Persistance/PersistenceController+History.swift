@@ -40,7 +40,7 @@ extension PersistenceController {
             return
         }
         if event.error != nil {
-            Logger.persistance.error("\(#function): Received a persistent CloudKit container event changed notification.\n\(event)")
+            Logger.persistance.debug("\(#function): Received a persistent CloudKit container event changed notification.\n\(event)")
         }
     }
 }
